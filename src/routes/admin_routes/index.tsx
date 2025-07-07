@@ -1,0 +1,24 @@
+import * as admin from "@/modules/admin";
+import { ROUTES } from "../routes";
+
+export const adminRoutes = {
+  path: "/admin",
+  children: [
+    {
+      path: ROUTES.Admin.ViewCalendar,
+      element: <admin.ViewCalendarPage />,
+    },
+    {
+      path: ROUTES.Admin.ScanCodeQRReservation,
+      element: <admin.ScanQRReservationsPage />,
+    },
+    {
+      path: ROUTES.Admin.ViewDetailsReservation,
+      element: <admin.ViewReservationPage />,
+    },
+    {
+      path: ROUTES.Admin.ViewAllReservations,
+      element: <admin.ViewAllReservationsPage />,
+    },
+  ],
+};
