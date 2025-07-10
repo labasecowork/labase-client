@@ -1,9 +1,10 @@
-import { useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getProfile } from "@/services";
+import { useQueryClient } from "@tanstack/react-query";
+import type { User } from "@/store";
 import { useUserStore } from "@/store";
+import type { LoginResponse } from "@/services/auth/auth.types";
 
 export const useAuth = () => {
+  const queryClient = useQueryClient();
   const token =
     typeof window !== "undefined"
       ? window.localStorage.getItem("TOKEN_AUTH")
@@ -11,34 +12,36 @@ export const useAuth = () => {
 
   const user = useUserStore((s) => s.user);
   const setUser = useUserStore((s) => s.setUser);
+  const deleteUser = useUserStore((s) => s.deleteUser);
 
-  const queryEnabled = !!token && !user;
+  const handleLogin = (loginResponse: LoginResponse) => {
+    const { user: userData, token } = loginResponse;
+    const transformedUser: User = {
+      id: userData.id,
+      name: `${userData.firstName} ${userData.lastName}`,
+      avatar: userData.profileImage,
+      email: userData.email,
+      userType: "client",
+    };
 
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["profile"],
-    queryFn: () => getProfile(),
-    enabled: queryEnabled,
-    retry: false,
-  });
+    localStorage.setItem("TOKEN_AUTH", token);
+    setUser(transformedUser);
+    queryClient.setQueryData(["profile"], transformedUser);
+  };
 
-  useEffect(() => {
-    if (data?.data && !user) {
-      const { id, firstName, lastName, avatar, email, userType } = data.data;
-      setUser({
-        id,
-        name: `${firstName} ${lastName}`,
-        avatar,
-        email,
-        userType,
-      });
-    }
-  }, [data, user, setUser]);
+  const handleLogout = () => {
+    localStorage.removeItem("TOKEN_AUTH");
+    deleteUser();
+    queryClient.clear();
+  };
 
   return {
     token,
-    user: user || data?.data || null,
-    isPending: isLoading,
-    isError,
-    error,
+    user,
+    isPending: false,
+    isError: false,
+    error: null,
+    handleLogin,
+    handleLogout,
   };
 };
