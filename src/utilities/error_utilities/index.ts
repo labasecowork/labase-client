@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import type { ErrorResponse } from "~/types/services";
+import type { ErrorResponse } from "@/types";
 
 export function getErrorMessageByStatus(
   status?: number,
@@ -51,9 +51,9 @@ export function getErrorMessageByStatus(
     510: "Extensión no soportada.",
     511: "Autenticación de red requerida. Necesitas conectarte primero.",
   };
-
   const fallbackMessage =
     error?.response?.data?.message || "Error desconocido del servidor.";
 
   return messages[status] || fallbackMessage;
 }
+
