@@ -62,7 +62,9 @@ export default function VerifyPasswordResetPage() {
     <div className="w-full">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Verificar Código</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          Verificar Código
+        </h1>
         <p className="text-gray-600">
           Hemos enviado un código de 4 dígitos a{" "}
           <span className="font-semibold text-gray-900">{email}</span>
@@ -72,7 +74,10 @@ export default function VerifyPasswordResetPage() {
       {/* Formulario */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div>
-          <Label htmlFor="code" className="text-sm font-medium text-gray-700 mb-2 block">
+          <Label
+            htmlFor="code"
+            className="text-sm font-medium text-gray-700 mb-2 block"
+          >
             Código de verificación
           </Label>
           <Input
@@ -97,4 +102,4 @@ export default function VerifyPasswordResetPage() {
       </form>
     </div>
   );
-} 
+}

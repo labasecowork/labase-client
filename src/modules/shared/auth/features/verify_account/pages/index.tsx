@@ -41,11 +41,12 @@ export default function VerifyAccountPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Error</h1>
           <p className="text-gray-600">
-            No se proporcionó un email. Por favor, vuelve a la página de registro.
+            No se proporcionó un email. Por favor, vuelve a la página de
+            registro.
           </p>
         </div>
-        <Button 
-          onClick={() => navigate(ROUTES.Auth.Register)} 
+        <Button
+          onClick={() => navigate(ROUTES.Auth.Register)}
           className="w-full h-12 bg-[#fbb70f] hover:bg-[#fbb70f]/90 text-white font-semibold rounded-lg transition-all duration-200"
         >
           Volver a registro
@@ -58,7 +59,9 @@ export default function VerifyAccountPage() {
     <div className="w-full">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Verificar Cuenta</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          Verificar Cuenta
+        </h1>
         <p className="text-gray-600">
           Hemos enviado un código de 4 dígitos a{" "}
           <span className="font-semibold text-gray-900">{email}</span>
@@ -68,7 +71,10 @@ export default function VerifyAccountPage() {
       {/* Formulario */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div>
-          <Label htmlFor="code" className="text-sm font-medium text-gray-700 mb-2 block">
+          <Label
+            htmlFor="code"
+            className="text-sm font-medium text-gray-700 mb-2 block"
+          >
             Código de verificación
           </Label>
           <Input
@@ -93,4 +99,4 @@ export default function VerifyAccountPage() {
       </form>
     </div>
   );
-} 
+}

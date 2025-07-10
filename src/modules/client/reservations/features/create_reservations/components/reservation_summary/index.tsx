@@ -1,26 +1,34 @@
-import { ROUTES } from "@/routes/routes";
-import { ArrowLeftIcon } from "@heroicons/react/20/solid";
-import { Link } from "react-router-dom";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { forwardRef } from "react";
+import type { Space } from "../space_selector";
 
-export default function ViewReservationPage() {
-  return (
-    <div className="w-full max-w-5xl mx-auto">
-      <div className="flex flex-col gap-4 mb-6">
-        <Link
-          to={ROUTES.Client.ViewReservations}
-          className="bg-stone-50 size-12 flex items-center justify-center rounded-full border-none shadow-none transition-all hover:bg-stone-100"
-        >
-          <ArrowLeftIcon className="size-4" />
-        </Link>
-        <h2 className="text-2xl font-bold text-stone-900">Ver reserva</h2>
-      </div>
+interface ReservationSummaryProps {
+  selectedSpace: Space | null;
+  date: Date | undefined;
+  startTime: string | null;
+  endTime: string | null;
+  personCount: number;
+  isFullSpace: boolean;
+}
 
-      <div className="w-full">
+export const ReservationSummary = forwardRef<
+  HTMLDivElement,
+  ReservationSummaryProps
+>(
+  (
+    { selectedSpace, date, startTime, endTime, personCount, isFullSpace },
+    ref
+  ) => {
+    return (
+      <div ref={ref} className="w-full p-4">
         {/* Ticket de Resumen */}
-        <div className="bg-stone-100 p-6 relative max-w-[400px]">
+        <div className="bg-stone-100 p-6 relative">
           {/* Encabezado del ticket */}
           <div className="text-center border-b border-dashed border-stone-300 pb-4 mb-4">
-            <h3 className="text-lg font-bold text-stone-900">RESERVA</h3>
+            <h3 className="text-lg font-bold text-stone-900">
+              RESUMEN DE RESERVA
+            </h3>
             <p className="text-xs text-stone-500 mt-1">Ticket #RES-2024-001</p>
           </div>
 
@@ -29,8 +37,12 @@ export default function ViewReservationPage() {
             <p className="text-xs font-semibold text-stone-700 mb-1">
               ESPACIO:
             </p>
-            <p className="text-sm text-stone-900">Sala de reuniones</p>
-            <p className="text-xs text-stone-500">S/100.00</p>
+            <p className="text-sm text-stone-900">
+              {selectedSpace ? selectedSpace.name : "No seleccionado"}
+            </p>
+            {selectedSpace && (
+              <p className="text-xs text-stone-500">{selectedSpace.price}</p>
+            )}
           </div>
 
           {/* Línea punteada separadora */}
@@ -42,13 +54,21 @@ export default function ViewReservationPage() {
               <p className="text-xs font-semibold text-stone-700 mb-1">
                 FECHA:
               </p>
-              <p className="text-sm text-stone-900">10/07/2025</p>
+              <p className="text-sm text-stone-900">
+                {date
+                  ? format(date, "dd/MM/yyyy", { locale: es })
+                  : "No seleccionada"}
+              </p>
             </div>
             <div>
               <p className="text-xs font-semibold text-stone-700 mb-1">
                 HORARIO:
               </p>
-              <p className="text-sm text-stone-900">10:00 - 12:00</p>
+              <p className="text-sm text-stone-900">
+                {startTime && endTime
+                  ? `${startTime} - ${endTime}`
+                  : "No seleccionado"}
+              </p>
             </div>
           </div>
 
@@ -61,25 +81,16 @@ export default function ViewReservationPage() {
               <p className="text-xs font-semibold text-stone-700 mb-1">
                 PERSONAS:
               </p>
-              <p className="text-sm text-stone-900">1</p>
+              <p className="text-sm text-stone-900">{personCount}</p>
             </div>
             <div>
               <p className="text-xs font-semibold text-stone-700 mb-1">
                 ESPACIO COMPLETO:
               </p>
-              <p className="text-sm text-stone-900">Sí</p>
+              <p className="text-sm text-stone-900">
+                {isFullSpace ? "Sí" : "No"}
+              </p>
             </div>
-          </div>
-
-          <div className="border-t border-dashed border-stone-300 my-4 pt-4">
-            <p className="text-xs font-semibold text-stone-700 mb-1">
-              CÓDIGO DE RESERVA:
-            </p>
-            <img
-              src="https://cdn.pixabay.com/photo/2013/07/12/14/45/qr-code-148732_1280.png"
-              alt="QR Code"
-              className="size-[200px] mx-auto my-4"
-            />
           </div>
 
           {/* Total estimado */}
@@ -88,7 +99,9 @@ export default function ViewReservationPage() {
               <p className="text-sm font-semibold text-stone-700">
                 TOTAL ESTIMADO:
               </p>
-              <p className="text-lg font-bold text-stone-900">S/0.00</p>
+              <p className="text-lg font-bold text-stone-900">
+                {selectedSpace ? selectedSpace.price : "S/0.00"}
+              </p>
             </div>
           </div>
 
@@ -97,6 +110,8 @@ export default function ViewReservationPage() {
           <div className="absolute -right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white rounded-full"></div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
+);
+
+ReservationSummary.displayName = "ReservationSummary";

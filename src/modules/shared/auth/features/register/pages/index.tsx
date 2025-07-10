@@ -36,14 +36,19 @@ export default function RegisterPage() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Crear Cuenta</h1>
-        <p className="text-gray-600">Completa los siguientes campos para empezar</p>
+        <p className="text-gray-600">
+          Completa los siguientes campos para empezar
+        </p>
       </div>
 
       {/* Formulario */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="first_name" className="text-sm font-medium text-gray-700 mb-2 block">
+            <Label
+              htmlFor="first_name"
+              className="text-sm font-medium text-gray-700 mb-2 block"
+            >
               Nombre
             </Label>
             <Input
@@ -53,11 +58,16 @@ export default function RegisterPage() {
               {...register("first_name")}
             />
             {errors.first_name && (
-              <p className="text-red-500 text-sm mt-1">{errors.first_name.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.first_name.message}
+              </p>
             )}
           </div>
           <div>
-            <Label htmlFor="last_name" className="text-sm font-medium text-gray-700 mb-2 block">
+            <Label
+              htmlFor="last_name"
+              className="text-sm font-medium text-gray-700 mb-2 block"
+            >
               Apellido
             </Label>
             <Input
@@ -67,13 +77,18 @@ export default function RegisterPage() {
               {...register("last_name")}
             />
             {errors.last_name && (
-              <p className="text-red-500 text-sm mt-1">{errors.last_name.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.last_name.message}
+              </p>
             )}
           </div>
         </div>
 
         <div>
-          <Label htmlFor="email" className="text-sm font-medium text-gray-700 mb-2 block">
+          <Label
+            htmlFor="email"
+            className="text-sm font-medium text-gray-700 mb-2 block"
+          >
             Email
           </Label>
           <Input
@@ -89,7 +104,10 @@ export default function RegisterPage() {
         </div>
 
         <div>
-          <Label htmlFor="password" className="text-sm font-medium text-gray-700 mb-2 block">
+          <Label
+            htmlFor="password"
+            className="text-sm font-medium text-gray-700 mb-2 block"
+          >
             Contraseña
           </Label>
           <Input
@@ -100,12 +118,17 @@ export default function RegisterPage() {
             {...register("password")}
           />
           {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {errors.password.message}
+            </p>
           )}
         </div>
 
         <div>
-          <Label htmlFor="confirm_password" className="text-sm font-medium text-gray-700 mb-2 block">
+          <Label
+            htmlFor="confirm_password"
+            className="text-sm font-medium text-gray-700 mb-2 block"
+          >
             Confirmar contraseña
           </Label>
           <Input
@@ -116,7 +139,9 @@ export default function RegisterPage() {
             {...register("confirm_password")}
           />
           {errors.confirm_password && (
-            <p className="text-red-500 text-sm mt-1">{errors.confirm_password.message}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {errors.confirm_password.message}
+            </p>
           )}
         </div>
 
@@ -131,7 +156,10 @@ export default function RegisterPage() {
 
       <div className="text-center mt-6 text-sm text-gray-600">
         ¿Ya tienes una cuenta?{" "}
-        <Link to="/login" className="text-gray-900 font-semibold hover:underline">
+        <Link
+          to="/login"
+          className="text-gray-900 font-semibold hover:underline"
+        >
           Iniciar sesión
         </Link>
       </div>

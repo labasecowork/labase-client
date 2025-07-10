@@ -37,14 +37,21 @@ export default function LoginPage() {
     <div className="w-full">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Iniciar Sesión</h1>
-        <p className="text-gray-600">Inicia sesión para continuar usando el sitio web.</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          Iniciar Sesión
+        </h1>
+        <p className="text-gray-600">
+          Inicia sesión para continuar usando el sitio web.
+        </p>
       </div>
 
       {/* Formulario */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div>
-          <Label htmlFor="email" className="text-sm font-medium text-gray-700 mb-2 block">
+          <Label
+            htmlFor="email"
+            className="text-sm font-medium text-gray-700 mb-2 block"
+          >
             Email
           </Label>
           <Input
@@ -60,7 +67,10 @@ export default function LoginPage() {
         </div>
 
         <div>
-          <Label htmlFor="password" className="text-sm font-medium text-gray-700 mb-2 block">
+          <Label
+            htmlFor="password"
+            className="text-sm font-medium text-gray-700 mb-2 block"
+          >
             Contraseña
           </Label>
           <Input
@@ -71,7 +81,9 @@ export default function LoginPage() {
             {...register("password")}
           />
           {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {errors.password.message}
+            </p>
           )}
         </div>
 
@@ -95,7 +107,10 @@ export default function LoginPage() {
 
       <div className="text-center mt-6 text-sm text-gray-600">
         ¿No tienes una cuenta?{" "}
-        <Link to="/register" className="text-gray-900 font-semibold hover:underline">
+        <Link
+          to="/register"
+          className="text-gray-900 font-semibold hover:underline"
+        >
           Registrarse
         </Link>
       </div>

@@ -44,7 +44,8 @@ export default function ChangePasswordPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Error</h1>
           <p className="text-gray-600">
-            Información inválida. Por favor, inicia el proceso de recuperación de nuevo.
+            Información inválida. Por favor, inicia el proceso de recuperación
+            de nuevo.
           </p>
         </div>
         <Button
@@ -61,7 +62,9 @@ export default function ChangePasswordPage() {
     <div className="w-full">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Crear Nueva Contraseña</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          Crear Nueva Contraseña
+        </h1>
         <p className="text-gray-600">
           Tu nueva contraseña debe ser diferente a las anteriores
         </p>
@@ -70,7 +73,10 @@ export default function ChangePasswordPage() {
       {/* Formulario */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div>
-          <Label htmlFor="password" className="text-sm font-medium text-gray-700 mb-2 block">
+          <Label
+            htmlFor="password"
+            className="text-sm font-medium text-gray-700 mb-2 block"
+          >
             Nueva contraseña
           </Label>
           <Input
@@ -81,12 +87,17 @@ export default function ChangePasswordPage() {
             {...register("password")}
           />
           {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {errors.password.message}
+            </p>
           )}
         </div>
 
         <div>
-          <Label htmlFor="confirm_password" className="text-sm font-medium text-gray-700 mb-2 block">
+          <Label
+            htmlFor="confirm_password"
+            className="text-sm font-medium text-gray-700 mb-2 block"
+          >
             Confirmar contraseña
           </Label>
           <Input
@@ -97,7 +108,9 @@ export default function ChangePasswordPage() {
             {...register("confirm_password")}
           />
           {errors.confirm_password && (
-            <p className="text-red-500 text-sm mt-1">{errors.confirm_password.message}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {errors.confirm_password.message}
+            </p>
           )}
         </div>
 
