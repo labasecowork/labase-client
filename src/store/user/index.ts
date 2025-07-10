@@ -1,9 +1,9 @@
 import { create } from "zustand";
 
-interface User {
-  id: number;
+export interface User {
+  id: string;
   name: string;
-  avatar: string;
+  avatar: string | null;
   email: string;
   userType: string;
 }

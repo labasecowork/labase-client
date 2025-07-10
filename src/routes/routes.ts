@@ -2,7 +2,9 @@ export const ROUTES = {
   Auth: {
     Login: "/login",
     Register: "/register",
+    VerifyAccount: "/verify-account",
     RecoverPassword: "/recover-password",
+    VerifyPasswordReset: "/verify-password-reset",
     ChangePassword: "/change-password",
   },
 
