@@ -5,6 +5,7 @@ import { forwardRef } from "react";
 interface PeopleCountInputProps {
   value: number;
   onChange: (value: number) => void;
+  minCapacity?: number;
   maxCapacity?: number;
   error?: string;
 }
@@ -12,7 +13,7 @@ interface PeopleCountInputProps {
 export const PeopleCountInput = forwardRef<
   HTMLDivElement,
   PeopleCountInputProps
->(({ value, onChange, maxCapacity, error }, ref) => {
+>(({ value, onChange, minCapacity = 1, maxCapacity, error }, ref) => {
   const handleIncrement = () => {
     const newValue = value + 1;
     if (!maxCapacity || newValue <= maxCapacity) {
@@ -21,13 +22,17 @@ export const PeopleCountInput = forwardRef<
   };
 
   const handleDecrement = () => {
-    if (value > 1) {
-      onChange(value - 1);
+    const newValue = value - 1;
+    if (newValue >= minCapacity) {
+      onChange(newValue);
     }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = Math.max(1, parseInt(e.target.value) || 1);
+    const newValue = Math.max(
+      minCapacity,
+      parseInt(e.target.value) || minCapacity
+    );
     if (!maxCapacity || newValue <= maxCapacity) {
       onChange(newValue);
     }
@@ -45,7 +50,7 @@ export const PeopleCountInput = forwardRef<
           value={value}
           onChange={handleInputChange}
           className={`pr-8 rounded-none h-9.5 ${error ? "border-red-500" : ""}`}
-          min="1"
+          min={minCapacity}
           max={maxCapacity}
         />
         <div className="absolute right-0 top-0 h-full flex flex-col">
@@ -60,7 +65,7 @@ export const PeopleCountInput = forwardRef<
           <button
             type="button"
             onClick={handleDecrement}
-            disabled={value <= 1}
+            disabled={value <= minCapacity}
             className="h-full w-6 flex items-center justify-center bg-stone-100 hover:bg-stone-200 text-xs font-bold text-stone-600 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronDownIcon className="size-4" />
@@ -69,9 +74,13 @@ export const PeopleCountInput = forwardRef<
       </div>
 
       {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
-      {maxCapacity && (
+      {(minCapacity || maxCapacity) && (
         <p className="text-xs text-stone-400 mt-1">
-          Capacidad máxima: {maxCapacity} personas
+          {minCapacity && maxCapacity && minCapacity !== maxCapacity
+            ? `Capacidad: ${minCapacity}-${maxCapacity} personas`
+            : maxCapacity
+            ? `Capacidad máxima: ${maxCapacity} personas`
+            : `Capacidad mínima: ${minCapacity} personas`}
         </p>
       )}
     </div>

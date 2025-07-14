@@ -1,7 +1,8 @@
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { forwardRef } from "react";
-import type { Space } from "../space_selector";
+import { forwardRef, useMemo } from "react";
+import type { Space } from "@/modules/client/space/features/get_spaces/types";
+import { timeToMinutes } from "@/utilities/date_utilities";
 
 interface ReservationSummaryProps {
   selectedSpace: Space | null;
@@ -20,16 +21,68 @@ export const ReservationSummary = forwardRef<
     { selectedSpace, date, startTime, endTime, personCount, isFullSpace },
     ref
   ) => {
+    const priceCalculation = useMemo(() => {
+      if (!selectedSpace || !startTime || !endTime) {
+        return { total: 0, unitPrice: 0, description: "", duration: 0 };
+      }
+
+      const startMinutes = timeToMinutes(startTime);
+      const endMinutes = timeToMinutes(endTime);
+      const durationMinutes = endMinutes - startMinutes;
+      const durationHours = durationMinutes / 60;
+
+      if (durationHours <= 0) {
+        return {
+          total: 0,
+          unitPrice: 0,
+          description: "Duración inválida",
+          duration: 0,
+        };
+      }
+
+      const mode = isFullSpace ? "GROUP" : "INDIVIDUAL";
+
+      const priceRule = selectedSpace.prices.find(
+        (p) => p.duration === "HOUR" && p.mode === mode
+      );
+
+      if (!priceRule) {
+        return {
+          total: 0,
+          unitPrice: 0,
+          description: "Precio no disponible",
+          duration: durationHours,
+        };
+      }
+
+      if (isFullSpace) {
+        const total = priceRule.amount * durationHours;
+        return {
+          total,
+          unitPrice: priceRule.amount,
+          description: `S/${priceRule.amount}/hora × ${durationHours}h`,
+          duration: durationHours,
+        };
+      } else {
+        const total = priceRule.amount * personCount * durationHours;
+        return {
+          total,
+          unitPrice: priceRule.amount,
+          description: `S/${priceRule.amount}/hora × ${personCount} personas × ${durationHours}h`,
+          duration: durationHours,
+        };
+      }
+    }, [selectedSpace, personCount, isFullSpace, startTime, endTime]);
+
     return (
       <div ref={ref} className="w-full p-4">
         {/* Ticket de Resumen */}
         <div className="bg-stone-100 p-6 relative">
-          {/* Encabezado del ticket */}
           <div className="text-center border-b border-dashed border-stone-300 pb-4 mb-4">
             <h3 className="text-lg font-bold text-stone-900">
               RESUMEN DE RESERVA
             </h3>
-            <p className="text-xs text-stone-500 mt-1">Ticket #RES-2024-001</p>
+            <p className="text-xs text-stone-500 mt-1">Reserva temporal</p>
           </div>
 
           {/* Información del espacio */}
@@ -41,14 +94,16 @@ export const ReservationSummary = forwardRef<
               {selectedSpace ? selectedSpace.name : "No seleccionado"}
             </p>
             {selectedSpace && (
-              <p className="text-xs text-stone-500">{selectedSpace.price}</p>
+              <p className="text-xs text-stone-500">
+                {isFullSpace
+                  ? "Modalidad: Espacio completo"
+                  : "Modalidad: Individual"}
+              </p>
             )}
           </div>
 
-          {/* Línea punteada separadora */}
           <div className="border-b border-dashed border-stone-300 my-4"></div>
 
-          {/* Información de fecha y hora */}
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
               <p className="text-xs font-semibold text-stone-700 mb-1">
@@ -72,7 +127,6 @@ export const ReservationSummary = forwardRef<
             </div>
           </div>
 
-          {/* Línea punteada separadora */}
           <div className="border-b border-dashed border-stone-300 my-4"></div>
 
           {/* Información de personas */}
@@ -100,9 +154,22 @@ export const ReservationSummary = forwardRef<
                 TOTAL ESTIMADO:
               </p>
               <p className="text-lg font-bold text-stone-900">
-                {selectedSpace ? selectedSpace.price : "S/0.00"}
+                S/{priceCalculation.total.toFixed(2)}
               </p>
             </div>
+            {selectedSpace && priceCalculation.description && (
+              <div className="mt-2 space-y-1">
+                <p className="text-xs text-stone-500">
+                  {priceCalculation.description}
+                </p>
+                {priceCalculation.duration > 0 && (
+                  <p className="text-xs text-stone-400">
+                    Duración: {priceCalculation.duration} hora
+                    {priceCalculation.duration !== 1 ? "s" : ""}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Círculos de perforación del ticket */}
