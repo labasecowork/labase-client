@@ -4,33 +4,37 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { LoginCredentials } from "@/services/auth/auth.types";
-import { loginSchema } from "@/services/auth/auth.types";
-import { login } from "@/services/auth";
 import { useAuth } from "@/hooks/use_auth";
 import { Link, useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
+import { useLogin } from "../service";
+import { loginSchema } from "../schemas";
+import type { LoginCredentials } from "../types";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const { handleLogin } = useAuth();
+  const { mutate: login, isPending } = useLogin();
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<LoginCredentials>({
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data: LoginCredentials) => {
-    try {
-      const response = await login(data);
-      handleLogin(response);
-      toast.success("¡Bienvenido de vuelta!");
-      navigate(ROUTES.Client.ViewReservations);
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Ocurrió un error");
-    }
+  const onSubmit = (data: LoginCredentials) => {
+    login(data, {
+      onSuccess: (response) => {
+        handleLogin(response);
+        toast.success("¡Bienvenido de vuelta!");
+        navigate(ROUTES.Client.ViewReservations);
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    });
   };
 
   return (
@@ -99,9 +103,9 @@ export default function LoginPage() {
         <Button
           type="submit"
           className="w-full h-12 bg-[#fbb70f] hover:bg-[#fbb70f]/90 text-white font-semibold rounded-lg transition-all duration-200"
-          disabled={isSubmitting}
+          disabled={isPending}
         >
-          {isSubmitting ? "Iniciando sesión..." : "Iniciar sesión"}
+          {isPending ? "Iniciando sesión..." : "Iniciar sesión"}
         </Button>
       </form>
 
