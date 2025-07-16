@@ -1,6 +1,9 @@
 import { Button } from "@/components/ui";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import { ArrowLeftIcon } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   SpaceSelector,
   DateSelector,
@@ -11,48 +14,107 @@ import {
 } from "../components";
 import type { ReservationFormData } from "../types";
 import { reservationSchema } from "../schemas";
-import { availableSpaces } from "../constants";
+import type { Space } from "@/modules/client/space/features/get_spaces/types";
 import { convertTimeToISO } from "@/utilities";
-import { ArrowLeftIcon } from "lucide-react";
-import { Link } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
+import { useGetAvailableSpaces } from "@/modules/client/space/features/get_spaces/service";
+import { useCheckAvailability, useCreateReservation } from "../service";
 
 export default function CreateReservationPage() {
+  const navigate = useNavigate();
+  const { data: spacesData, isLoading: isLoadingSpaces } =
+    useGetAvailableSpaces();
+  const { mutate: checkAvailability, isPending: isChecking } =
+    useCheckAvailability();
+  const { mutate: createReservation, isPending: isCreating } =
+    useCreateReservation();
+
   const {
     handleSubmit,
     watch,
     setValue,
     formState: { errors },
   } = useForm<ReservationFormData>({
-    resolver: zodResolver(reservationSchema),
+    resolver: zodResolver(reservationSchema(spacesData?.spaces || [])),
     defaultValues: {
       spaceId: "",
       people: 1,
       fullRoom: false,
       startTime: "",
       endTime: "",
+      date: undefined,
     },
   });
 
   const watchedValues = watch();
   const selectedSpace =
-    availableSpaces.find((space) => space.id === watchedValues.spaceId) || null;
+    spacesData?.spaces.find(
+      (space: Space) => space.id === watchedValues.spaceId
+    ) || null;
 
-  const onSubmit = (data: ReservationFormData) => {
-    if (!data.date) return;
-
+  const handleCreateReservation = (
+    availabilityData: any,
+    data: ReservationFormData
+  ) => {
     const reservationData = {
       spaceId: data.spaceId,
-      startTime: convertTimeToISO(data.date as Date, data.startTime),
-      endTime: convertTimeToISO(data.date as Date, data.endTime),
+      startTime: availabilityData.startTime,
+      endTime: availabilityData.endTime,
       people: data.people,
       fullRoom: data.fullRoom,
     };
 
-    console.log(
-      "Datos de la reserva:",
-      JSON.stringify(reservationData, null, 2)
-    );
+    createReservation(reservationData, {
+      onSuccess: (res) => {
+        toast.success("¡Reserva creada con éxito!", {
+          description: `Tu código de reserva es ${res.codeQr}.`,
+        });
+        navigate(ROUTES.Client.ViewReservations);
+      },
+      onError: (err) => {
+        toast.error("Error al crear la reserva", {
+          description: err.message,
+        });
+      },
+    });
+  };
+
+  const onSubmit = (data: ReservationFormData) => {
+    if (!data.date || !data.startTime || !data.endTime || !data.spaceId) {
+      toast.error("Datos incompletos", {
+        description: "Por favor, completa todos los campos requeridos.",
+      });
+      return;
+    }
+
+    const availabilityData = {
+      spaceId: data.spaceId,
+      startTime: convertTimeToISO(data.date, data.startTime),
+      endTime: convertTimeToISO(data.date, data.endTime),
+    };
+
+    checkAvailability(availabilityData, {
+      onSuccess: (response) => {
+        if (!response.available) {
+          toast.error("Horario no disponible", {
+            description:
+              "El espacio seleccionado ya está reservado en este horario. Por favor, elige otro.",
+          });
+          return;
+        }
+
+        toast.success("¡Horario disponible!", {
+          description: "Puedes proceder a crear tu reserva.",
+        });
+
+        handleCreateReservation(availabilityData, data);
+      },
+      onError: (err) => {
+        toast.error("Error al verificar disponibilidad", {
+          description: err.message,
+        });
+      },
+    });
   };
 
   return (
@@ -71,15 +133,25 @@ export default function CreateReservationPage() {
                 Crear reserva
               </h2>
             </div>
-            <Button type="submit" variant="default">
-              Crear reserva
+            <Button
+              type="submit"
+              variant="default"
+              disabled={isChecking || isCreating}
+            >
+              {isChecking
+                ? "Verificando..."
+                : isCreating
+                ? "Creando reserva..."
+                : "Crear reserva"}
             </Button>
           </div>
         </div>
+
         <div className="w-full grid grid-cols-[600px_400px] justify-between">
           <div>
             <SpaceSelector
-              spaces={availableSpaces}
+              spaces={spacesData?.spaces || []}
+              isLoading={isLoadingSpaces}
               selectedSpace={watchedValues.spaceId || null}
               onSpaceSelect={(spaceId) => setValue("spaceId", spaceId)}
               error={errors.spaceId?.message}
@@ -95,7 +167,8 @@ export default function CreateReservationPage() {
               <PeopleCountInput
                 value={watchedValues.people || 1}
                 onChange={(value) => setValue("people", value)}
-                maxCapacity={selectedSpace?.capacity}
+                minCapacity={selectedSpace?.capacityMin}
+                maxCapacity={selectedSpace?.capacityMax}
                 error={errors.people?.message}
               />
             </div>
@@ -112,6 +185,8 @@ export default function CreateReservationPage() {
             <FullSpaceSwitch
               checked={watchedValues.fullRoom || false}
               onCheckedChange={(checked) => setValue("fullRoom", checked)}
+              selectedSpace={selectedSpace}
+              peopleCount={watchedValues.people || 1}
               error={errors.fullRoom?.message}
             />
           </div>

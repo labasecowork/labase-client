@@ -1,16 +1,18 @@
 export const timeToMinutes = (time: string): number => {
-  const match = time.match(/^(\d{1,2}):(\d{2})(am|pm)$/);
-  if (!match) return 0;
+  const match = time.match(/^(\d{1,2}):(\d{2})\s*(am|pm)$/i);
+  if (!match) {
+    console.error(`Formato de hora no válido: "${time}"`);
+    return 0;
+  }
 
   const [, hourStr, minuteStr, period] = match;
   let hour = parseInt(hourStr);
   const minute = parseInt(minuteStr);
 
-  // Convertir a formato 24 horas
   if (period === "am" && hour === 12) {
-    hour = 0; // 12am = 00:00
+    hour = 0;
   } else if (period === "pm" && hour !== 12) {
-    hour += 12; // 1pm = 13:00, etc.
+    hour += 12;
   }
 
   return hour * 60 + minute;

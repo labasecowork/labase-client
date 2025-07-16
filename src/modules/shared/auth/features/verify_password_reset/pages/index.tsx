@@ -1,42 +1,56 @@
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
-  verifyCodeSchema,
-  type VerifyCodeData,
-} from "@/services/auth/auth.types";
-import { verifyPasswordResetCode } from "@/services/auth";
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+import { Label } from "@/components/ui/label";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
+import { useVerifyPasswordResetCode } from "../service";
+import { verifyCodeSchema } from "../schemas";
+import type { VerifyCodeData } from "../types";
 
 export default function VerifyPasswordResetPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const email = location.state?.email;
 
+  const { mutate: verifyCode, isPending } = useVerifyPasswordResetCode();
+
   const {
-    register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    control,
+    formState: { errors },
   } = useForm<VerifyCodeData>({
     resolver: zodResolver(verifyCodeSchema),
   });
 
-  const onSubmit = async (data: VerifyCodeData) => {
-    try {
-      await verifyPasswordResetCode(data.code, email);
-      toast.success("Código verificado", {
-        description: "Ahora puedes crear una nueva contraseña",
-      });
-      navigate(ROUTES.Auth.ChangePassword, {
-        state: { email, code: data.code },
-      });
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Ocurrió un error");
+  const onSubmit = (data: VerifyCodeData) => {
+    if (!email) {
+      toast.error("No se proporcionó un email. Vuelve a intentarlo.");
+      return;
     }
+
+    verifyCode(
+      { code: data.code, email },
+      {
+        onSuccess: () => {
+          toast.success("Código verificado", {
+            description: "Ahora puedes crear una nueva contraseña",
+          });
+          navigate(ROUTES.Auth.ChangePassword, {
+            state: { email, code: data.code },
+          });
+        },
+        onError: (error) => {
+          toast.error(error.message);
+        },
+      }
+    );
   };
 
   if (!email) {
@@ -80,12 +94,19 @@ export default function VerifyPasswordResetPage() {
           >
             Código de verificación
           </Label>
-          <Input
-            id="code"
-            placeholder="1234"
-            className="h-12 px-4 border-gray-300 rounded-lg focus:outline-none transition-colors text-center text-lg font-mono tracking-widest"
-            {...register("code")}
-            maxLength={4}
+          <Controller
+            control={control}
+            name="code"
+            render={({ field }) => (
+              <InputOTP maxLength={4} {...field}>
+                <InputOTPGroup>
+                  <InputOTPSlot index={0} />
+                  <InputOTPSlot index={1} />
+                  <InputOTPSlot index={2} />
+                  <InputOTPSlot index={3} />
+                </InputOTPGroup>
+              </InputOTP>
+            )}
           />
           {errors.code && (
             <p className="text-red-500 text-sm mt-1">{errors.code.message}</p>
@@ -94,10 +115,10 @@ export default function VerifyPasswordResetPage() {
 
         <Button
           type="submit"
-          className="w-full h-12 bg-[#fbb70f] hover:bg-[#fbb70f]/90 text-white font-semibold rounded-lg transition-all duration-200"
-          disabled={isSubmitting}
+          className="h-12 px-15 bg-[#fbb70f] hover:bg-[#fbb70f]/90 text-white font-semibold rounded-lg transition-all duration-200"
+          disabled={isPending}
         >
-          {isSubmitting ? "Verificando..." : "Verificar código"}
+          {isPending ? "Verificando..." : "Verificar código"}
         </Button>
       </form>
     </div>

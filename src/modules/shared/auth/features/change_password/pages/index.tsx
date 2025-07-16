@@ -4,13 +4,11 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  changePasswordSchema,
-  type ChangePasswordData,
-} from "@/services/auth/auth.types";
-import { confirmNewPassword } from "@/services/auth";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
+import { useConfirmNewPassword } from "../service";
+import { changePasswordSchema } from "../schemas";
+import type { ChangePasswordData } from "../types";
 
 export default function ChangePasswordPage() {
   const navigate = useNavigate();
@@ -18,24 +16,36 @@ export default function ChangePasswordPage() {
   const email = location.state?.email;
   const code = location.state?.code;
 
+  const { mutate: confirmPassword, isPending } = useConfirmNewPassword();
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<ChangePasswordData>({
     resolver: zodResolver(changePasswordSchema),
   });
 
-  const onSubmit = async (data: ChangePasswordData) => {
-    try {
-      await confirmNewPassword({ ...data, email });
-      toast.success("Contraseña actualizada", {
-        description: "Tu contraseña ha sido cambiada. Ya puedes iniciar sesión",
-      });
-      navigate(ROUTES.Auth.Login);
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Ocurrió un error");
+  const onSubmit = (data: ChangePasswordData) => {
+    if (!email) {
+      toast.error("No se proporcionó un email. Vuelve a intentarlo.");
+      return;
     }
+    confirmPassword(
+      { ...data, email },
+      {
+        onSuccess: () => {
+          toast.success("Contraseña actualizada", {
+            description:
+              "Tu contraseña ha sido cambiada. Ya puedes iniciar sesión",
+          });
+          navigate(ROUTES.Auth.Login);
+        },
+        onError: (error) => {
+          toast.error(error.message);
+        },
+      }
+    );
   };
 
   if (!email || !code) {
@@ -117,9 +127,9 @@ export default function ChangePasswordPage() {
         <Button
           type="submit"
           className="w-full h-12 bg-[#fbb70f] hover:bg-[#fbb70f]/90 text-white font-semibold rounded-lg transition-all duration-200"
-          disabled={isSubmitting}
+          disabled={isPending}
         >
-          {isSubmitting ? "Guardando..." : "Guardar nueva contraseña"}
+          {isPending ? "Guardando..." : "Guardar nueva contraseña"}
         </Button>
       </form>
     </div>

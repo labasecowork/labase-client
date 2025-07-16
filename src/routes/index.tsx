@@ -4,14 +4,7 @@ import { errorRoutes } from "@/routes/error_routes";
 import { appRoutes } from "./app_routes";
 import { clientRoutes } from "./client_routes";
 import { adminRoutes } from "./admin_routes";
-import { Sidebar } from "@/components/layouts";
 
-const routes = [
-  {
-    path: "/",
-    element: <Sidebar />,
-    children: [adminRoutes],
-  },
-];
+const routes = [authRoutes, appRoutes, errorRoutes];
 const router = createBrowserRouter(routes);
 export default router;

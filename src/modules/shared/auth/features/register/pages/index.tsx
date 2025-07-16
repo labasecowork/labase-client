@@ -4,31 +4,36 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { registerSchema } from "@/services/auth/auth.types";
-import type { RegisterData } from "@/services/auth/auth.types";
-import { requestRegister } from "@/services/auth";
 import { Link, useNavigate } from "react-router-dom";
+import { useRequestRegister } from "../service";
+import { registerSchema } from "../schemas";
+import type { RegisterData } from "../types";
+import { ROUTES } from "@/routes/routes";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
+  const { mutate: registerUser, isPending } = useRequestRegister();
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<RegisterData>({
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = async (data: RegisterData) => {
-    try {
-      await requestRegister(data);
-      toast.success("Código de verificación enviado", {
-        description: "Revisa tu correo electrónico para continuar",
-      });
-      navigate("/verify-account", { state: { email: data.email } });
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Ocurrió un error");
-    }
+  const onSubmit = (data: RegisterData) => {
+    registerUser(data, {
+      onSuccess: () => {
+        toast.success("Código de verificación enviado", {
+          description: "Revisa tu correo electrónico para continuar",
+        });
+        navigate(ROUTES.Auth.VerifyAccount, { state: { email: data.email } });
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    });
   };
 
   return (
@@ -148,9 +153,9 @@ export default function RegisterPage() {
         <Button
           type="submit"
           className="w-full h-12 bg-[#fbb70f] hover:bg-[#fbb70f]/90 text-white font-semibold rounded-lg transition-all duration-200"
-          disabled={isSubmitting}
+          disabled={isPending}
         >
-          {isSubmitting ? "Creando cuenta..." : "Crear cuenta"}
+          {isPending ? "Creando cuenta..." : "Crear cuenta"}
         </Button>
       </form>
 
