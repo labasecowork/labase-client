@@ -1,13 +1,40 @@
 import type z from "zod";
 import type { reservationSchema } from "../schemas";
 
-export interface Space {
-  id: string;
-  name: string;
-  description: string;
-  price: string;
-  imageUrl: string;
-  capacity: number;
+export type Duration = "HOUR" | "DAY" | "WEEK" | "MONTH";
+export type SpaceType = "FULL_ROOM" | "INDIVIDUAL";
+export type SpaceAccess = "PUBLIC" | "PRIVATE";
+
+export interface AvailabilityRequest {
+  spaceId: string;
+  startTime: string;
+  endTime: string;
 }
 
-export type ReservationFormData = z.infer<typeof reservationSchema>;
+export interface AvailabilityResponse {
+  available: boolean;
+}
+
+export interface CreateReservationRequest {
+  spaceId: string;
+  startTime: string;
+  endTime: string;
+  people: number;
+  fullRoom: boolean;
+}
+
+export interface CreateReservationResponse {
+  reservation_id: string;
+  codeQr: string;
+  user: {
+    id: string;
+    user_type: "admin" | "client";
+    status: "active" | "inactive";
+    adminDetails: null | unknown;
+  };
+}
+
+type ReservationSchemaFunction = typeof reservationSchema;
+export type ReservationFormData = z.infer<
+  ReturnType<ReservationSchemaFunction>
+>;

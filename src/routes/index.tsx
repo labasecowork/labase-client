@@ -5,6 +5,7 @@ import { appRoutes } from "./app_routes";
 import { clientRoutes } from "./client_routes";
 import { adminRoutes } from "./admin_routes";
 
-const routes = [adminRoutes];
+
+const routes = [authRoutes, appRoutes, errorRoutes];
 const router = createBrowserRouter(routes);
 export default router;

@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import type { User } from "@/store";
 import { useUserStore } from "@/store";
-import type { LoginResponse } from "@/services/auth/auth.types";
+import type { LoginResponse } from "@/modules/shared/auth/features/login/types";
 
 export const useAuth = () => {
   const queryClient = useQueryClient();
@@ -18,8 +18,8 @@ export const useAuth = () => {
     const { user: userData, token } = loginResponse;
     const transformedUser: User = {
       id: userData.id,
-      name: `${userData.firstName} ${userData.lastName}`,
-      avatar: userData.profileImage,
+      name: `${userData.first_name} ${userData.last_name}`,
+      avatar: userData.profile_image,
       email: userData.email,
       userType: "client",
     };
