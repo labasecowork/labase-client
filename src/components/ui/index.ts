@@ -4,3 +4,8 @@ export * from "./input";
 export * from "./label";
 export * from "./sonner";
 export * from "./loader_splash";
+export * from "./table";
+export * from "./switch";
+export * from "./popover";
+export * from "./calendar";
+export * from "./dropdown_menu";
