@@ -1,20 +1,24 @@
+import { CustomHeader } from "@/components/ui";
+import { useTitle } from "@/hooks";
 import { ROUTES } from "@/routes/routes";
 import { Scanner } from "@yudiel/react-qr-scanner";
-import { ArrowLeftIcon } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function ScanQRReservationsPage() {
+  const { changeTitle } = useTitle();
+  useEffect(() => {
+    changeTitle("Escanear código QR - La base");
+  }, []);
   return (
-    <div className="w-screen h-screen ">
-      <div className="absolute top-0 left-0 z-10 w-full p-4">
-        <div className="flex flex-col gap-4 mb-6 max-w-5xl mx-auto w-full">
-          <Link
+    <div className="w-full h-full overflow-hidden">
+      <div className="absolute top-0 left-0 z-10 w-full">
+        <div className=" mb-6 max-w-4xl mx-auto w-full mt-8 px-4">
+          <CustomHeader
+            title="Escanear código QR"
             to={ROUTES.Admin.ViewAllReservations}
-            className="bg-stone-50/10 size-12 flex items-center justify-center rounded-full border-none shadow-none transition-all hover:bg-stone-100/40"
-          >
-            <ArrowLeftIcon className="size-4 text-white" />
-          </Link>
-          <h2 className="text-2xl font-bold text-white">Escanear código QR</h2>
+            classNameTitle="text-white"
+            classNameLink="bg-stone-50/10 text-white hover:bg-stone-50/20"
+          />
         </div>
       </div>
 

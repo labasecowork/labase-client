@@ -9,3 +9,4 @@ export * from "./switch";
 export * from "./popover";
 export * from "./calendar";
 export * from "./dropdown_menu";
+export * from "./custom_header";

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Scrollbars } from "react-custom-scrollbars-2";
 
 // Interfaz para los eventos
 interface Event {
@@ -39,7 +40,7 @@ const eventsData: Event[] = [
 ];
 
 export const Calendar = () => {
-  const container = useRef<HTMLDivElement | null>(null);
+  const container = useRef<Scrollbars | null>(null);
   const containerNav = useRef<HTMLDivElement | null>(null);
   const containerOffset = useRef<HTMLDivElement | null>(null);
 
@@ -67,24 +68,6 @@ export const Calendar = () => {
   };
 
   // Función para formatear la fecha
-  const formatDate = (date: Date) => {
-    const months = [
-      "Enero",
-      "Febrero",
-      "Marzo",
-      "Abril",
-      "Mayo",
-      "Junio",
-      "Julio",
-      "Agosto",
-      "Septiembre",
-      "Octubre",
-      "Noviembre",
-      "Diciembre",
-    ];
-
-    return `${months[date.getMonth()]} ${date.getFullYear()}`;
-  };
 
   // Función para obtener el nombre del día
   const getDayName = (date: Date, short: boolean = false) => {
@@ -136,12 +119,13 @@ export const Calendar = () => {
     // Posicionar el scroll en 9AM (inicio del horario laboral)
     if (container.current && containerNav.current && containerOffset.current) {
       const currentMinute = 0; // Empezar en el inicio (9AM)
-      container.current.scrollTop =
-        ((container.current.scrollHeight -
+      const scrollTop =
+        ((container.current.getScrollHeight() -
           containerNav.current.offsetHeight -
           containerOffset.current.offsetHeight) *
           currentMinute) /
         600; // 600 minutos (10 horas de 9AM a 7PM)
+      container.current.scrollTop(scrollTop);
     }
   }, []);
 
@@ -176,139 +160,134 @@ export const Calendar = () => {
 
   return (
     <div className="flex h-full flex-col">
-      <header className="flex flex-none items-center justify-between border-b border-stone-200 px-6 py-4">
-        <h1 className="text-base font-semibold text-stone-900">
-          <time dateTime={currentWeek[0]?.toISOString().split("T")[0]}>
-            {formatDate(currentWeek[0])}
-          </time>
-        </h1>
-      </header>
-
-      <div
-        ref={container}
-        className="isolate flex flex-auto flex-col overflow-auto bg-white"
-      >
-        <div
-          style={{ width: "165%" }}
-          className="flex max-w-full flex-none flex-col sm:max-w-none md:max-w-full"
-        >
+      <Scrollbars ref={container} autoHide style={{ height: "100%" }}>
+        <div className="isolate flex flex-auto flex-col bg-stone-50">
           <div
-            ref={containerNav}
-            className="sticky top-0 z-30 flex-none bg-white shadow-sm ring-1 ring-black/5 sm:pr-8"
+            style={{ width: "165%" }}
+            className="flex max-w-full flex-none flex-col sm:max-w-none md:max-w-full"
           >
-            {/* Vista móvil */}
-            <div className="grid grid-cols-7 text-sm/6 text-stone-500 sm:hidden">
-              {currentWeek.map((date, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  className="flex flex-col items-center pt-2 pb-3"
-                >
-                  {getDayName(date, true)}{" "}
-                  <span
-                    className={`mt-1 flex size-8 items-center justify-center font-semibold ${
-                      isToday(date)
-                        ? "rounded-full bg-stone-600 text-white"
-                        : "text-stone-900"
-                    }`}
+            <div
+              ref={containerNav}
+              className="sticky top-0 z-30 flex-none bg-stone-50 shadow-sm ring-1 ring-black/5 sm:pr-8"
+            >
+              {/* Vista móvil */}
+              <div className="grid grid-cols-7 text-sm/6 text-stone-500 sm:hidden">
+                {currentWeek.map((date, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    className="flex flex-col items-center pt-2 pb-3"
                   >
-                    {date.getDate()}
-                  </span>
-                </button>
-              ))}
-            </div>
-
-            {/* Vista desktop */}
-            <div className="-mr-px hidden grid-cols-7 divide-x divide-stone-100 border-r border-stone-100 text-sm/6 text-stone-500 sm:grid">
-              <div className="col-end-1 w-14" />
-              {currentWeek.map((date, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-center py-3"
-                >
-                  <span className={isToday(date) ? "flex items-baseline" : ""}>
-                    {getDayName(date)}{" "}
+                    {getDayName(date, true)}{" "}
                     <span
-                      className={`items-center justify-center font-semibold ${
+                      className={`mt-1 flex size-8 items-center justify-center font-semibold ${
                         isToday(date)
-                          ? "ml-1.5 flex size-8 justify-center rounded-full bg-stone-600 text-white"
+                          ? "rounded-full bg-stone-600 text-white"
                           : "text-stone-900"
                       }`}
                     >
                       {date.getDate()}
                     </span>
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex flex-auto">
-            <div className="sticky left-0 z-10 w-14 flex-none bg-white ring-1 ring-stone-100" />
-            <div className="grid flex-auto grid-cols-1 grid-rows-1">
-              {/* Líneas horizontales */}
-              <div
-                className="col-start-1 col-end-2 row-start-1 grid divide-y divide-stone-100"
-                style={{ gridTemplateRows: "repeat(22, minmax(3.5rem, 1fr))" }} // 22 filas para 11 horas (9AM-7PM)
-              >
-                <div ref={containerOffset} className="row-end-1 h-7"></div>
-                {generateTimeSlots()}
-              </div>
-
-              {/* Líneas verticales */}
-              <div className="col-start-1 col-end-2 row-start-1 hidden grid-cols-8 grid-rows-1 divide-x divide-stone-100 sm:grid">
-                <div className="col-start-1 row-span-full" />
-                <div className="col-start-2 row-span-full" />
-                <div className="col-start-3 row-span-full" />
-                <div className="col-start-4 row-span-full" />
-                <div className="col-start-5 row-span-full" />
-                <div className="col-start-6 row-span-full" />
-                <div className="col-start-7 row-span-full" />
-                <div className="col-start-8 row-span-full" />
-              </div>
-
-              {/* Eventos */}
-              <ol
-                className="col-start-1 col-end-2 row-start-1 grid grid-cols-8 sm:pr-8"
-                style={{
-                  gridTemplateRows:
-                    "1.75rem repeat(22, minmax(3.5rem, 1fr)) auto",
-                }}
-              >
-                {events.map((event) => (
-                  <li
-                    key={event.id}
-                    className="relative mt-px flex"
-                    style={{
-                      gridRow: `${timeToGridRow(
-                        event.startTime
-                      )} / span ${getEventDuration(
-                        event.startTime,
-                        event.endTime
-                      )}`,
-                      gridColumn: `${getEventColumn(event.day)} / ${
-                        getEventColumn(event.day) + 1
-                      }`,
-                    }}
-                  >
-                    <a
-                      href="#"
-                      className={`group absolute inset-1 flex flex-col overflow-y-auto p-2 text-xs/5 bg-stone-50 text-stone-700 hover:bg-stone-100 border-l-4 border-stone-400`}
-                    >
-                      <p className="order-1 font-semibold">{event.title}</p>
-                      <p className="group-hover:opacity-75">
-                        <time dateTime={event.startTime}>
-                          {event.startTime}
-                        </time>
-                      </p>
-                    </a>
-                  </li>
+                  </button>
                 ))}
-              </ol>
+              </div>
+
+              {/* Vista desktop */}
+              <div className="-mr-px hidden grid-cols-7 divide-x divide-stone-100 border-r border-stone-100 text-sm/6 text-stone-500 sm:grid">
+                <div className="col-end-1 w-14" />
+                {currentWeek.map((date, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-center py-3"
+                  >
+                    <span
+                      className={isToday(date) ? "flex items-baseline" : ""}
+                    >
+                      {getDayName(date)}{" "}
+                      <span
+                        className={`items-center justify-center font-semibold ${
+                          isToday(date)
+                            ? "ml-1.5 flex size-8 justify-center rounded-full bg-stone-600 text-white"
+                            : "text-stone-900"
+                        }`}
+                      >
+                        {date.getDate()}
+                      </span>
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-auto">
+              <div className="sticky left-0 z-10 w-14 flex-none bg-stone-50 ring-1 ring-stone-100" />
+              <div className="grid flex-auto grid-cols-1 grid-rows-1">
+                {/* Líneas horizontales */}
+                <div
+                  className="col-start-1 col-end-2 row-start-1 grid divide-y divide-stone-100"
+                  style={{
+                    gridTemplateRows: "repeat(22, minmax(3.5rem, 1fr))",
+                  }} // 22 filas para 11 horas (9AM-7PM)
+                >
+                  <div ref={containerOffset} className="row-end-1 h-7"></div>
+                  {generateTimeSlots()}
+                </div>
+
+                {/* Líneas verticales */}
+                <div className="col-start-1 col-end-2 row-start-1 hidden grid-cols-8 grid-rows-1 divide-x divide-stone-100 sm:grid">
+                  <div className="col-start-1 row-span-full" />
+                  <div className="col-start-2 row-span-full" />
+                  <div className="col-start-3 row-span-full" />
+                  <div className="col-start-4 row-span-full" />
+                  <div className="col-start-5 row-span-full" />
+                  <div className="col-start-6 row-span-full" />
+                  <div className="col-start-7 row-span-full" />
+                  <div className="col-start-8 row-span-full" />
+                </div>
+
+                {/* Eventos */}
+                <ol
+                  className="col-start-1 col-end-2 row-start-1 grid grid-cols-8 sm:pr-8"
+                  style={{
+                    gridTemplateRows:
+                      "1.75rem repeat(22, minmax(3.5rem, 1fr)) auto",
+                  }}
+                >
+                  {events.map((event) => (
+                    <li
+                      key={event.id}
+                      className="relative mt-px flex"
+                      style={{
+                        gridRow: `${timeToGridRow(
+                          event.startTime
+                        )} / span ${getEventDuration(
+                          event.startTime,
+                          event.endTime
+                        )}`,
+                        gridColumn: `${getEventColumn(event.day)} / ${
+                          getEventColumn(event.day) + 1
+                        }`,
+                      }}
+                    >
+                      <a
+                        href="#"
+                        className={`group absolute inset-1 flex flex-col overflow-y-auto p-2 text-xs/5 bg-stone-200 text-stone-900 hover:bg-stone-300 transition-all border-l-4 border-stone-400`}
+                      >
+                        <p className="order-1 font-semibold">{event.title}</p>
+                        <p className="group-hover:opacity-75">
+                          <time dateTime={event.startTime}>
+                            {event.startTime}
+                          </time>
+                        </p>
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Scrollbars>
     </div>
   );
 };

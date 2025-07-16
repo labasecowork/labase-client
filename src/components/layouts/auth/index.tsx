@@ -6,9 +6,9 @@ export default function AuthLayout() {
       {/* Panel Izquierdo - Imagen */}
       <div className="hidden lg:flex flex-1 bg-white p-8">
         <div className="w-full h-full rounded-3xl relative overflow-hidden">
-          <img 
-            src="/images/recepcion.jpg" 
-            alt="Recepción" 
+          <img
+            src="/images/recepcion.jpg"
+            alt="Recepción"
             className="w-full h-full object-cover"
           />
         </div>
@@ -22,4 +22,4 @@ export default function AuthLayout() {
       </div>
     </main>
   );
-} 
+}

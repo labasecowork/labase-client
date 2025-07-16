@@ -26,3 +26,22 @@ export const convertTimeToISO = (date: Date, time: string): string => {
 
   return newDate.toISOString();
 };
+
+export const formatDate = (date: Date) => {
+  const months = [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
+  ];
+
+  return `${months[date.getMonth()]} ${date.getFullYear()}`;
+};

@@ -1,12 +1,5 @@
 import { create } from "zustand";
-
-export interface User {
-  id: string;
-  name: string;
-  avatar: string | null;
-  email: string;
-  userType: string;
-}
+import type { User } from "@/types/user";
 
 interface UserStore {
   user: User | null;
