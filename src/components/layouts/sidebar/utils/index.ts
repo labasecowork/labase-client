@@ -62,12 +62,6 @@ export const getNavigationConfig = (userType: string): NavigationItem[] => {
         icon: ClipboardDocumentListIcon,
         key: "my-reservations",
       },
-      {
-        name: "Nueva Reserva",
-        href: ROUTES.Client.CreateReservation,
-        icon: PlusIcon,
-        key: "create-reservation",
-      },
     ],
   };
 

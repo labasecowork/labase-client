@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { OTPInput, OTPInputContext } from "input-otp";
 
@@ -44,8 +42,8 @@ const InputOTPSlot = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "relative flex h-12 w-12 items-center justify-center border-2 border-gray-300 rounded-lg text-lg font-mono tracking-widest transition-all",
-        isActive && "z-10 ring-2 ring-offset-background ring-[#fbb70f]",
+        "relative flex h-12 w-12 items-center justify-center border border-stone-300 rounded-none text-lg tracking-widest transition-all font-serif font-bold",
+        isActive && "z-10 ring-2 ring-offset-background ring-stone-500",
         className
       )}
       {...props}

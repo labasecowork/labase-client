@@ -5,8 +5,7 @@ export const mockUser: User = {
   id: "1",
   name: "María González",
   email: "maria@labase.com",
-  avatar: null,
-  userType: "admin", // Cambiar a "client" para probar vista de cliente
+  userType: "client", // Cambiar a "client" para probar vista de cliente
 };
 
 export const userNavigation: UserNavigationItem[] = [

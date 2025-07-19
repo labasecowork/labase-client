@@ -13,11 +13,14 @@ import { ROUTES } from "@/routes/routes";
 import { useVerifyAccount } from "../service";
 import { verifyCodeSchema } from "../schemas";
 import type { VerifyCodeData } from "../types";
+import { useTitle } from "@/hooks";
+import { useEffect } from "react";
 
 export default function VerifyAccountPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const email = location.state?.email;
+  const { changeTitle } = useTitle();
 
   const { mutate: verifyAccount, isPending } = useVerifyAccount();
 
@@ -31,7 +34,9 @@ export default function VerifyAccountPage() {
 
   const onSubmit = (data: VerifyCodeData) => {
     if (!email) {
-      toast.error("No se proporcionó un email. Vuelve a intentarlo.");
+      toast.error("Ups! Algo salió mal", {
+        description: "No se proporcionó un email. Vuelve a intentarlo.",
+      });
       return;
     }
     verifyAccount(
@@ -44,18 +49,24 @@ export default function VerifyAccountPage() {
           navigate(ROUTES.Auth.Login);
         },
         onError: (error) => {
-          toast.error(error.message);
+          toast.error("Ups! Algo salió mal", {
+            description: error.message,
+          });
         },
       }
     );
   };
 
+  useEffect(() => {
+    changeTitle("Verificar cuenta - La base");
+  }, []);
+
   if (!email) {
     return (
       <div className="w-full">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Error</h1>
-          <p className="text-gray-600">
+          <h1 className="text-3xl font-bold text-stone-900 mb-2">Error</h1>
+          <p className="text-stone-600">
             No se proporcionó un email. Por favor, vuelve a la página de
             registro.
           </p>
@@ -74,21 +85,21 @@ export default function VerifyAccountPage() {
     <div className="w-full">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Verificar Cuenta
+        <h1 className="text-3xl font-serif font-bold text-stone-900 mb-2">
+          Verificar cuenta
         </h1>
-        <p className="text-gray-600">
+        <p className="text-stone-600 text-sm">
           Hemos enviado un código de 4 dígitos a{" "}
-          <span className="font-semibold text-gray-900">{email}</span>
+          <span className="font-semibold text-stone-900">{email}</span>
         </p>
       </div>
 
       {/* Formulario */}
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-full">
         <div>
           <Label
             htmlFor="code"
-            className="text-sm font-medium text-gray-700 mb-2 block"
+            className="text-sm font-medium text-stone-700 mb-2 block w-full"
           >
             Código de verificación
           </Label>
@@ -113,7 +124,7 @@ export default function VerifyAccountPage() {
 
         <Button
           type="submit"
-          className="h-12 px-15 bg-[#fbb70f] hover:bg-[#fbb70f]/90 text-white font-semibold rounded-lg transition-all duration-200"
+          className="h-12 px-15 bg-stone-500 hover:bg-stone-500/90 text-white font-semibold  transition-all duration-200 rounded-full w-full mt-4"
           disabled={isPending}
         >
           {isPending ? "Verificando..." : "Verificar cuenta"}

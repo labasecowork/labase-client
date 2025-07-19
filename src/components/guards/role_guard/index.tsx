@@ -17,7 +17,6 @@ export default function RoleGuard() {
     (user.userType === "client" && isClientRoute);
 
   if (!canAccess) {
-    // Redirige al home del rol correcto
     const fallback =
       user.userType === "admin"
         ? ROUTES.Admin.ViewCalendar

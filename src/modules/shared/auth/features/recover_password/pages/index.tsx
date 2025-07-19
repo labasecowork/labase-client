@@ -9,10 +9,14 @@ import { useRequestPasswordReset } from "../service";
 import { forgotPasswordSchema } from "../schemas";
 import type { ForgotPasswordData } from "../types";
 import { ROUTES } from "@/routes/routes";
+import { useEffect } from "react";
+import { useTitle } from "@/hooks";
+import { ArrowLeftIcon } from "lucide-react";
 
 export default function RecoverPasswordPage() {
   const navigate = useNavigate();
   const { mutate: requestPasswordReset, isPending } = useRequestPasswordReset();
+  const { changeTitle } = useTitle();
 
   const {
     register,
@@ -34,19 +38,25 @@ export default function RecoverPasswordPage() {
         });
       },
       onError: (error) => {
-        toast.error(error.message);
+        toast.error("Ups! Algo salió mal", {
+          description: error.message,
+        });
       },
     });
   };
+
+  useEffect(() => {
+    changeTitle("Recuperar contraseña - La base");
+  }, []);
 
   return (
     <div className="w-full">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Recuperar Contraseña
+        <h1 className="text-3xl font-serif font-bold text-stone-900 mb-2">
+          Recuperar contraseña
         </h1>
-        <p className="text-gray-600">
+        <p className="text-stone-600 text-sm">
           Ingresa tu email y te enviaremos un código para recuperar tu cuenta
         </p>
       </div>
@@ -56,15 +66,15 @@ export default function RecoverPasswordPage() {
         <div>
           <Label
             htmlFor="email"
-            className="text-sm font-medium text-gray-700 mb-2 block"
+            className="text-sm font-medium text-stone-700 mb-2 block"
           >
-            Email
+            Correo electrónico
           </Label>
           <Input
             id="email"
             type="email"
-            placeholder="tucorreo@email.com"
-            className="h-12 px-4 border-gray-300 rounded-lg focus:outline-none transition-colors"
+            placeholder="Ej. tucorreo@email.com"
+            className="h-12 px-4 border-stone-300 rounded-none focus:outline-none transition-colors"
             {...register("email")}
           />
           {errors.email && (
@@ -74,18 +84,19 @@ export default function RecoverPasswordPage() {
 
         <Button
           type="submit"
-          className="w-full h-12 bg-[#fbb70f] hover:bg-[#fbb70f]/90 text-white font-semibold rounded-lg transition-all duration-200"
+          className="w-full h-12 bg-stone-500 hover:bg-stone-500/90 text-white font-semibold  transition-all duration-200"
           disabled={isPending}
         >
-          {isPending ? "Enviando..." : "Enviar código de recuperación"}
+          {isPending ? "Enviando..." : "Enviar código"}
         </Button>
       </form>
 
-      <div className="text-center mt-6 text-sm text-gray-600">
+      <div className="text-center mt-6 text-sm text-stone-600">
         <Link
           to="/login"
-          className="text-gray-900 font-semibold hover:underline"
+          className="text-stone-900 font-semibold hover:underline flex items-center gap-2 justify-center"
         >
+          <ArrowLeftIcon className="w-4 h-4" />
           Volver a iniciar sesión
         </Link>
       </div>

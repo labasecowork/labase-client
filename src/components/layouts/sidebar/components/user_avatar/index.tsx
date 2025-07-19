@@ -1,7 +1,5 @@
-import type { User } from "@/types/user";
-
 interface Props {
-  user: User;
+  name: string;
   size?: "sm" | "md";
 }
 
@@ -10,7 +8,7 @@ const sizeClasses = {
   md: "size-10",
 };
 
-export const UserAvatar: React.FC<Props> = ({ user, size = "sm" }) => (
+export const UserAvatar: React.FC<Props> = ({ name, size = "sm" }) => (
   <div
     className={`${sizeClasses[size]} rounded-full bg-stone-500 flex items-center justify-center`}
   >
@@ -19,7 +17,7 @@ export const UserAvatar: React.FC<Props> = ({ user, size = "sm" }) => (
         size === "sm" ? "text-sm" : "text-base"
       }`}
     >
-      {user.name.charAt(0).toUpperCase()}
+      {name.charAt(0).toUpperCase()}
     </span>
   </div>
 );

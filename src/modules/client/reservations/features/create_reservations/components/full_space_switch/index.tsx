@@ -89,7 +89,7 @@ export const FullSpaceSwitch = forwardRef<HTMLDivElement, FullSpaceSwitchProps>(
 
             {/* Modalidad Grupal */}
             <div
-              className={`flex items-center justify-between p-2 rounded ${
+              className={`flex items-center justify-between p-2 ${
                 checked ? "bg-stone-50 border border-stone-200" : "bg-stone-50"
               } ${!priceInfo.group?.available ? "opacity-50" : ""}`}
             >

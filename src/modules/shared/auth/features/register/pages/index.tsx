@@ -9,11 +9,13 @@ import { useRequestRegister } from "../service";
 import { registerSchema } from "../schemas";
 import type { RegisterData } from "../types";
 import { ROUTES } from "@/routes/routes";
+import { useEffect } from "react";
+import { useTitle } from "@/hooks";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
   const { mutate: registerUser, isPending } = useRequestRegister();
-
+  const { changeTitle } = useTitle();
   const {
     register,
     handleSubmit,
@@ -31,18 +33,26 @@ export default function RegisterPage() {
         navigate(ROUTES.Auth.VerifyAccount, { state: { email: data.email } });
       },
       onError: (error) => {
-        toast.error(error.message);
+        toast.error("Ups! Algo salió mal", {
+          description: error.message,
+        });
       },
     });
   };
+
+  useEffect(() => {
+    changeTitle("Crear cuenta - La base");
+  }, []);
 
   return (
     <div className="w-full">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Crear Cuenta</h1>
-        <p className="text-gray-600">
-          Completa los siguientes campos para empezar
+        <h1 className="text-3xl font-serif font-bold text-stone-900 mb-2">
+          Crear cuenta
+        </h1>
+        <p className="text-stone-600 text-sm">
+          Completa los siguientes campos para empezar a usar la plataforma.
         </p>
       </div>
 
@@ -52,14 +62,14 @@ export default function RegisterPage() {
           <div>
             <Label
               htmlFor="first_name"
-              className="text-sm font-medium text-gray-700 mb-2 block"
+              className="text-sm font-medium text-stone-700 mb-2 block"
             >
               Nombre
             </Label>
             <Input
               id="first_name"
               placeholder="Juan"
-              className="h-12 px-4 border-gray-300 rounded-lg focus:outline-none transition-colors"
+              className="h-12 px-4 border-stone-300 rounded-none focus:outline-none transition-colors"
               {...register("first_name")}
             />
             {errors.first_name && (
@@ -71,14 +81,14 @@ export default function RegisterPage() {
           <div>
             <Label
               htmlFor="last_name"
-              className="text-sm font-medium text-gray-700 mb-2 block"
+              className="text-sm font-medium text-stone-700 mb-2 block"
             >
               Apellido
             </Label>
             <Input
               id="last_name"
               placeholder="Pérez"
-              className="h-12 px-4 border-gray-300 rounded-lg focus:outline-none transition-colors"
+              className="h-12 px-4 border-stone-300 rounded-none focus:outline-none transition-colors"
               {...register("last_name")}
             />
             {errors.last_name && (
@@ -92,7 +102,7 @@ export default function RegisterPage() {
         <div>
           <Label
             htmlFor="email"
-            className="text-sm font-medium text-gray-700 mb-2 block"
+            className="text-sm font-medium text-stone-700 mb-2 block"
           >
             Email
           </Label>
@@ -100,7 +110,7 @@ export default function RegisterPage() {
             id="email"
             type="email"
             placeholder="tucorreo@email.com"
-            className="h-12 px-4 border-gray-300 rounded-lg focus:outline-none transition-colors"
+            className="h-12 px-4 border-stone-300 rounded-none focus:outline-none transition-colors"
             {...register("email")}
           />
           {errors.email && (
@@ -111,7 +121,7 @@ export default function RegisterPage() {
         <div>
           <Label
             htmlFor="password"
-            className="text-sm font-medium text-gray-700 mb-2 block"
+            className="text-sm font-medium text-stone-700 mb-2 block"
           >
             Contraseña
           </Label>
@@ -119,7 +129,7 @@ export default function RegisterPage() {
             id="password"
             type="password"
             placeholder="Ej: Jk92@lZp"
-            className="h-12 px-4 border-gray-300 rounded-lg focus:outline-none transition-colors"
+            className="h-12 px-4 border-stone-300 rounded-none focus:outline-none transition-colors"
             {...register("password")}
           />
           {errors.password && (
@@ -132,7 +142,7 @@ export default function RegisterPage() {
         <div>
           <Label
             htmlFor="confirm_password"
-            className="text-sm font-medium text-gray-700 mb-2 block"
+            className="text-sm font-medium text-stone-700 mb-2 block"
           >
             Confirmar contraseña
           </Label>
@@ -140,7 +150,7 @@ export default function RegisterPage() {
             id="confirm_password"
             type="password"
             placeholder="Ej: Jk92@lZp"
-            className="h-12 px-4 border-gray-300 rounded-lg focus:outline-none transition-colors"
+            className="h-12 px-4 border-stone-300 rounded-none focus:outline-none transition-colors"
             {...register("confirm_password")}
           />
           {errors.confirm_password && (
@@ -152,18 +162,18 @@ export default function RegisterPage() {
 
         <Button
           type="submit"
-          className="w-full h-12 bg-[#fbb70f] hover:bg-[#fbb70f]/90 text-white font-semibold rounded-lg transition-all duration-200"
+          className="w-full h-12 bg-stone-500 hover:bg-stone-500/90 text-white font-semibold  transition-all duration-200"
           disabled={isPending}
         >
           {isPending ? "Creando cuenta..." : "Crear cuenta"}
         </Button>
       </form>
 
-      <div className="text-center mt-6 text-sm text-gray-600">
+      <div className="text-center mt-6 text-sm text-stone-600">
         ¿Ya tienes una cuenta?{" "}
         <Link
           to="/login"
-          className="text-gray-900 font-semibold hover:underline"
+          className="text-stone-900 font-semibold hover:underline"
         >
           Iniciar sesión
         </Link>

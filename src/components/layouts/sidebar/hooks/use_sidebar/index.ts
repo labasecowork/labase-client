@@ -5,13 +5,11 @@ import {
   getNavigationConfig,
   isActiveRoute,
 } from "@/components/layouts/sidebar/utils";
-import {
-  mockUser,
-  userNavigation,
-} from "@/components/layouts/sidebar/constants";
+import { userNavigation } from "@/components/layouts/sidebar/constants";
+import { useUserStore } from "@/store";
 
 export const useSidebar = () => {
-  const user = mockUser;
+  const user = useUserStore((s) => s.user);
   const location = useLocation();
   const navigate = useNavigate();
 

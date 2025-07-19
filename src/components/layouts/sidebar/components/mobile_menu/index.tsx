@@ -10,7 +10,7 @@ interface Props {
   navigation: NavigationItem[];
   location: { pathname: string };
   handleNavClick: (href: string, e: React.MouseEvent) => void;
-  user: User;
+  user: User | null;
   userNavigation: UserNavigationItem[];
   handleLogoutClick: () => void;
 }
@@ -61,17 +61,19 @@ export const MobileMenu: React.FC<Props> = ({
       <div className="border-t border-stone-700 pt-4 pb-3">
         <div className="flex items-center px-5">
           <div className="shrink-0">
-            <UserAvatar user={user} size="md" />
+            <UserAvatar name={user?.name ?? "U"} size="md" />
           </div>
-          <div className="ml-3">
-            <div className="text-xs font-medium text-white">{user.name}</div>
-            <div className="text-xs font-medium text-stone-300">
-              {user.email}
+          {user && (
+            <div className="ml-3">
+              <div className="text-xs font-medium text-white">{user?.name}</div>
+              <div className="text-xs font-medium text-stone-300">
+                {user?.email}
+              </div>
+              <div className="text-xs font-medium text-stone-400 capitalize">
+                {user?.userType === "admin" ? "Administrador" : "Cliente"}
+              </div>
             </div>
-            <div className="text-xs font-medium text-stone-400 capitalize">
-              {user.userType === "admin" ? "Administrador" : "Cliente"}
-            </div>
-          </div>
+          )}
         </div>
         <div className="mt-3 px-2">
           {userNavigation.map((item) => (

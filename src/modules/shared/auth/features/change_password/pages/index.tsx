@@ -9,12 +9,15 @@ import { ROUTES } from "@/routes/routes";
 import { useConfirmNewPassword } from "../service";
 import { changePasswordSchema } from "../schemas";
 import type { ChangePasswordData } from "../types";
+import { useTitle } from "@/hooks";
+import { useEffect } from "react";
 
 export default function ChangePasswordPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const email = location.state?.email;
   const code = location.state?.code;
+  const { changeTitle } = useTitle();
 
   const { mutate: confirmPassword, isPending } = useConfirmNewPassword();
 
@@ -28,7 +31,9 @@ export default function ChangePasswordPage() {
 
   const onSubmit = (data: ChangePasswordData) => {
     if (!email) {
-      toast.error("No se proporcionó un email. Vuelve a intentarlo.");
+      toast.error("Ups! Algo salió mal", {
+        description: "No se proporcionó un email. Vuelve a intentarlo.",
+      });
       return;
     }
     confirmPassword(
@@ -42,18 +47,24 @@ export default function ChangePasswordPage() {
           navigate(ROUTES.Auth.Login);
         },
         onError: (error) => {
-          toast.error(error.message);
+          toast.error("Ups! Algo salió mal", {
+            description: error.message,
+          });
         },
       }
     );
   };
 
+  useEffect(() => {
+    changeTitle("Crear nueva contraseña - La base");
+  }, []);
+
   if (!email || !code) {
     return (
       <div className="w-full">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Error</h1>
-          <p className="text-gray-600">
+          <h1 className="text-3xl font-bold text-stone-900 mb-2">Error</h1>
+          <p className="text-stone-600">
             Información inválida. Por favor, inicia el proceso de recuperación
             de nuevo.
           </p>
@@ -72,10 +83,10 @@ export default function ChangePasswordPage() {
     <div className="w-full">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Crear Nueva Contraseña
+        <h1 className="text-3xl font-serif font-bold text-stone-900 mb-2">
+          Crear nueva contraseña
         </h1>
-        <p className="text-gray-600">
+        <p className="text-stone-600 text-sm">
           Tu nueva contraseña debe ser diferente a las anteriores
         </p>
       </div>
@@ -85,15 +96,15 @@ export default function ChangePasswordPage() {
         <div>
           <Label
             htmlFor="password"
-            className="text-sm font-medium text-gray-700 mb-2 block"
+            className="text-sm font-medium text-stone-700 mb-2 block w-full"
           >
             Nueva contraseña
           </Label>
           <Input
             id="password"
             type="password"
-            placeholder="••••••••••"
-            className="h-12 px-4 border-gray-300 rounded-lg focus:outline-none transition-colors"
+            placeholder="Ej. EadqWC%1235"
+            className="h-12 px-4 border-stone-300 rounded-none focus:outline-none transition-colors"
             {...register("password")}
           />
           {errors.password && (
@@ -106,15 +117,15 @@ export default function ChangePasswordPage() {
         <div>
           <Label
             htmlFor="confirm_password"
-            className="text-sm font-medium text-gray-700 mb-2 block"
+            className="text-sm font-medium text-stone-700 mb-2 block w-full"
           >
             Confirmar contraseña
           </Label>
           <Input
             id="confirm_password"
             type="password"
-            placeholder="••••••••••"
-            className="h-12 px-4 border-gray-300 rounded-lg focus:outline-none transition-colors"
+            placeholder="Ej. EadqWC%1235"
+            className="h-12 px-4 border-stone-300 rounded-none focus:outline-none transition-colors"
             {...register("confirm_password")}
           />
           {errors.confirm_password && (
@@ -126,7 +137,7 @@ export default function ChangePasswordPage() {
 
         <Button
           type="submit"
-          className="w-full h-12 bg-[#fbb70f] hover:bg-[#fbb70f]/90 text-white font-semibold rounded-lg transition-all duration-200"
+          className="w-full h-12 bg-stone-500 hover:bg-stone-500/90 text-white font-semibold rounded-full transition-all duration-200"
           disabled={isPending}
         >
           {isPending ? "Guardando..." : "Guardar nueva contraseña"}

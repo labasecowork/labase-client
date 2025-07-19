@@ -12,7 +12,7 @@ export default function Core({ children }: Props) {
   return (
     <QueryClientProvider client={createQueryClient()}>
       {children}
-      <Toaster richColors />
+      <Toaster expand visibleToasts={1} />
       {MODE && <ReactQueryDevtools />}
     </QueryClientProvider>
   );

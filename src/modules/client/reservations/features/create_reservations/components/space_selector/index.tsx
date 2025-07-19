@@ -11,7 +11,7 @@ interface SpaceSelectorProps {
 }
 
 const SpaceCardSkeleton = () => (
-  <div className="flex-shrink-0 w-80 h-[320px] bg-stone-50 border-2 rounded-none overflow-hidden animate-pulse">
+  <div className="flex-shrink-0 w-80 h-[380px] bg-stone-50 shadow  rounded-none overflow-hidden animate-pulse">
     <div className="h-48 bg-stone-200"></div>
     <div className="p-4">
       <div className="h-4 bg-stone-200 rounded w-3/4 mb-3"></div>
@@ -30,7 +30,7 @@ export const SpaceSelector = forwardRef<HTMLDivElement, SpaceSelectorProps>(
           Selecciona el espacio:
         </label>
 
-        <div className="h-[380px]">
+        <div className="h-[400px]">
           <Scrollbars
             style={{ width: "100%", height: "100%" }}
             autoHide
@@ -54,11 +54,11 @@ export const SpaceSelector = forwardRef<HTMLDivElement, SpaceSelectorProps>(
                       className={`flex-shrink-0 w-80 bg-white border-2 rounded-none overflow-hidden cursor-pointer transition-all duration-200 ${
                         selectedSpace === space.id
                           ? "border-stone-900 shadow-lg"
-                          : " border-none shadow hover:shadow-md"
+                          : " border-white shadow hover:shadow-md"
                       }`}
                     >
                       <div className="relative h-48 overflow-hidden">
-                        {/* ENdpoint sin imagen - estatica por ahora*/}
+                        {/* Endpoint sin imagen - estatica por ahora*/}
                         <img
                           src="https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg"
                           alt={space.name}

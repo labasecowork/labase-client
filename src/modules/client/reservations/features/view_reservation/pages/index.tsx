@@ -2,12 +2,15 @@ import { ROUTES } from "@/routes/routes";
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import { Link, useParams } from "react-router-dom";
 import { useResolveReservationByCode } from "../service";
-import { LoaderSplash } from "@/components/ui";
+import { Card, CardHeader, CardTitle } from "@/components/ui";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { QRCodeSVG } from "qrcode.react";
+import { useTitle } from "@/hooks";
+import { useEffect } from "react";
+import { getStatusLabel } from "@/utilities/status_utilities";
 
 export default function ViewReservationPage() {
   const { code } = useParams<{ code: string }>();
@@ -17,9 +20,22 @@ export default function ViewReservationPage() {
     isError,
     error,
   } = useResolveReservationByCode(code!);
+  const { changeTitle } = useTitle();
+
+  useEffect(() => {
+    changeTitle("Ver reserva - La base");
+  }, [changeTitle]);
 
   if (isLoading) {
-    return <LoaderSplash />;
+    return (
+      <div className="w-full max-w-5xl mx-auto">
+        <Card>
+          <CardHeader>
+            <CardTitle>Cargando...</CardTitle>
+          </CardHeader>
+        </Card>
+      </div>
+    );
   }
 
   if (isError) {
@@ -49,11 +65,11 @@ export default function ViewReservationPage() {
   }
 
   const { reservation, status } = reservationData;
-
+  const statusLabel = getStatusLabel(status);
   const price = `S/${parseFloat(reservation.price).toFixed(2)}`;
 
   return (
-    <div className="w-full max-w-5xl mx-auto">
+    <div className="w-full max-w-4xl mx-auto px-4 py-8">
       <div className="flex flex-col gap-4 mb-6">
         <Link
           to={ROUTES.Client.ViewReservations}
@@ -61,89 +77,123 @@ export default function ViewReservationPage() {
         >
           <ArrowLeftIcon className="size-4" />
         </Link>
-        <h2 className="text-2xl font-bold text-stone-900">
-          Ver reserva{" "}
-          <span className="text-base font-normal text-stone-500">
-            ({status})
+        <h2 className="text-3xl font-bold text-stone-900 ">
+          <span className="font-serif">Ver reserva </span>
+          <span className="text-lg font-serif font-medium text-stone-500">
+            ({statusLabel})
           </span>
         </h2>
       </div>
 
-      <div className="w-full">
-        <div className="bg-stone-100 p-6 relative max-w-[400px]">
-          <div className="text-center border-b border-dashed border-stone-300 pb-4 mb-4">
-            <h3 className="text-lg font-bold text-stone-900">RESERVA</h3>
+      <div className="w-full mt-6">
+        {/* Ticket de Resumen */}
+        <div className="bg-stone-100 relative w-full max-w-[400px] mx-auto lg:max-w-none">
+          {/* Encabezado del ticket */}
+          <div className="text-left px-6 sm:px-10 py-4 bg-stone-200">
+            <h3 className="text-xl font-bold text-stone-900">RESERVA</h3>
             <p className="text-xs text-stone-500 mt-1">
               Ticket #{reservation.id.split("-")[0]}
             </p>
           </div>
 
-          <div className="mb-4">
-            <p className="text-xs font-semibold text-stone-700 mb-1">
-              ESPACIO:
-            </p>
-            <p className="text-sm text-stone-900">{reservation.space.name}</p>
-          </div>
-
-          <div className="border-b border-dashed border-stone-300 my-4"></div>
-
-          <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-8 lg:gap-16 px-6 sm:px-10 pb-10 mt-10">
             <div>
-              <p className="text-xs font-semibold text-stone-700 mb-1">
-                FECHA:
-              </p>
-              <p className="text-sm text-stone-900">
-                {format(new Date(reservation.startTime), "dd/MM/yyyy")}
-              </p>
+              {/* Información del espacio */}
+              <div className="mb-4">
+                <p className="text-xs font-semibold text-stone-700 mb-1">
+                  ESPACIO:
+                </p>
+                <p className="text-sm text-stone-900">
+                  {reservation.space.name}
+                </p>
+              </div>
+
+              {/* Línea punteada separadora */}
+              <div className="border-b border-dashed border-stone-300 my-4"></div>
+
+              {/* Información de fecha y hora */}
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                  <p className="text-xs font-semibold text-stone-700 mb-1">
+                    FECHA:
+                  </p>
+                  <p className="text-sm text-stone-900">
+                    {format(new Date(reservation.startTime), "dd/MM/yyyy")}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-stone-700 mb-1">
+                    HORARIO:
+                  </p>
+                  <p className="text-sm text-stone-900">
+                    {format(new Date(reservation.startTime), "HH:mm")} -{" "}
+                    {format(new Date(reservation.endTime), "HH:mm", {
+                      locale: es,
+                    })}
+                  </p>
+                </div>
+              </div>
+
+              {/* Línea punteada separadora */}
+              <div className="border-b border-dashed border-stone-300 my-4"></div>
+
+              {/* Información de personas */}
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                  <p className="text-xs font-semibold text-stone-700 mb-1">
+                    PERSONAS:
+                  </p>
+                  <p className="text-sm text-stone-900">{reservation.people}</p>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-stone-700 mb-1">
+                    ESPACIO COMPLETO:
+                  </p>
+                  <p className="text-sm text-stone-900">
+                    {reservation.fullRoom ? "Sí" : "No"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="block lg:hidden">
+                <p className="text-xs font-semibold text-stone-700 mb-1 border-t border-dashed border-stone-300 pt-4">
+                  CÓDIGO DE RESERVA:
+                </p>
+                <div className="flex justify-center my-4 w-full">
+                  <QRCodeSVG
+                    value={reservation.codeQr}
+                    bgColor="#f5f5f4"
+                    size={250}
+                  />
+                </div>
+              </div>
+
+              {/* Total estimado */}
+              <div className="border-t border-dashed border-stone-300 pt-4 mt-4">
+                <div className="flex justify-between items-center">
+                  <p className="text-sm font-semibold text-stone-700">
+                    TOTAL ESTIMADO:
+                  </p>
+                  <p className="text-lg font-bold text-stone-900">{price}</p>
+                </div>
+              </div>
             </div>
-            <div>
-              <p className="text-xs font-semibold text-stone-700 mb-1">
-                HORARIO:
-              </p>
-              <p className="text-sm text-stone-900">
-                {format(new Date(reservation.startTime), "HH:mm")} -{" "}
-                {format(new Date(reservation.endTime), "HH:mm", {
-                  locale: es,
-                })}
-              </p>
+            <div className="hidden lg:flex justify-center lg:justify-start items-center h-full">
+              <div>
+                <QRCodeSVG
+                  value={reservation.codeQr}
+                  bgColor="#f5f5f4"
+                  size={250}
+                />
+              </div>
             </div>
           </div>
 
-          <div className="border-b border-dashed border-stone-300 my-4"></div>
+          {/* Círculos de perforación adicionales - Lado izquierdo */}
+          <div className="absolute -left-3 top-[50%] size-6 lg:size-8 bg-white rounded-full"></div>
 
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div>
-              <p className="text-xs font-semibold text-stone-700 mb-1">
-                PERSONAS:
-              </p>
-              <p className="text-sm text-stone-900">{reservation.people}</p>
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-stone-700 mb-1">
-                ESPACIO COMPLETO:
-              </p>
-              <p className="text-sm text-stone-900">
-                {reservation.fullRoom ? "Sí" : "No"}
-              </p>
-            </div>
-          </div>
-
-          <div className="border-t-2 border-dashed border-stone-300 my-4 pt-4 flex justify-between items-center">
-            <p className="text-sm font-semibold text-stone-700">TOTAL:</p>
-            <p className="text-lg font-bold text-stone-900">{price}</p>
-          </div>
-
-          <div className="border-t border-dashed border-stone-300 my-4 pt-4">
-            <p className="text-xs font-semibold text-stone-700 mb-1">
-              CÓDIGO DE RESERVA:
-            </p>
-            <div className="flex justify-center my-4">
-              <QRCodeSVG value={reservation.codeQr} size={200} />
-            </div>
-          </div>
-
-          <div className="absolute -left-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white rounded-full"></div>
-          <div className="absolute -right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-white rounded-full"></div>
+          {/* Círculos de perforación adicionales - Lado derecho */}
+          <div className="absolute -right-3 top-[50%] size-6 lg:size-8 bg-white rounded-full"></div>
         </div>
       </div>
     </div>

@@ -1,47 +1,70 @@
-import { useQueryClient } from "@tanstack/react-query";
-import type { User } from "@/store";
+import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getProfile } from "@/services";
 import { useUserStore } from "@/store";
-import type { LoginResponse } from "@/modules/shared/auth/features/login/types";
 
 export const useAuth = () => {
-  const queryClient = useQueryClient();
   const token =
     typeof window !== "undefined"
       ? window.localStorage.getItem("TOKEN_AUTH")
       : null;
 
-  const user = useUserStore((s) => s.user);
+  const userLocalStorage =
+    typeof window !== "undefined"
+      ? JSON.parse(window.localStorage.getItem("USER_AUTH") || "null")
+      : null;
+
+  const userStore = useUserStore((s) => s.user);
   const setUser = useUserStore((s) => s.setUser);
-  const deleteUser = useUserStore((s) => s.deleteUser);
 
-  const handleLogin = (loginResponse: LoginResponse) => {
-    const { user: userData, token } = loginResponse;
-    const transformedUser: User = {
-      id: userData.id,
-      name: `${userData.first_name} ${userData.last_name}`,
-      avatar: userData.profile_image,
-      email: userData.email,
-      userType: "client",
+  useEffect(() => {
+    if (token && userLocalStorage && !userStore) {
+      setUser(userLocalStorage);
+    }
+  }, [token, userLocalStorage, userStore, setUser]);
+
+  const hasInconsistentState = !token && userLocalStorage;
+
+  const queryEnabled = !!token && !userLocalStorage;
+
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["profile"],
+    queryFn: () => getProfile(),
+    enabled: queryEnabled,
+    retry: false,
+  });
+
+  useEffect(() => {
+    if (data?.data && !userLocalStorage) {
+      const { id, first_name, last_name, email, user_type } = data.data;
+      const userData = {
+        id,
+        name: `${first_name} ${last_name}`,
+        email,
+        userType: user_type,
+      };
+      setUser(userData);
+      localStorage.setItem("USER_AUTH", JSON.stringify(userData));
+    }
+  }, [data, userLocalStorage, setUser]);
+
+  if (hasInconsistentState) {
+    return {
+      token: null,
+      user: null,
+      isPending: false,
+      isError: true,
+      error: new Error("Estado inconsistente: usuario sin token"),
     };
+  }
 
-    localStorage.setItem("TOKEN_AUTH", token);
-    setUser(transformedUser);
-    queryClient.setQueryData(["profile"], transformedUser);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("TOKEN_AUTH");
-    deleteUser();
-    queryClient.clear();
-  };
+  const currentUser = userLocalStorage || userStore || data?.data || null;
 
   return {
     token,
-    user,
-    isPending: false,
-    isError: false,
-    error: null,
-    handleLogin,
-    handleLogout,
+    user: currentUser,
+    isPending: isLoading,
+    isError,
+    error,
   };
 };

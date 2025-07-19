@@ -1,9 +1,8 @@
-import { Button } from "@/components/ui";
+import { Button, CustomHeader } from "@/components/ui";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { ArrowLeftIcon } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   SpaceSelector,
   DateSelector,
@@ -12,22 +11,29 @@ import {
   FullSpaceSwitch,
   ReservationSummary,
 } from "../components";
-import type { ReservationFormData } from "../types";
+import type { AvailabilityRequest, ReservationFormData } from "../types";
 import { reservationSchema } from "../schemas";
 import type { Space } from "@/modules/client/space/features/get_spaces/types";
 import { convertTimeToISO } from "@/utilities";
 import { ROUTES } from "@/routes/routes";
 import { useGetAvailableSpaces } from "@/modules/client/space/features/get_spaces/service";
 import { useCheckAvailability, useCreateReservation } from "../service";
+import { useTitle } from "@/hooks";
+import { useEffect } from "react";
 
 export default function CreateReservationPage() {
   const navigate = useNavigate();
+  const { changeTitle } = useTitle();
   const { data: spacesData, isLoading: isLoadingSpaces } =
     useGetAvailableSpaces();
   const { mutate: checkAvailability, isPending: isChecking } =
     useCheckAvailability();
   const { mutate: createReservation, isPending: isCreating } =
     useCreateReservation();
+
+  useEffect(() => {
+    changeTitle("Crear reserva - La base");
+  }, [changeTitle]);
 
   const {
     handleSubmit,
@@ -53,7 +59,7 @@ export default function CreateReservationPage() {
     ) || null;
 
   const handleCreateReservation = (
-    availabilityData: any,
+    availabilityData: AvailabilityRequest,
     data: ReservationFormData
   ) => {
     const reservationData = {
@@ -118,21 +124,14 @@ export default function CreateReservationPage() {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto">
+    <div className="w-full max-w-5xl mx-auto px-4 py-8">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <div className="flex items-end justify-between gap-4 mb-6">
-            <div>
-              <Link
-                to={ROUTES.Client.ViewReservations}
-                className="bg-stone-50 size-12 flex items-center justify-center rounded-full border-none shadow-none transition-all hover:bg-stone-100"
-              >
-                <ArrowLeftIcon className="size-4" />
-              </Link>
-              <h2 className="text-2xl font-bold text-stone-900 mt-4">
-                Crear reserva
-              </h2>
-            </div>
+            <CustomHeader
+              title="Crear reserva"
+              to={ROUTES.Client.ViewReservations}
+            />
             <Button
               type="submit"
               variant="default"

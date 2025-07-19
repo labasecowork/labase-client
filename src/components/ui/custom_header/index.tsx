@@ -20,7 +20,7 @@ export const CustomHeader: React.FC<Props> = ({
       <Link
         to={to}
         className={twMerge(
-          "bg-stone-50 size-12 flex items-center justify-center rounded-full border-none shadow-none transition-all hover:bg-stone-100",
+          "bg-stone-50 size-12 flex items-center justify-center rounded-full border-none shadow-none transition-all hover:bg-stone-100 cursor-pointer",
           classNameLink
         )}
       >
