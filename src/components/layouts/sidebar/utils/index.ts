@@ -2,7 +2,7 @@ import { ROUTES } from "@/routes/routes";
 import {
   CalendarIcon,
   ClipboardDocumentListIcon,
-  PlusIcon,
+  NewspaperIcon,
 } from "@heroicons/react/24/outline";
 import type { NavigationItem } from "../types";
 
@@ -53,6 +53,12 @@ export const getNavigationConfig = (userType: string): NavigationItem[] => {
         href: ROUTES.Admin.ViewAllReservations,
         icon: ClipboardDocumentListIcon,
         key: "reservations",
+      },
+      {
+        name: "Newsletter",
+        href: ROUTES.Admin.SendNewsletter,
+        icon: NewspaperIcon,
+        key: "newsletter",
       },
     ],
     client: [

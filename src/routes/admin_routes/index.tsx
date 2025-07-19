@@ -20,5 +20,9 @@ export const adminRoutes = {
       path: ROUTES.Admin.ViewAllReservations,
       element: <admin.ViewAllReservationsPage />,
     },
+    {
+      path: ROUTES.Admin.SendNewsletter,
+      element: <admin.SendNewsletterPage />,
+    },
   ],
 };
