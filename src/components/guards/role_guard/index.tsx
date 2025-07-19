@@ -9,8 +9,8 @@ export default function RoleGuard() {
 
   if (!user?.userType) return null;
 
-  const isAdminRoute = path.startsWith(ROUTES.Admin.ViewCalendar);
-  const isClientRoute = path.startsWith(ROUTES.Client.ViewReservations);
+  const isAdminRoute = path.startsWith("/admin");
+  const isClientRoute = path.startsWith("/client");
 
   const canAccess =
     (user.userType === "admin" && isAdminRoute) ||
