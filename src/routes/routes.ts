@@ -19,6 +19,7 @@ export const ROUTES = {
     ViewAllReservations: "/admin/reservations",
     ViewDetailsReservation: "/admin/reservations/:id",
     ScanCodeQRReservation: "/admin/reservations/scan-qr",
+    SendNewsletter: "/admin/newsletter",
   },
 
   Error: {
