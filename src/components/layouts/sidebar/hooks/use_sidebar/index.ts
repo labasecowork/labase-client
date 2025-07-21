@@ -10,10 +10,10 @@ import { useUserStore } from "@/store";
 
 export const useSidebar = () => {
   const user = useUserStore((s) => s.user);
+  const deleteUser = useUserStore((s) => s.deleteUser);
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Estados
   const [indicatorStyle, setIndicatorStyle] = useState<{
     left: number;
     width: number;
@@ -21,20 +21,17 @@ export const useSidebar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
-  // Configuración de navegación basada en el rol del usuario
   const navigation = useMemo(() => {
     if (!user?.userType) return [];
     return getNavigationConfig(user.userType);
   }, [user?.userType]);
 
-  // Índice del elemento activo
   const activeIndex = useMemo(() => {
     return navigation.findIndex((item) =>
       isActiveRoute(item.href, location.pathname)
     );
   }, [navigation, location.pathname]);
 
-  // Efecto para inicializar el indicador
   useEffect(() => {
     if (navRefs.current[activeIndex] && activeIndex !== -1) {
       const activeElement = navRefs.current[activeIndex];
@@ -47,7 +44,6 @@ export const useSidebar = () => {
     }
   }, [activeIndex, navigation]);
 
-  // Handlers
   const handleMouseEnter = (index: number) => {
     const targetElement = navRefs.current[index];
     if (targetElement) {
@@ -77,7 +73,9 @@ export const useSidebar = () => {
   };
 
   const handleLogout = () => {
-    console.log("Mock logout");
+    localStorage.removeItem("TOKEN_AUTH");
+    localStorage.removeItem("USER_AUTH");
+    deleteUser();
     navigate(ROUTES.Auth.Login);
   };
 
@@ -86,13 +84,13 @@ export const useSidebar = () => {
   };
 
   return {
-    // Estados
+    // States
     indicatorStyle,
     mobileMenuOpen,
     setMobileMenuOpen,
     navRefs,
 
-    // Datos computados
+    // Computed data
     navigation,
     activeIndex,
     user,

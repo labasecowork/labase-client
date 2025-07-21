@@ -4,7 +4,6 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAuth } from "@/hooks/use_auth";
 import { Link, useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import { useLogin } from "../service";

@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { CustomHeader } from "@/components/ui";
 import { useTitle } from "@/hooks";
-import { MailCheck, Users, ChevronDown } from "lucide-react";
+import { Users, ChevronDown } from "lucide-react";
 import { SubscribersTable } from "../components";
 import { useSendNewsletter } from "../service";
 import { sendNewsletterSchema } from "../schemas";
@@ -18,6 +18,7 @@ import { subscribedEmails } from "../constants";
 export default function SendNewsletterPage() {
   const { changeTitle } = useTitle();
   const { mutate: sendNewsletter, isPending } = useSendNewsletter();
+  // const { data: subscribers } = useGetSubscribers();
   const [isSubscribersExpanded, setIsSubscribersExpanded] = useState(false);
 
   const {
@@ -51,13 +52,9 @@ export default function SendNewsletterPage() {
   }, [changeTitle]);
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 py-8">
+    <div className="w-full max-w-5xl mx-auto px-4 py-10">
       <div className="flex items-center justify-between gap-4 mb-8">
         <CustomHeader title="Enviar Newsletter" />
-        <div className="bg-stone-200 flex items-center justify-center gap-2 text-stone-900 font-medium text-sm px-8 py-3 rounded-full">
-          <MailCheck className="size-4" />
-          {subscribedEmails.length} Suscriptores
-        </div>
       </div>
 
       {/* Accordión para móvil */}
@@ -89,7 +86,7 @@ export default function SendNewsletterPage() {
 
           {isSubscribersExpanded && (
             <div className="border-t border-stone-200 p-4">
-              <div className="bg-stone-50 overflow-hidden border border-stone-200 rounded-lg">
+              <div className="bg-stone-50 overflow-hidden border border-stone-200">
                 <div className="max-h-[400px] overflow-y-auto">
                   <SubscribersTable />
                 </div>
@@ -100,35 +97,15 @@ export default function SendNewsletterPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Tabla de suscriptores */}
-        <div className="hidden lg:block lg:col-span-1">
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold text-stone-900 mb-2">
-              Todos los emails que se suscribieron
-            </h3>
-            <p className="text-sm text-stone-600">
-              Lista de usuarios suscritos que recibirán el newsletter
-            </p>
-          </div>
-          <div className="bg-stone-50 overflow-hidden border border-stone-200 rounded-lg">
-            <div className="max-h-[600px] overflow-y-auto">
-              <SubscribersTable />
-            </div>
-          </div>
-        </div>
-
         {/* Formulario */}
         <div className="col-span-1 lg:col-span-1">
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold text-stone-900 mb-2">
-              Redactar Newsletter
-            </h3>
-            <p className="text-sm text-stone-600">
-              Completa los campos para enviar el newsletter
-            </p>
-          </div>
+          <p className="text-sm text-stone-600 mb-4">
+            Completa los campos para enviar el newsletter, con esto se enviara
+            un correo electrónico a todos los suscriptores, tienes un total de{" "}
+            {subscribedEmails.length} suscriptores.
+          </p>
 
-          <div className="bg-white border border-stone-200 rounded-lg p-6">
+          <div className="">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div>
                 <Label
@@ -160,7 +137,7 @@ export default function SendNewsletterPage() {
                 <Textarea
                   id="content"
                   placeholder="Escribe el contenido de tu newsletter aquí..."
-                  className="min-h-[350px] px-4 py-3 border-stone-300 focus:outline-none transition-colors rounded-none resize-none"
+                  className="min-h-[390px] px-4 py-3 border-stone-300 focus:outline-none transition-colors rounded-none resize-none"
                   {...register("content")}
                 />
                 {errors.content && (
@@ -173,12 +150,24 @@ export default function SendNewsletterPage() {
               <Button
                 type="submit"
                 disabled={isPending}
-                className="w-full h-12 bg-stone-500 hover:bg-stone-400 text-white font-medium rounded-none transition-all duration-200"
+                className="w-full h-12 bg-stone-500 hover:bg-stone-400 text-white font-medium  transition-all duration-200"
               >
                 {isPending ? "Enviando..." : "Enviar Newsletter"}
               </Button>
             </form>
           </div>
+        </div>
+        {/* Tabla de suscriptores */}
+        <div className="hidden lg:block lg:col-span-1">
+          {false ? (
+            <div className="bg-stone-50 overflow-hidden animate-pulse max-h-[675px] h-full"></div>
+          ) : (
+            <div className="bg-stone-50 overflow-hidden">
+              <div className="max-h-[675px] overflow-y-auto">
+                <SubscribersTable />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -106,8 +106,11 @@ export const TimeRangeSelector = forwardRef<
     };
 
     return (
-      <div ref={ref} className="flex items-start gap-4 mb-6">
-        <div className="flex flex-col">
+      <div
+        ref={ref}
+        className="items-start gap-4 mb-6 grid grid-cols-1 lg:grid-cols-2"
+      >
+        <div className="flex flex-col w-full">
           <label className="text-sm/6 text-stone-500 mb-2">
             Ingresa hora de inicio:
           </label>
@@ -115,7 +118,7 @@ export const TimeRangeSelector = forwardRef<
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                className={`w-[280px] justify-start text-left font-normal text-sm px-4 py-2 rounded-none text-stone-500 ${
+                className={`w-full justify-start text-left font-normal text-sm px-4 py-2 rounded-none text-stone-500 ${
                   startTimeError ? "border-red-500" : ""
                 }`}
               >
@@ -147,7 +150,7 @@ export const TimeRangeSelector = forwardRef<
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                className={`w-[280px] justify-start text-left font-normal text-sm px-4 py-2 rounded-none text-stone-500 ${
+                className={`w-full justify-start text-left font-normal text-sm px-4 py-2 rounded-none text-stone-500 ${
                   endTimeError ? "border-red-500" : ""
                 }`}
                 disabled={endTimeSlots.length === 0}

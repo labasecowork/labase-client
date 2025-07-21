@@ -5,7 +5,7 @@ import type { MyReservationsResponse } from "../types";
 
 const getMyReservationsRequest = async (): Promise<MyReservationsResponse> => {
   const { data } = await axiosInstance.get<Response<MyReservationsResponse>>(
-    "/reservations/mine"
+    "/me/reservations"
   );
   if (!data.data) {
     throw new Error(

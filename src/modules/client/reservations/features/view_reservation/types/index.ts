@@ -1,5 +1,5 @@
 import type { Space } from "@/modules/client/space/features/get_spaces/types";
-import type { User } from "@/store";
+import type { User } from "@/types/user";
 
 export interface Reservation {
   id: string;
