@@ -47,3 +47,27 @@ export const formatDate = (date: Date) => {
 
   return `${months[date.getMonth()]} ${date.getFullYear()}`;
 };
+
+export const formatTimeTo12Hours = (isoString: string): string => {
+  const date = new Date(isoString);
+  return date
+    .toLocaleTimeString("es-ES", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    })
+    .toLowerCase();
+};
+
+export const formatTimeRange = (startTime: string, endTime: string): string => {
+  return `${formatTimeTo12Hours(startTime)} - ${formatTimeTo12Hours(endTime)}`;
+};
+
+export const formatDateToShort = (isoString: string): string => {
+  const date = new Date(isoString);
+  return date.toLocaleDateString("es-PE", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "2-digit",
+  });
+};

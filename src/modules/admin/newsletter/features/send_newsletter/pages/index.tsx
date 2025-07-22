@@ -10,15 +10,19 @@ import { CustomHeader } from "@/components/ui";
 import { useTitle } from "@/hooks";
 import { Users, ChevronDown } from "lucide-react";
 import { SubscribersTable } from "../components";
-import { useSendNewsletter } from "../service";
+import { useGetSubscribers, useSendNewsletter } from "../service";
 import { sendNewsletterSchema } from "../schemas";
 import type { SendNewsletterData } from "../types";
-import { subscribedEmails } from "../constants";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
 
 export default function SendNewsletterPage() {
   const { changeTitle } = useTitle();
   const { mutate: sendNewsletter, isPending } = useSendNewsletter();
-  // const { data: subscribers } = useGetSubscribers();
+  const {
+    data: subscribers,
+    isPending: isPendingSubscribers,
+    isError,
+  } = useGetSubscribers();
   const [isSubscribersExpanded, setIsSubscribersExpanded] = useState(false);
 
   const {
@@ -32,9 +36,9 @@ export default function SendNewsletterPage() {
 
   const onSubmit = (data: SendNewsletterData) => {
     sendNewsletter(data, {
-      onSuccess: (response) => {
+      onSuccess: () => {
         toast.success("Newsletter enviado exitosamente", {
-          description: `Se envió a ${response.recipients_count} suscriptores`,
+          description: `Se envió a ${subscribers?.data?.count} suscriptores`,
         });
         reset();
       },
@@ -72,7 +76,11 @@ export default function SendNewsletterPage() {
                     Lista de Suscriptores
                   </h3>
                   <p className="text-sm text-stone-600">
-                    {subscribedEmails.length} usuarios suscritos
+                    {isPendingSubscribers
+                      ? "Cargando..."
+                      : isError
+                      ? "Error al cargar los suscriptores"
+                      : `${subscribers?.data?.count || 0} usuarios suscritos`}
                   </p>
                 </div>
               </div>
@@ -83,15 +91,20 @@ export default function SendNewsletterPage() {
               />
             </div>
           </div>
-
-          {isSubscribersExpanded && (
-            <div className="border-t border-stone-200 p-4">
-              <div className="bg-stone-50 overflow-hidden border border-stone-200">
-                <div className="max-h-[400px] overflow-y-auto">
-                  <SubscribersTable />
+          {isPendingSubscribers ? (
+            <div className="bg-stone-50 overflow-hidden animate-pulse max-h-[200px] h-full"></div>
+          ) : (
+            isSubscribersExpanded && (
+              <div className="border-t border-stone-200 p-4">
+                <div className="bg-stone-50 overflow-hidden border border-stone-200">
+                  <div className="max-h-[400px] overflow-y-auto">
+                    <SubscribersTable
+                      subscribers={subscribers?.data?.subscribers || []}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+            )
           )}
         </div>
       </div>
@@ -102,7 +115,11 @@ export default function SendNewsletterPage() {
           <p className="text-sm text-stone-600 mb-4">
             Completa los campos para enviar el newsletter, con esto se enviara
             un correo electrónico a todos los suscriptores, tienes un total de{" "}
-            {subscribedEmails.length} suscriptores.
+            {isPendingSubscribers
+              ? "cargando..."
+              : isError
+              ? "error al cargar los suscriptores."
+              : `${subscribers?.data?.count || 0} suscriptores.`}
           </p>
 
           <div className="">
@@ -132,7 +149,7 @@ export default function SendNewsletterPage() {
                   htmlFor="content"
                   className="text-sm font-medium text-stone-700 mb-2 block"
                 >
-                  Descripción del mail
+                  Contenido
                 </Label>
                 <Textarea
                   id="content"
@@ -159,12 +176,26 @@ export default function SendNewsletterPage() {
         </div>
         {/* Tabla de suscriptores */}
         <div className="hidden lg:block lg:col-span-1">
-          {false ? (
+          {isPendingSubscribers ? (
             <div className="bg-stone-50 overflow-hidden animate-pulse max-h-[675px] h-full"></div>
+          ) : isError ? (
+            <div className="col-span-1 lg:col-span-1 w-full h-full max-h-[675px] bg-rose-500/10 flex items-center justify-center flex-col text-center px-8">
+              <ExclamationTriangleIcon className="size-10 text-rose-800" />
+              <h2 className="text-rose-800 text-2xl font-serif mt-4 font-bold">
+                Error al cargar los suscriptores
+              </h2>
+              <p className="text-rose-700 text-xs sm:text-sm mt-0  sm:mt-2">
+                Sucedio un error al cargar los suscriptores, porfavor intenta
+                nuevamente, si el problema persiste, por favor contacta al
+                soporte.
+              </p>
+            </div>
           ) : (
-            <div className="bg-stone-50 overflow-hidden">
-              <div className="max-h-[675px] overflow-y-auto">
-                <SubscribersTable />
+            <div className="bg-stone-50 overflow-hidden h-full">
+              <div className="h-[675px] w-full">
+                <SubscribersTable
+                  subscribers={subscribers?.data?.subscribers || []}
+                />
               </div>
             </div>
           )}

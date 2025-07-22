@@ -7,11 +7,13 @@ import {
   TableRow,
 } from "@/components/ui";
 import { MailIcon, UserIcon } from "lucide-react";
-import { subscribedEmails } from "../../constants";
+import type { Subscriber } from "../../types";
 
-export const SubscribersTable = () => {
+export const SubscribersTable: React.FC<{
+  subscribers: Subscriber[];
+}> = ({ subscribers }) => {
   return (
-    <Table>
+    <Table className="w-full">
       <TableHeader>
         <TableRow className="border-b border-stone-200">
           <TableHead className="w-[280px] px-4 py-4">
@@ -30,7 +32,7 @@ export const SubscribersTable = () => {
       </TableHeader>
 
       <TableBody>
-        {subscribedEmails.map((subscriber, index) => (
+        {subscribers.map((subscriber, index) => (
           <TableRow
             key={subscriber.id}
             className={`border-b border-stone-100 hover:bg-stone-100 transition-colors ${

@@ -4,10 +4,18 @@ import { ROUTES } from "@/routes/routes";
 import { QrCodeIcon } from "lucide-react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useGetReservations } from "../service";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
 import { ReservationTable } from "../components";
 
 export default function ViewAllReservationsPage() {
   const { changeTitle } = useTitle();
+  const { data: reservations, isLoading, isError } = useGetReservations();
+
+  useEffect(() => {
+    console.log(reservations?.data?.data);
+  }, [reservations]);
+
   useEffect(() => {
     changeTitle("Ver reservas - La base");
   }, []);
@@ -23,10 +31,27 @@ export default function ViewAllReservationsPage() {
           Escanear código QR
         </Link>
       </div>
-
-      <div className="bg-stone-50 overflow-hidden mt-8">
-        <ReservationTable />
-      </div>
+      {isLoading ? (
+        <div className="bg-stone-50 overflow-hidden animate-pulse max-h-[675px] h-full"></div>
+      ) : isError ? (
+        <div className="col-span-1 lg:col-span-1 w-full h-full max-h-[675px] bg-rose-500/10 flex items-center justify-center flex-col text-center px-8">
+          <ExclamationTriangleIcon className="size-10 text-rose-800" />
+          <h2 className="text-rose-800 text-2xl font-serif mt-4 font-bold">
+            Error al cargar las reservas
+          </h2>
+          <p className="text-rose-700 text-xs sm:text-sm mt-0  sm:mt-2">
+            Sucedio un error al cargar las reservas, porfavor intenta
+            nuevamente, si el problema persiste, por favor contacta al soporte.
+          </p>
+        </div>
+      ) : (
+        <div
+          className="bg-stone-50 w-full mt-8"
+          style={{ height: "calc(100vh - 250px)" }}
+        >
+          <ReservationTable reservations={reservations?.data?.data || []} />
+        </div>
+      )}
     </div>
   );
 }

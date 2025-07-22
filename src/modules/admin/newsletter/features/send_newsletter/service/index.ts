@@ -1,15 +1,24 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { axiosInstance } from "@/lib/axios";
-import type { SendNewsletterData, NewsletterResponse } from "../types";
+import { axiosInstance } from "@/interceptors/axios";
+import type {
+  SendNewsletterData,
+  NewsletterResponse,
+  SubscriberResponse,
+} from "../types";
+import type { Response } from "@/types";
 
 const sendNewsletter = async (
   data: SendNewsletterData
 ): Promise<NewsletterResponse> => {
-  const response = await axiosInstance.post("/newsletter/send", data);
+  const newData = {
+    subject: data.subject,
+    html: data.content,
+  };
+  const response = await axiosInstance.post("/bulk_email", newData);
   return response.data;
 };
 
-const getSubscribers = async () => {
+const getSubscribers = async (): Promise<Response<SubscriberResponse>> => {
   const response = await axiosInstance.get("/newsletter/subscribers");
   return response.data;
 };
