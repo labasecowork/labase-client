@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { axiosInstance } from "@/interceptors/axios";
+import { axiosInstance } from "@/interceptors";
 import type { Response } from "@/types/services";
 import type { Space } from "@/modules/client/space/features/get_spaces/types";
 import { useAuth } from "@/hooks";

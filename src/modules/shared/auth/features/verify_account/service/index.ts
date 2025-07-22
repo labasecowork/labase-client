@@ -1,13 +1,8 @@
-import { useMutation } from "@tanstack/react-query";
-import { axiosInstance } from "@/interceptors/axios";
+import { axiosInstance } from "@/interceptors";
 import type { Response } from "@/types/services";
+import type { VerifyParams } from "../types";
 
-interface VerifyParams {
-  code: string;
-  email: string;
-}
-
-const verifyAccountRequest = async ({
+export const verifyAccountRequest = async ({
   code,
   email,
 }: VerifyParams): Promise<Response> => {
@@ -19,10 +14,4 @@ const verifyAccountRequest = async ({
     }
   );
   return data;
-};
-
-export const useVerifyAccount = () => {
-  return useMutation({
-    mutationFn: verifyAccountRequest,
-  });
 };

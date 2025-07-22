@@ -1,9 +1,8 @@
-import { useMutation } from "@tanstack/react-query";
-import { axiosInstance } from "@/interceptors/axios";
+import { axiosInstance } from "@/interceptors";
 import type { ForgotPasswordData } from "../types";
 import type { Response } from "@/types/services";
 
-const requestPasswordResetRequest = async (
+export const requestPasswordResetRequest = async (
   resetData: ForgotPasswordData
 ): Promise<Response> => {
   const { data } = await axiosInstance.post<Response>(
@@ -11,10 +10,4 @@ const requestPasswordResetRequest = async (
     resetData
   );
   return data;
-};
-
-export const useRequestPasswordReset = () => {
-  return useMutation({
-    mutationFn: requestPasswordResetRequest,
-  });
 };

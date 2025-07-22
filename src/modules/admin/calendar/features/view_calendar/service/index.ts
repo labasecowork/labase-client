@@ -1,4 +1,4 @@
-import { axiosInstance } from "@/interceptors/axios";
+import { axiosInstance } from "@/interceptors/";
 import { useQuery } from "@tanstack/react-query";
 import type { Event } from "../types";
 import type { Response } from "@/types";
