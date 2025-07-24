@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui";
+import type { Reservation } from "@/types";
 import {
   BuildingIcon,
   CalendarIcon,
@@ -15,8 +16,59 @@ import {
   UserIcon,
   UsersIcon,
 } from "lucide-react";
-import { reservations } from "../../constants";
+import { useEffect, useState } from "react";
+import { socket } from "@/lib/socket";
+
 export const ReservationTable = () => {
+  const [reservations, setReservations] = useState<Reservation[]>([]);
+
+  useEffect(() => {
+    const onNewReservation = (newReservation: {
+      reservationId: string;
+      user: { name: string; lastName: string };
+      startTime: string;
+      endTime: string;
+      people: number;
+      price: number;
+      spaceName: string;
+      fullRoom: boolean;
+    }) => {
+      console.log("Nueva reservación recibida:", newReservation);
+
+      const startTime = new Date(newReservation.startTime);
+      const endTime = new Date(newReservation.endTime);
+
+      // Formatear HH:mm
+      const formatTime = (date: Date) => {
+        const hours = String(date.getHours()).padStart(2, "0");
+        const minutes = String(date.getMinutes()).padStart(2, "0");
+        return `${hours}:${minutes}`;
+      };
+
+      const formattedReservation = {
+        id: newReservation.reservationId,
+        date: startTime.toISOString().split("T")[0],
+        time: `${formatTime(startTime)} - ${formatTime(endTime)}`,
+        people: newReservation.people,
+        total: `$ ${newReservation.price}`,
+        fullSpace: newReservation.fullRoom,
+        client: `${newReservation.user.name} ${newReservation.user.lastName}`,
+        space: newReservation.spaceName,
+      };
+
+      setReservations((currentReservations) => [
+        formattedReservation,
+        ...currentReservations,
+      ]);
+    };
+
+    socket.on("RESERVATION_CREATED", onNewReservation);
+
+    return () => {
+      socket.off("RESERVATION_CREATED", onNewReservation);
+    };
+  }, []);
+
   return (
     <Table>
       <TableHeader className="">
