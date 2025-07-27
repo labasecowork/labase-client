@@ -20,6 +20,10 @@ export const ROUTES = {
     ViewDetailsReservation: "/admin/reservations/:id",
     ScanCodeQRReservation: "/admin/reservations/scan-qr",
     SendNewsletter: "/admin/newsletter",
+    ViewSpaces: "/admin/spaces",
+    CreateSpace: "/admin/spaces/create",
+    ViewSpace: "/admin/spaces/:id",
+    EditSpace: "/admin/spaces/:id/edit",
   },
 
   Error: {
