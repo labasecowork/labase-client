@@ -1,8 +1,6 @@
-import { axiosInstance } from "@/interceptors/axios";
+import { axiosInstance } from "@/interceptors";
 
 export const getProfile = async () => {
-  const response = await axiosInstance.get(
-    "http://localhost:3000/api/v1/users/profile"
-  );
+  const response = await axiosInstance.get("/users/profile");
   return response.data;
 };

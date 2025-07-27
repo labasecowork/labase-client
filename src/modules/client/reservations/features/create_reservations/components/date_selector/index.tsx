@@ -19,7 +19,7 @@ interface DateSelectorProps {
 export const DateSelector = forwardRef<HTMLDivElement, DateSelectorProps>(
   ({ date, onDateChange, error }, ref) => {
     return (
-      <div ref={ref} className="flex flex-col">
+      <div ref={ref} className="flex flex-col w-full">
         <label className="text-sm/6 text-stone-500 mb-2">
           Ingresa día de reserva:
         </label>
@@ -28,7 +28,7 @@ export const DateSelector = forwardRef<HTMLDivElement, DateSelectorProps>(
             <Button
               variant="outline"
               data-empty={!date}
-              className={`data-[empty=true]:text-muted-foreground rounded-none w-[280px] justify-start text-left font-normal text-sm px-4 py-2 shadow-none ${
+              className={`data-[empty=true]:text-muted-foreground rounded-none w-full justify-start text-left font-normal text-sm px-4 py-2 shadow-none ${
                 error ? "border-red-500" : ""
               }`}
             >

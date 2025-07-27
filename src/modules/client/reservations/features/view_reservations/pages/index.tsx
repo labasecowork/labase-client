@@ -14,14 +14,14 @@ export default function ViewReservationsPage() {
   }, [changeTitle]);
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 py-8">
-      <div className="flex items-center justify-between gap-4 mb-8">
+    <div className="w-full max-w-5xl mx-auto px-4 py-10">
+      <div className="flex items-center justify-between gap-4 mb-8 flex-wrap">
         <CustomHeader title={"Mis reservas"} />
         <Link
           to={ROUTES.Client.CreateReservation}
-          className="bg-stone-500 text-white font-medium hover:bg-stone-400 transition-all text-sm px-8 py-3 rounded-full flex items-center gap-2"
+          className="bg-stone-500 text-xs text-white font-medium hover:bg-stone-400 transition-all sm:text-sm px-8 py-3 rounded-full flex items-center gap-2"
         >
-          <PlusIcon className="w-4 h-4" />
+          <PlusIcon className="size-3 sm:size-4" />
           Crear reserva
         </Link>
       </div>

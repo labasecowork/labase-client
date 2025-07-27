@@ -20,16 +20,16 @@ export const CustomHeader: React.FC<Props> = ({
       <Link
         to={to}
         className={twMerge(
-          "bg-stone-50 size-12 flex items-center justify-center rounded-full border-none shadow-none transition-all hover:bg-stone-100 cursor-pointer",
+          "bg-stone-50 size-10 sm:size-12 flex items-center justify-center rounded-full border-none shadow-none transition-all hover:bg-stone-100 cursor-pointer",
           classNameLink
         )}
       >
-        <ArrowLeftIcon className="size-4" />
+        <ArrowLeftIcon className="size-3.5 sm:size-4" />
       </Link>
     )}
     <h2
       className={twMerge(
-        "text-3xl font-serif font-bold text-stone-900",
+        "text-2xl sm:text-3xl font-serif font-bold text-stone-900",
         classNameTitle
       )}
     >

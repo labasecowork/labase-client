@@ -46,13 +46,13 @@ export const ListCard = () => {
 
   if (isErrorReservations || isErrorSpaces) {
     return (
-      <div className="text-center bg-red-500/10 px-4 py-16 text-sm">
-        <div className="w-full max-w-[450px] mx-auto text-center">
+      <div className="text-center bg-red-500/10 p-10 sm:p-24 text-sm">
+        <div className="w-full  mx-auto max-w-md ">
           <ExclamationTriangleIcon className="h-10 w-10 text-rose-800 mx-auto" />
-          <h2 className="text-lg font-bold font-serif text-rose-800 mt-4">
+          <h2 className="text-xl font-bold font-serif text-rose-800 mt-4">
             Sucedio un error
           </h2>
-          <p className="text-rose-700 text-sm mt-2">
+          <p className="text-rose-700 text-xs sm:text-sm mt-0 sm:mt-2">
             Sucedio un error al cargar tus reservas, este error es inesperado,
             más información:{" "}
             {errorReservations?.message || errorSpaces?.message}
@@ -64,13 +64,13 @@ export const ListCard = () => {
 
   if (!reservationsData || reservationsData.data.length === 0) {
     return (
-      <div className="text-center bg-stone-500/10 px-8 py-16 rounded-lg">
-        <div className="w-full max-w-[450px] mx-auto">
+      <div className="text-center bg-stone-500/10 p-10 sm:p-24 ">
+        <div className="w-full  mx-auto max-w-md ">
           <InboxArrowDownIcon className="w-10 h-10 text-stone-500 mx-auto" />
           <p className=" font-bold font-serif text-stone-900 text-lg mt-4">
             Aún no tienes ninguna reserva.
           </p>
-          <p className="text-sm text-stone-500 text-center mt-2">
+          <p className="text-xs sm:text-sm text-stone-500 text-center mt-0 sm:mt-2">
             Aún no tienes ninguna reserva, puedes crear una nueva reserva
             pulsando en el botón de crear reserva, ¡animate a crear una!.
           </p>

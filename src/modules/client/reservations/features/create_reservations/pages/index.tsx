@@ -124,10 +124,10 @@ export default function CreateReservationPage() {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 py-8">
+    <div className="w-full max-w-5xl mx-auto px-4 py-10">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <div className="flex items-end justify-between gap-4 mb-6">
+          <div className="flex items-end justify-between gap-4 mb-6 flex-wrap">
             <CustomHeader
               title="Crear reserva"
               to={ROUTES.Client.ViewReservations}
@@ -136,6 +136,7 @@ export default function CreateReservationPage() {
               type="submit"
               variant="default"
               disabled={isChecking || isCreating}
+              className=" text-xs sm:text-sm"
             >
               {isChecking
                 ? "Verificando..."
@@ -146,7 +147,7 @@ export default function CreateReservationPage() {
           </div>
         </div>
 
-        <div className="w-full grid grid-cols-[600px_400px] justify-between">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-[600px_400px] justify-between">
           <div>
             <SpaceSelector
               spaces={spacesData?.spaces || []}
@@ -156,7 +157,7 @@ export default function CreateReservationPage() {
               error={errors.spaceId?.message}
             />
 
-            <div className="mb-6 flex items-start gap-4">
+            <div className="mb-6  items-start gap-4 grid grid-cols-1 lg:grid-cols-2">
               <DateSelector
                 date={watchedValues.date}
                 onDateChange={(date) => setValue("date", date as Date)}

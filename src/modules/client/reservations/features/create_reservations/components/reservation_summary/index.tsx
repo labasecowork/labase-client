@@ -75,7 +75,7 @@ export const ReservationSummary = forwardRef<
     }, [selectedSpace, personCount, isFullSpace, startTime, endTime]);
 
     return (
-      <div ref={ref} className="w-full p-4">
+      <div ref={ref} className="w-full lg:p-4">
         {/* Ticket de Resumen */}
         <div className="bg-stone-100 p-6 relative">
           <div className="text-center border-b border-dashed border-stone-300 pb-4 mb-4">

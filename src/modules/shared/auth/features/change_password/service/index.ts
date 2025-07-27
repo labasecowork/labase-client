@@ -1,13 +1,8 @@
-import { useMutation } from "@tanstack/react-query";
-import { axiosInstance } from "@/interceptors/axios";
+import { axiosInstance } from "@/interceptors";
 import type { Response } from "@/types/services";
-import type { ChangePasswordData } from "../types";
+import type { ConfirmPasswordPayload } from "../types";
 
-type ConfirmPasswordPayload = ChangePasswordData & {
-  email: string;
-};
-
-const confirmNewPasswordRequest = async (
+export const confirmNewPasswordRequest = async (
   payload: ConfirmPasswordPayload
 ): Promise<Response> => {
   const { data } = await axiosInstance.post<Response>(
@@ -15,10 +10,4 @@ const confirmNewPasswordRequest = async (
     payload
   );
   return data;
-};
-
-export const useConfirmNewPassword = () => {
-  return useMutation({
-    mutationFn: confirmNewPasswordRequest,
-  });
 };

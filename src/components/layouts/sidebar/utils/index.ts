@@ -2,6 +2,7 @@ import { ROUTES } from "@/routes/routes";
 import {
   CalendarIcon,
   ClipboardDocumentListIcon,
+  BuildingOfficeIcon,
   NewspaperIcon,
 } from "@heroicons/react/24/outline";
 import type { NavigationItem } from "../types";
@@ -59,6 +60,12 @@ export const getNavigationConfig = (userType: string): NavigationItem[] => {
         href: ROUTES.Admin.SendNewsletter,
         icon: NewspaperIcon,
         key: "newsletter",
+      },
+      {
+        name: "Espacios",
+        href: ROUTES.Admin.ViewSpaces,
+        icon: BuildingOfficeIcon,
+        key: "spaces",
       },
     ],
     client: [

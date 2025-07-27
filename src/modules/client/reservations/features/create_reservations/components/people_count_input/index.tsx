@@ -39,12 +39,12 @@ export const PeopleCountInput = forwardRef<
   };
 
   return (
-    <div ref={ref} className="flex flex-col">
+    <div ref={ref} className="flex flex-col w-full">
       <label className="text-sm/6 text-stone-500 mb-2">
         Ingresa cantidad de personas:
       </label>
 
-      <div className="relative w-[280px]">
+      <div className="relative w-full">
         <Input
           type="number"
           value={value}

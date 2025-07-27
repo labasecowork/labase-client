@@ -1,9 +1,8 @@
-import { useMutation } from "@tanstack/react-query";
-import { axiosInstance } from "@/interceptors/axios";
+import { axiosInstance } from "@/interceptors";
 import type { RegisterData } from "../types";
 import type { Response } from "@/types/services";
 
-const registerRequest = async (
+export const registerRequest = async (
   registerData: RegisterData
 ): Promise<Response> => {
   const { data } = await axiosInstance.post<Response>(
@@ -11,10 +10,4 @@ const registerRequest = async (
     registerData
   );
   return data;
-};
-
-export const useRequestRegister = () => {
-  return useMutation({
-    mutationFn: registerRequest,
-  });
 };

@@ -8,16 +8,21 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { CustomHeader } from "@/components/ui";
 import { useTitle } from "@/hooks";
-import { MailCheck, Users, ChevronDown } from "lucide-react";
+import { Users, ChevronDown } from "lucide-react";
 import { SubscribersTable } from "../components";
-import { useSendNewsletter } from "../service";
+import { useGetSubscribers, useSendNewsletter } from "../service";
 import { sendNewsletterSchema } from "../schemas";
 import type { SendNewsletterData } from "../types";
-import { subscribedEmails } from "../constants";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
 
 export default function SendNewsletterPage() {
   const { changeTitle } = useTitle();
   const { mutate: sendNewsletter, isPending } = useSendNewsletter();
+  const {
+    data: subscribers,
+    isPending: isPendingSubscribers,
+    isError,
+  } = useGetSubscribers();
   const [isSubscribersExpanded, setIsSubscribersExpanded] = useState(false);
 
   const {
@@ -31,9 +36,9 @@ export default function SendNewsletterPage() {
 
   const onSubmit = (data: SendNewsletterData) => {
     sendNewsletter(data, {
-      onSuccess: (response) => {
+      onSuccess: () => {
         toast.success("Newsletter enviado exitosamente", {
-          description: `Se envió a ${response.recipients_count} suscriptores`,
+          description: `Se envió a ${subscribers?.data?.count} suscriptores`,
         });
         reset();
       },
@@ -51,13 +56,9 @@ export default function SendNewsletterPage() {
   }, [changeTitle]);
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 py-8">
+    <div className="w-full max-w-5xl mx-auto px-4 py-10">
       <div className="flex items-center justify-between gap-4 mb-8">
         <CustomHeader title="Enviar Newsletter" />
-        <div className="bg-stone-200 flex items-center justify-center gap-2 text-stone-900 font-medium text-sm px-8 py-3 rounded-full">
-          <MailCheck className="size-4" />
-          {subscribedEmails.length} Suscriptores
-        </div>
       </div>
 
       {/* Accordión para móvil */}
@@ -75,7 +76,11 @@ export default function SendNewsletterPage() {
                     Lista de Suscriptores
                   </h3>
                   <p className="text-sm text-stone-600">
-                    {subscribedEmails.length} usuarios suscritos
+                    {isPendingSubscribers
+                      ? "Cargando..."
+                      : isError
+                      ? "Error al cargar los suscriptores"
+                      : `${subscribers?.data?.count || 0} usuarios suscritos`}
                   </p>
                 </div>
               </div>
@@ -86,49 +91,38 @@ export default function SendNewsletterPage() {
               />
             </div>
           </div>
-
-          {isSubscribersExpanded && (
-            <div className="border-t border-stone-200 p-4">
-              <div className="bg-stone-50 overflow-hidden border border-stone-200 rounded-lg">
-                <div className="max-h-[400px] overflow-y-auto">
-                  <SubscribersTable />
+          {isPendingSubscribers ? (
+            <div className="bg-stone-50 overflow-hidden animate-pulse max-h-[200px] h-full"></div>
+          ) : (
+            isSubscribersExpanded && (
+              <div className="border-t border-stone-200 p-4">
+                <div className="bg-stone-50 overflow-hidden border border-stone-200">
+                  <div className="max-h-[400px] overflow-y-auto">
+                    <SubscribersTable
+                      subscribers={subscribers?.data?.subscribers || []}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+            )
           )}
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Tabla de suscriptores */}
-        <div className="hidden lg:block lg:col-span-1">
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold text-stone-900 mb-2">
-              Todos los emails que se suscribieron
-            </h3>
-            <p className="text-sm text-stone-600">
-              Lista de usuarios suscritos que recibirán el newsletter
-            </p>
-          </div>
-          <div className="bg-stone-50 overflow-hidden border border-stone-200 rounded-lg">
-            <div className="max-h-[600px] overflow-y-auto">
-              <SubscribersTable />
-            </div>
-          </div>
-        </div>
-
         {/* Formulario */}
         <div className="col-span-1 lg:col-span-1">
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold text-stone-900 mb-2">
-              Redactar Newsletter
-            </h3>
-            <p className="text-sm text-stone-600">
-              Completa los campos para enviar el newsletter
-            </p>
-          </div>
+          <p className="text-sm text-stone-600 mb-4">
+            Completa los campos para enviar el newsletter, con esto se enviara
+            un correo electrónico a todos los suscriptores, tienes un total de{" "}
+            {isPendingSubscribers
+              ? "cargando..."
+              : isError
+              ? "error al cargar los suscriptores."
+              : `${subscribers?.data?.count || 0} suscriptores.`}
+          </p>
 
-          <div className="bg-white border border-stone-200 rounded-lg p-6">
+          <div className="">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div>
                 <Label
@@ -155,12 +149,12 @@ export default function SendNewsletterPage() {
                   htmlFor="content"
                   className="text-sm font-medium text-stone-700 mb-2 block"
                 >
-                  Descripción del mail
+                  Contenido
                 </Label>
                 <Textarea
                   id="content"
                   placeholder="Escribe el contenido de tu newsletter aquí..."
-                  className="min-h-[350px] px-4 py-3 border-stone-300 focus:outline-none transition-colors rounded-none resize-none"
+                  className="min-h-[390px] px-4 py-3 border-stone-300 focus:outline-none transition-colors rounded-none resize-none"
                   {...register("content")}
                 />
                 {errors.content && (
@@ -173,12 +167,38 @@ export default function SendNewsletterPage() {
               <Button
                 type="submit"
                 disabled={isPending}
-                className="w-full h-12 bg-stone-500 hover:bg-stone-400 text-white font-medium rounded-none transition-all duration-200"
+                className="w-full h-12 bg-stone-500 hover:bg-stone-400 text-white font-medium  transition-all duration-200"
               >
                 {isPending ? "Enviando..." : "Enviar Newsletter"}
               </Button>
             </form>
           </div>
+        </div>
+        {/* Tabla de suscriptores */}
+        <div className="hidden lg:block lg:col-span-1">
+          {isPendingSubscribers ? (
+            <div className="bg-stone-50 overflow-hidden animate-pulse max-h-[675px] h-full"></div>
+          ) : isError ? (
+            <div className="col-span-1 lg:col-span-1 w-full h-full max-h-[675px] bg-rose-500/10 flex items-center justify-center flex-col text-center px-8">
+              <ExclamationTriangleIcon className="size-10 text-rose-800" />
+              <h2 className="text-rose-800 text-2xl font-serif mt-4 font-bold">
+                Error al cargar los suscriptores
+              </h2>
+              <p className="text-rose-700 text-xs sm:text-sm mt-0  sm:mt-2">
+                Sucedio un error al cargar los suscriptores, porfavor intenta
+                nuevamente, si el problema persiste, por favor contacta al
+                soporte.
+              </p>
+            </div>
+          ) : (
+            <div className="bg-stone-50 overflow-hidden h-full">
+              <div className="h-[675px] w-full">
+                <SubscribersTable
+                  subscribers={subscribers?.data?.subscribers || []}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

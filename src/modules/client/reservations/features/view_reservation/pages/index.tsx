@@ -2,15 +2,15 @@ import { ROUTES } from "@/routes/routes";
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import { Link, useParams } from "react-router-dom";
 import { useResolveReservationByCode } from "../service";
-import { Card, CardHeader, CardTitle } from "@/components/ui";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { QRCodeSVG } from "qrcode.react";
 import { useTitle } from "@/hooks";
 import { useEffect } from "react";
 import { getStatusLabel } from "@/utilities/status_utilities";
+import { CustomHeader } from "@/components/ui";
 
 export default function ViewReservationPage() {
   const { code } = useParams<{ code: string }>();
@@ -18,7 +18,6 @@ export default function ViewReservationPage() {
     data: reservationData,
     isLoading,
     isError,
-    error,
   } = useResolveReservationByCode(code!);
   const { changeTitle } = useTitle();
 
@@ -28,24 +27,32 @@ export default function ViewReservationPage() {
 
   if (isLoading) {
     return (
-      <div className="w-full max-w-5xl mx-auto">
-        <Card>
-          <CardHeader>
-            <CardTitle>Cargando...</CardTitle>
-          </CardHeader>
-        </Card>
+      <div className="px-4 py-10 w-full mx-auto max-w-5xl">
+        <CustomHeader title="Ver reserva" to={ROUTES.Client.ViewReservations} />
+        <div className="w-full animate-pulse bg-stone-50 h-[500px] mt-8"></div>
       </div>
     );
   }
 
   if (isError) {
     return (
-      <div className="w-full max-w-5xl mx-auto">
-        <Alert variant="destructive">
-          <ExclamationTriangleIcon className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error.message}</AlertDescription>
-        </Alert>
+      <div className="w-full max-w-5xl mx-auto px-4 py-10">
+        <CustomHeader title="Ver reserva" to={ROUTES.Client.ViewReservations} />
+        <div className="bg-red-500/10 p-10 sm:p-24 gap-2 mt-8">
+          <div className="mx-auto max-w-md text-center">
+            <ExclamationTriangleIcon className="size-10 text-rose-800 mx-auto" />
+            <div>
+              <h2 className="text-xl font-serif font-bold text-rose-800 mt-4">
+                Ups! Sucedio un error
+              </h2>
+              <p className="text-xs sm:text-sm text-rose-700 mt-0 sm:mt-2">
+                No se pudo encontrar la reserva solicitada, posiblemente no
+                existe o ya fue cancelada, si crees que esto es un error, por
+                favor contacta a soporte.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -73,13 +80,13 @@ export default function ViewReservationPage() {
       <div className="flex flex-col gap-4 mb-6">
         <Link
           to={ROUTES.Client.ViewReservations}
-          className="bg-stone-50 size-12 flex items-center justify-center rounded-full border-none shadow-none transition-all hover:bg-stone-100"
+          className="bg-stone-50 size-10 sm:size-12 flex items-center justify-center rounded-full border-none shadow-none transition-all hover:bg-stone-100"
         >
-          <ArrowLeftIcon className="size-4" />
+          <ArrowLeftIcon className="size-3.5 sm:size-4" />
         </Link>
-        <h2 className="text-3xl font-bold text-stone-900 ">
+        <h2 className="text-2xl sm:text-3xl font-bold text-stone-900 ">
           <span className="font-serif">Ver reserva </span>
-          <span className="text-lg font-serif font-medium text-stone-500">
+          <span className="text-base sm:text-lg font-serif font-medium text-stone-500">
             ({statusLabel})
           </span>
         </h2>

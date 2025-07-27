@@ -2,36 +2,17 @@ import type { Event } from "@/types/calendar";
 import { useEffect, useRef, useState } from "react";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { socket } from "@/lib/socket";
+  
+  interface Event {
+  id: string;
+  title: string;
+  subtitle: string;
+  startTime: string; // Formato "HH:MM"
+  endTime: string; // Formato "HH:MM"
+  day: number; // 0 = Lunes, 1 = Martes, etc.
+}
 
-// JSON de eventos de ejemplo
-const eventsData: Event[] = [
-  {
-    id: "1",
-    title: "Reunión de equipo",
-    startTime: "10:00",
-    endTime: "11:30",
-    day: 0, // Lunes
-    color: "stone",
-  },
-  {
-    id: "2",
-    title: "Presentación proyecto",
-    startTime: "14:00",
-    endTime: "15:30",
-    day: 2, // Miércoles
-    color: "stone",
-  },
-  {
-    id: "3",
-    title: "Revisión con cliente",
-    startTime: "16:00",
-    endTime: "17:00",
-    day: 4, // Viernes
-    color: "stone",
-  },
-];
-
-export const Calendar = () => {
+export const Calendar = ({ events }: { events: Event[] }) => {
   const container = useRef<Scrollbars | null>(null);
   const containerNav = useRef<HTMLDivElement | null>(null);
   const containerOffset = useRef<HTMLDivElement | null>(null);
@@ -58,8 +39,6 @@ export const Calendar = () => {
 
     return week;
   };
-
-  // Función para formatear la fecha
 
   // Función para obtener el nombre del día
   const getDayName = (date: Date, short: boolean = false) => {
@@ -99,8 +78,14 @@ export const Calendar = () => {
 
   // Función para obtener la columna del evento
   const getEventColumn = (dayIndex: number) => {
-    // +2 porque la primera columna es para las horas y empezamos desde la columna 2
-    return dayIndex + 2;
+    if (dayIndex === 0) return 6; // Domingo
+    if (dayIndex === 1) return -1; // Lunes
+    if (dayIndex === 2) return 0;
+    if (dayIndex === 3) return 1;
+    if (dayIndex === 4) return 2;
+    if (dayIndex === 5) return 3;
+    if (dayIndex === 6) return 4; // Sábado
+    return dayIndex;
   };
 
   useEffect(() => {
@@ -199,7 +184,7 @@ export const Calendar = () => {
   }
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col min-h-[600px]">
       <Scrollbars ref={container} autoHide style={{ height: "100%" }}>
         <div className="isolate flex flex-auto flex-col bg-stone-50">
           <div
@@ -304,20 +289,25 @@ export const Calendar = () => {
                           event.startTime,
                           event.endTime,
                         )}`,
-                        gridColumn: `${getEventColumn(event.day)} / ${
-                          getEventColumn(event.day) + 1
-                        }`,
+                        gridColumn: `${getEventColumn(
+                          event.day
+                        )} / ${getEventColumn(event.day)}`,
                       }}
                     >
                       <a
                         href="#"
-                        className={`group absolute inset-1 flex flex-col overflow-y-auto p-2 text-xs/5 bg-stone-200 text-stone-900 hover:bg-stone-300 transition-all border-l-4 border-stone-400`}
+                        className={`group absolute inset-1 flex flex-col justify-between overflow-y-auto p-2 text-xs/5 bg-stone-200 text-stone-900 hover:bg-stone-300 transition-all border-l-4 border-stone-400`}
                       >
-                        <p className="order-1 font-semibold">{event.title}</p>
-                        <p className="group-hover:opacity-75">
-                          <time dateTime={event.startTime}>
-                            {event.startTime}
-                          </time>
+                        <div>
+                          <p className="group-hover:opacity-75">
+                            <time dateTime={event.startTime}>
+                              {event.startTime}
+                            </time>
+                          </p>
+                          <p className="order-1 font-semibold">{event.title}</p>
+                        </div>
+                        <p className="order-2 font-normal text-xs">
+                          {event.subtitle}
                         </p>
                       </a>
                     </li>

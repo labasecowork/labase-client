@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { axiosInstance } from "@/interceptors/axios";
+import { axiosInstance } from "@/interceptors";
 import type { Response } from "@/types/services";
 import type { MyReservationsResponse } from "../types";
 
 const getMyReservationsRequest = async (): Promise<MyReservationsResponse> => {
   const { data } = await axiosInstance.get<Response<MyReservationsResponse>>(
-    "/reservations/mine"
+    "/me/reservations"
   );
   if (!data.data) {
     throw new Error(

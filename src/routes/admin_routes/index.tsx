@@ -24,5 +24,21 @@ export const adminRoutes = {
       path: ROUTES.Admin.SendNewsletter,
       element: <admin.SendNewsletterPage />,
     },
+    {
+      path: ROUTES.Admin.ViewSpaces,
+      element: <admin.ViewSpacesPage />,
+    },
+    {
+      path: ROUTES.Admin.CreateSpace,
+      element: <admin.CreateSpacePage />,
+    },
+    {
+      path: ROUTES.Admin.ViewSpace,
+      element: <admin.ViewSpacePage />,
+    },
+    {
+      path: ROUTES.Admin.EditSpace,
+      element: <admin.EditSpacePage />,
+    },
   ],
 };

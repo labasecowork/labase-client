@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { axiosInstance } from "@/interceptors/axios";
+import { axiosInstance } from "@/interceptors";
 import type { Response } from "@/types/services";
 import type {
   AvailabilityRequest,
