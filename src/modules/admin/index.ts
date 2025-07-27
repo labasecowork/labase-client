@@ -3,3 +3,7 @@ export { default as ViewAllReservationsPage } from "./reservations/features/view
 export { default as ViewReservationPage } from "./reservations/features/view_reservation/pages";
 export { default as ScanQRReservationsPage } from "./reservations/features/scan_qr_reservations/pages";
 export { default as SendNewsletterPage } from "./newsletter/features/send_newsletter/pages";
+export { default as ViewSpacesPage } from "./spaces/features/view_spaces/pages";
+export { default as CreateSpacePage } from "./spaces/features/create_space/pages";
+export { default as EditSpacePage } from "./spaces/features/edit_space/pages";
+export { default as ViewSpacePage } from "./spaces/features/view_space/pages";
