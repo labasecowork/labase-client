@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui";
-import type { Reservation } from "@/types";
+import type { Reservation } from "../../types";
 import {
   BuildingIcon,
   CalendarIcon,
@@ -16,59 +16,17 @@ import {
   UserIcon,
   UsersIcon,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "@/routes/routes";
+import { formatDateToShort, formatTimeRange } from "@/utilities/date_utilities";
+import { formatPrice } from "@/utilities/string_utilities";
 
-import { useEffect, useState } from "react";
-import { socket } from "@/lib/socket";
+interface ReservationTableProps {
+  reservations: Reservation[];
+}
 
-export const ReservationTable = () => {
-  const [reservations, setReservations] = useState<Reservation[]>([]);
-
-  useEffect(() => {
-    const onNewReservation = (newReservation: {
-      reservationId: string;
-      user: { name: string; lastName: string };
-      startTime: string;
-      endTime: string;
-      people: number;
-      price: number;
-      spaceName: string;
-      fullRoom: boolean;
-    }) => {
-      console.log("Nueva reservación recibida:", newReservation);
-
-      const startTime = new Date(newReservation.startTime);
-      const endTime = new Date(newReservation.endTime);
-
-      // Formatear HH:mm
-      const formatTime = (date: Date) => {
-        const hours = String(date.getHours()).padStart(2, "0");
-        const minutes = String(date.getMinutes()).padStart(2, "0");
-        return `${hours}:${minutes}`;
-      };
-
-      const formattedReservation = {
-        id: newReservation.reservationId,
-        date: startTime.toISOString().split("T")[0],
-        time: `${formatTime(startTime)} - ${formatTime(endTime)}`,
-        people: newReservation.people,
-        total: `$ ${newReservation.price}`,
-        fullSpace: newReservation.fullRoom,
-        client: `${newReservation.user.name} ${newReservation.user.lastName}`,
-        space: newReservation.spaceName,
-      };
-
-      setReservations((currentReservations) => [
-        formattedReservation,
-        ...currentReservations,
-      ]);
-    };
-
-    socket.on("RESERVATION_CREATED", onNewReservation);
-
-    return () => {
-      socket.off("RESERVATION_CREATED", onNewReservation);
-    };
-  }, []);
+export const ReservationTable = ({ reservations }: ReservationTableProps) => {
+  const navigate = useNavigate();
 
   return (
     <div

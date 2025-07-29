@@ -16,6 +16,7 @@ export const useAuth = () => {
 
   const userStore = useUserStore((s) => s.user);
   const setUser = useUserStore((s) => s.setUser);
+  const deleteUser = useUserStore((s) => s.deleteUser);
 
   useEffect(() => {
     if (token && userLocalStorage && !userStore) {
@@ -60,11 +61,18 @@ export const useAuth = () => {
 
   const currentUser = userLocalStorage || userStore || data?.data || null;
 
+  const logout = () => {
+    localStorage.removeItem("USER_AUTH");
+    localStorage.removeItem("TOKEN_AUTH");
+    deleteUser();
+  };
+
   return {
     token,
     user: currentUser,
     isPending: isLoading,
     isError,
     error,
+    logout,
   };
 };

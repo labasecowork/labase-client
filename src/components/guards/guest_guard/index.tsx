@@ -17,6 +17,7 @@ export default function GuestGuard() {
 
   if (isError) {
     window.localStorage.removeItem("TOKEN_AUTH");
+    window.localStorage.removeItem("USER_AUTH");
 
     if (currentPath.includes(ROUTES.Auth.Login)) {
       window.location.reload();

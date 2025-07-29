@@ -6,11 +6,10 @@ import {
   isActiveRoute,
 } from "@/components/layouts/sidebar/utils";
 import { userNavigation } from "@/components/layouts/sidebar/constants";
-import { useUserStore } from "@/store";
+import { useAuth } from "@/hooks";
 
 export const useSidebar = () => {
-  const user = useUserStore((s) => s.user);
-  const deleteUser = useUserStore((s) => s.deleteUser);
+  const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -72,15 +71,9 @@ export const useSidebar = () => {
     setMobileMenuOpen(false);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("TOKEN_AUTH");
-    localStorage.removeItem("USER_AUTH");
-    deleteUser();
-    navigate(ROUTES.Auth.Login);
-  };
-
   const handleLogoutClick = () => {
-    handleLogout();
+    logout?.();
+    navigate(ROUTES.Auth.Login);
   };
 
   return {

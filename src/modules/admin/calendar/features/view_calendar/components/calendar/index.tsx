@@ -1,24 +1,17 @@
-import type { Event } from "@/types/calendar";
 import { useEffect, useRef, useState } from "react";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { socket } from "@/lib/socket";
-  
-  interface Event {
-  id: string;
-  title: string;
-  subtitle: string;
-  startTime: string; // Formato "HH:MM"
-  endTime: string; // Formato "HH:MM"
-  day: number; // 0 = Lunes, 1 = Martes, etc.
+import type { Event } from "@/types";
+
+interface CalendarProps {
+  events: Event[];
 }
 
-export const Calendar = ({ events }: { events: Event[] }) => {
+export const Calendar = ({ events }: CalendarProps) => {
   const container = useRef<Scrollbars | null>(null);
   const containerNav = useRef<HTMLDivElement | null>(null);
   const containerOffset = useRef<HTMLDivElement | null>(null);
 
   const [currentWeek, setCurrentWeek] = useState<Date[]>([]);
-  const [events, setEvents] = useState<Event[]>(eventsData);
 
   // Función para obtener la semana actual
   const getCurrentWeek = () => {
@@ -89,54 +82,6 @@ export const Calendar = ({ events }: { events: Event[] }) => {
   };
 
   useEffect(() => {
-    // Transforma los datos del socket al formato del calendario
-    const onNewReservation = (reservation: any) => {
-      const reservationDate = new Date(reservation.startTime);
-
-      // Comprueba si la fecha de la reservación está en la semana actual que se muestra.
-      const isInCurrentWeek = currentWeek.some(
-        (dayInWeek) =>
-          dayInWeek.toDateString() === reservationDate.toDateString(),
-      );
-
-      if (!isInCurrentWeek) {
-        return;
-      }
-
-      // Formatear HH:mm
-      const formatTime = (date: Date) => {
-        const hours = String(date.getHours()).padStart(2, "0");
-        const minutes = String(date.getMinutes()).padStart(2, "0");
-        return `${hours}:${minutes}`;
-      };
-
-      const dayOfWeek =
-        reservationDate.getDay() === 0 ? 6 : reservationDate.getDay() - 1;
-
-      const newEvent: Event = {
-        id: reservation.reservationId,
-        title: reservation.spaceName,
-        startTime: formatTime(new Date(reservation.startTime)),
-        endTime: formatTime(new Date(reservation.endTime)),
-        day: dayOfWeek,
-        color: "stone",
-      };
-
-      setEvents((prevEvents) => [...prevEvents, newEvent]);
-    };
-
-    // Suscríbete al evento
-    socket.on("RESERVATION_CREATED", onNewReservation);
-
-    // Limpia la suscripción cuando el componente se desmonte
-    return () => {
-      socket.off("RESERVATION_CREATED", onNewReservation);
-    };
-
-    // Este efecto depende de `currentWeek` para poder hacer la comprobación correctamente.
-  }, [currentWeek]);
-
-  useEffect(() => {
     setCurrentWeek(getCurrentWeek());
   }, []);
 
@@ -172,7 +117,7 @@ export const Calendar = ({ events }: { events: Event[] }) => {
           <div className="sticky left-0 z-20 -mt-2.5 -ml-14 w-14 pr-2 text-right text-xs/5 text-stone-400">
             {formatHour(hour)}
           </div>
-        </div>,
+        </div>
       );
       slots.push(<div key={`${hour}-empty`} />);
     }
@@ -284,10 +229,10 @@ export const Calendar = ({ events }: { events: Event[] }) => {
                       className="relative mt-px flex"
                       style={{
                         gridRow: `${timeToGridRow(
-                          event.startTime,
+                          event.startTime
                         )} / span ${getEventDuration(
                           event.startTime,
-                          event.endTime,
+                          event.endTime
                         )}`,
                         gridColumn: `${getEventColumn(
                           event.day
@@ -306,9 +251,7 @@ export const Calendar = ({ events }: { events: Event[] }) => {
                           </p>
                           <p className="order-1 font-semibold">{event.title}</p>
                         </div>
-                        <p className="order-2 font-normal text-xs">
-                          {event.subtitle}
-                        </p>
+                        <p className="order-2 font-normal text-xs"></p>
                       </a>
                     </li>
                   ))}
