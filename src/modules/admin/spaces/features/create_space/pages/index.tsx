@@ -8,7 +8,7 @@ export default function CreateSpacePage() {
   const { changeTitle } = useTitle();
 
   useEffect(() => {
-    changeTitle("Crear Nuevo Espacio - La base");
+    changeTitle("Crear nuevo espacio - La base");
   }, [changeTitle]);
 
   return (

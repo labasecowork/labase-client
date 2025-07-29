@@ -15,15 +15,15 @@ export const InfoItem: React.FC<InfoItemProps> = ({
     </div>
     {isStatus ? (
       <div
-        className={`mt-1 font-semibold flex items-center gap-2 ${
-          statusValue ? "text-emerald-600" : "text-red-600"
+        className={`mt-1 text-sm font-semibold flex items-center gap-2 ${
+          statusValue ? "text-emerald-700" : "text-rose-700"
         }`}
       >
         {statusValue ? <Check className="size-4" /> : <X className="size-4" />}
         {value}
       </div>
     ) : (
-      <p className="mt-1 font-semibold text-stone-800">{value}</p>
+      <p className="mt-1 font-semibold text-stone-800 text-sm">{value}</p>
     )}
   </div>
 );

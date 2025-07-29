@@ -16,11 +16,13 @@ export interface FormProps {
 
 export interface GeneralInfoSectionProps {
   register: UseFormRegister<EditSpaceData>;
+  control: Control<EditSpaceData>;
   errors: FieldErrors<EditSpaceData>;
 }
 
 export interface ConfigSectionProps {
   register: UseFormRegister<EditSpaceData>;
+  control: Control<EditSpaceData>;
   errors: FieldErrors<EditSpaceData>;
 }
 

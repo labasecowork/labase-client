@@ -15,3 +15,4 @@ export * from "./status_message";
 export * from "./switch";
 export * from "./table";
 export * from "./textarea";
+export * from "./select";

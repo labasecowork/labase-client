@@ -6,15 +6,15 @@ export const PermissionItem: React.FC<PermissionItemProps> = ({
   allowed,
 }) => (
   <div
-    className={`flex items-center gap-3 p-3 rounded-md text-sm border ${
+    className={`flex items-center gap-2 p-3 bg-stone-100 text-sm ${
       allowed
         ? "bg-stone-50 border-stone-200 text-stone-800"
         : "bg-stone-50 border-stone-200 text-stone-500"
     }`}
   >
     <div
-      className={`flex items-center justify-center size-5 rounded-full ${
-        allowed ? "bg-stone-800" : "bg-stone-300"
+      className={`flex items-center justify-center size-4 rounded-full ${
+        allowed ? "bg-stone-500" : "bg-stone-300"
       }`}
     >
       {allowed ? (
@@ -23,6 +23,6 @@ export const PermissionItem: React.FC<PermissionItemProps> = ({
         <X className="size-3 text-stone-500" />
       )}
     </div>
-    <span className={`font-medium ${!allowed && "line-through"}`}>{label}</span>
+    <span className={`${!allowed && "line-through"}`}>{label}</span>
   </div>
 );

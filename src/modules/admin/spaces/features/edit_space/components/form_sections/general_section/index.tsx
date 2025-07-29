@@ -76,9 +76,13 @@ export const Form: React.FC<FormProps> = ({ spaceId, defaultValues }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-8">
-      <GeneralInfoSection register={register} errors={errors} />
+      <GeneralInfoSection
+        register={register}
+        control={control}
+        errors={errors}
+      />
 
-      <ConfigSection register={register} errors={errors} />
+      <ConfigSection register={register} control={control} errors={errors} />
 
       <PricingSection
         register={register}

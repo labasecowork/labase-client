@@ -19,9 +19,7 @@ import {
   Users,
   Shield,
   KeyRound,
-  Building2,
   Calendar,
-  DollarSign,
   Trash2,
 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -29,6 +27,7 @@ import { useDeactivateSpace } from "../../../../features/desactivate_space/servi
 import { InfoItem } from "../info_item";
 import { PermissionItem } from "../permission_item";
 import type { SpaceDetailsProps } from "../../types";
+import { BuildingOfficeIcon } from "@heroicons/react/24/solid";
 
 export const SpaceDetails: React.FC<SpaceDetailsProps> = ({ spaceData }) => {
   const { space } = spaceData;
@@ -47,42 +46,43 @@ export const SpaceDetails: React.FC<SpaceDetailsProps> = ({ spaceData }) => {
   };
 
   return (
-    <Card className="mt-8 shadow-sm border-stone-200">
-      <CardHeader className="bg-stone-50 border-b border-stone-200 rounded-t-lg">
-        <div className="flex justify-between items-start flex-wrap gap-4">
-          <div>
-            <CardTitle className="text-2xl font-serif flex items-center gap-3">
-              <Building2 className="size-6 text-stone-500" />
-              {space.name}
+    <Card className="mt-8 border-stone-200">
+      <CardHeader className="">
+        <div className="flex justify-between items-end flex-wrap gap-4">
+          <div className="w-full">
+            <CardTitle className="text-2xl flex justify-between items-end gap-3">
+              <div className="flex items-center gap-2 font-serif font-semibold">
+                <BuildingOfficeIcon className="size-6 text-stone-600" />
+                {space.name}
+              </div>
+              <div className="flex items-center gap-2">
+                {!space.disabled && (
+                  <Button
+                    onClick={handleDeactivateClick}
+                    disabled={isDeactivating}
+                    className="text-stone-800 hover:text-stone-700 bg-stone-100 hover:bg-stone-200 border-none font-sans shadow-none"
+                  >
+                    <Trash2 className="size-4 mr-2" />
+                    {isDeactivating ? "Desactivando..." : "Desactivar"}
+                  </Button>
+                )}
+
+                <Link to={editUrl}>
+                  <Button className="bg-stone-800 text-stone-100 border-stone-200 hover:bg-stone-600 font-sans shadow-none">
+                    <Edit className="size-4 mr-2" />
+                    Editar
+                  </Button>
+                </Link>
+              </div>
             </CardTitle>
-            <CardDescription className="mt-2">
+            <CardDescription className="mt-4">
               {space.description}
             </CardDescription>
           </div>
-
-          <div className="flex items-center gap-2">
-            <Link to={editUrl}>
-              <Button variant="outline" className="bg-white">
-                <Edit className="size-4 mr-2" />
-                Editar
-              </Button>
-            </Link>
-            {!space.disabled && (
-              <Button
-                variant="outline"
-                onClick={handleDeactivateClick}
-                disabled={isDeactivating}
-                className="text-red-600 border hover:text-red-700"
-              >
-                <Trash2 className="size-4 mr-2" />
-                {isDeactivating ? "Desactivando..." : "Desactivar"}
-              </Button>
-            )}
-          </div>
         </div>
       </CardHeader>
-      <CardContent className="p-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <CardContent className="px-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 bg-stone-100 p-6">
           <InfoItem
             icon={Tag}
             label="Tipo"
@@ -107,50 +107,49 @@ export const SpaceDetails: React.FC<SpaceDetailsProps> = ({ spaceData }) => {
           />
         </div>
 
-        <div className="mt-6 pt-6 border-t border-stone-200">
-          <h3 className="text-base font-semibold text-stone-800 mb-4">
-            Modalidades de Reserva
+        <div className="my-4">
+          <h3 className="text-lg font-semibold font-serif text-stone-800 mb-2">
+            Modalidades de reserva
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <PermissionItem
-              label="Reserva por Persona (Individual)"
+              label="Reserva por persona (individual)"
               allowed={space.allowByUnit}
             />
             <PermissionItem
-              label="Reserva de Espacio Completo (Grupal)"
+              label="Reserva de espacio completo (grupal)"
               allowed={space.allowFullRoom}
             />
           </div>
         </div>
 
-        <div className="mt-6 pt-6 border-t border-stone-200">
-          <h3 className="text-base font-semibold text-stone-800 mb-4">
-            Tarifas Establecidas
+        <div className="my-4">
+          <h3 className="text-lg font-semibold font-serif text-stone-800 mb-2">
+            Tarifas establecidas
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
             {space.prices.map((price, index) => (
               <div
                 key={price.id || `${price.duration}-${price.mode}-${index}`}
-                className="p-4 bg-stone-50 rounded-lg border border-stone-200"
+                className="p-4 bg-stone-100 "
               >
                 <div className="flex items-center gap-2 text-stone-600">
                   <Calendar className="size-4" />
-                  <p className="font-medium text-sm">
+                  <p className="font-medium text-xs">
                     {formatDurationUnit(price.duration)}
                   </p>
                 </div>
                 <div className="flex items-center gap-2 text-stone-600 mt-1">
                   <Users className="size-4" />
-                  <p className="font-medium text-sm">
+                  <p className="font-medium text-xs">
                     {formatPriceMode(price.mode)}
                   </p>
                 </div>
-                <div className="flex items-baseline gap-2 mt-3">
-                  <DollarSign className="size-5 text-stone-800" />
-                  <p className="font-bold text-2xl text-stone-900">
+                <div className="flex items-baseline gap-2 ">
+                  <p className="text-sm text-muted-foreground">S/</p>
+                  <p className="font-bold text-2xl text-stone-900 font-serif">
                     {price.amount.toFixed(2)}
                   </p>
-                  <p className="text-sm text-muted-foreground">S/</p>
                 </div>
               </div>
             ))}
@@ -162,8 +161,8 @@ export const SpaceDetails: React.FC<SpaceDetailsProps> = ({ spaceData }) => {
           </div>
         </div>
       </CardContent>
-      <CardFooter className="bg-stone-50 border-t border-stone-200 rounded-b-lg">
-        <p className="text-xs text-muted-foreground">
+      <CardFooter className="bg-stone-50 border-t border-stone-200 rounded-b-lg ">
+        <p className="text-xs text-muted-foreground px-4">
           ID del Espacio: {space.id}
         </p>
       </CardFooter>

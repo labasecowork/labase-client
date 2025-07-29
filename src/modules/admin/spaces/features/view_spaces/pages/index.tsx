@@ -9,7 +9,7 @@ export default function ViewSpacesPage() {
   const { data: spacesResponse, isLoading, isError } = useGetSpaces();
 
   useEffect(() => {
-    changeTitle("Gestionar Espacios - La base");
+    changeTitle("Gestionar espacios - La base");
   }, [changeTitle]);
 
   return (

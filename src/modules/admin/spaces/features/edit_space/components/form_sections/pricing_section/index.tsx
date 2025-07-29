@@ -7,12 +7,19 @@ import {
   Input,
   Label,
   Button,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui";
-import { PlusCircleIcon, TrashIcon } from "lucide-react";
+import { Controller } from "react-hook-form";
+import { PlusIcon, Trash2Icon } from "lucide-react";
 import type { PricingSectionProps } from "../../../types";
 
 export const PricingSection: React.FC<PricingSectionProps> = ({
   register,
+  control,
   errors,
   fields,
   append,
@@ -25,33 +32,49 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
         Define los precios para las diferentes modalidades y duraciones.
       </CardDescription>
     </CardHeader>
-    <CardContent className="space-y-4">
+    <CardContent className="space-y-2">
       {fields.map((field, index) => (
         <div
           key={field.id}
-          className="grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr_auto] items-end gap-4 p-4 border rounded-lg bg-stone-50/50"
+          className="grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr_auto] items-end gap-4 p-4 bg-stone-100"
         >
           <div>
             <Label>Unidad de Tiempo</Label>
-            <select
-              {...register(`prices.${index}.duration`)}
-              className="w-full h-10 px-3 border border-input rounded-md bg-background"
-            >
-              <option value="HOUR">Por Hora</option>
-              <option value="DAY">Por Día</option>
-              <option value="WEEK">Por Semana</option>
-              <option value="MONTH">Por Mes</option>
-            </select>
+            <Controller
+              name={`prices.${index}.duration`}
+              control={control}
+              render={({ field }) => (
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Selecciona unidad" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="HOUR">Por Hora</SelectItem>
+                    <SelectItem value="DAY">Por Día</SelectItem>
+                    <SelectItem value="WEEK">Por Semana</SelectItem>
+                    <SelectItem value="MONTH">Por Mes</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
           </div>
           <div>
             <Label>Modo</Label>
-            <select
-              {...register(`prices.${index}.mode`)}
-              className="w-full h-10 px-3 border border-input rounded-md bg-background"
-            >
-              <option value="INDIVIDUAL">Individual</option>
-              <option value="GROUP">Grupal</option>
-            </select>
+            <Controller
+              name={`prices.${index}.mode`}
+              control={control}
+              render={({ field }) => (
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Selecciona modo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="INDIVIDUAL">Individual</SelectItem>
+                    <SelectItem value="GROUP">Grupal</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
           </div>
           <div>
             <Label>Monto (S/)</Label>
@@ -69,9 +92,9 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
             variant="ghost"
             size="icon"
             onClick={() => remove(index)}
-            className="text-red-500 hover:bg-red-50 hover:text-red-600"
+            className="text-stone-500 bg-stone-200 rounded-none m-0 hover:bg-rose-100 hover:text-rose-800 h-[40px]"
           >
-            <TrashIcon className="size-4" />
+            <Trash2Icon className="size-4" />
           </Button>
         </div>
       ))}
@@ -81,13 +104,13 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
       <Button
         type="button"
         variant="outline"
-        className="mt-4 w-full border-dashed"
+        className="mt-4 w-full border-dashed bg-stone-50 shadow-none"
         onClick={() =>
           append({ duration: "HOUR", amount: 0, mode: "INDIVIDUAL" })
         }
       >
-        <PlusCircleIcon className="size-4 mr-2" />
-        Añadir Tarifa
+        <PlusIcon className="size-4 mr-2" />
+        Añadir tarifa
       </Button>
     </CardContent>
   </Card>

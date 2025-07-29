@@ -15,10 +15,10 @@ export const formatSpaceType = (type: SpaceType): string => {
 };
 
 const durationUnitMap: Record<DurationUnit, string> = {
-  HOUR: "Por Hora",
-  DAY: "Por Día",
-  WEEK: "Por Semana",
-  MONTH: "Por Mes",
+  HOUR: "Por hora",
+  DAY: "Por día",
+  WEEK: "Por semana",
+  MONTH: "Por mes",
 };
 
 export const formatDurationUnit = (unit: DurationUnit): string => {

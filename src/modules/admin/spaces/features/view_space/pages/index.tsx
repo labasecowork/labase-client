@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { SpaceDetails } from "../components/space_details";
 
 const LoadingState = () => (
-  <div className="mt-8 h-96 w-full animate-pulse bg-stone-100 rounded-lg"></div>
+  <div className="mt-8 h-[650px] w-full animate-pulse bg-stone-100"></div>
 );
 
 export default function ViewSpacePage() {

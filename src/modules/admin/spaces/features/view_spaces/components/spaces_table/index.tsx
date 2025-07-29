@@ -79,11 +79,11 @@ export const SpacesTable: React.FC<{ spaces: Space[] }> = ({ spaces }) => {
               </TableCell>
               <TableCell className="px-4 py-4">
                 {space.disabled ? (
-                  <span className="flex items-center gap-2 text-red-600">
+                  <span className="flex items-center gap-2 text-rose-800">
                     <XCircle className="size-4" /> Desactivado
                   </span>
                 ) : (
-                  <span className="flex items-center gap-2 text-emerald-600">
+                  <span className="flex items-center gap-2 text-emerald-800">
                     <CheckCircle className="size-4" /> Activado
                   </span>
                 )}

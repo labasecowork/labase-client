@@ -336,7 +336,7 @@ export default function SendNewsletterPage() {
   return (
     <div className="w-full max-w-5xl mx-auto px-4 py-10">
       <div className="flex items-center justify-between gap-4 mb-8">
-        <CustomHeader title="Gestor de newsletters" />
+        <CustomHeader title="Gestor de Newsletters" />
       </div>
 
       {subscribers?.data?.total === 0 && <EmptyState />}
