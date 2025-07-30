@@ -2,6 +2,7 @@ import * as guard from "@/components/guards";
 import * as layout from "@/components/layouts";
 import { clientRoutes } from "@/routes/client_routes";
 import { adminRoutes } from "@/routes/admin_routes";
+import { employeeRoutes } from "@/routes/employee_routes";
 
 export const appRoutes = {
   path: "/",
@@ -12,7 +13,7 @@ export const appRoutes = {
       children: [
         {
           element: <layout.Sidebar />,
-          children: [clientRoutes, adminRoutes],
+          children: [clientRoutes, adminRoutes, employeeRoutes],
         },
       ],
     },

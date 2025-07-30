@@ -4,6 +4,7 @@ import {
   ClipboardDocumentListIcon,
   BuildingOfficeIcon,
   NewspaperIcon,
+  UserGroupIcon,
 } from "@heroicons/react/24/outline";
 import type { NavigationItem } from "../types";
 
@@ -31,6 +32,16 @@ export const isActiveRoute = (
     return (
       cleanCurrentPath === "/client/reservations" ||
       cleanCurrentPath.startsWith("/client/reservations/")
+    );
+  }
+
+  if (
+    navHref === ROUTES.Employee.RegisterAttendance &&
+    cleanCurrentPath.startsWith("/employee")
+  ) {
+    return (
+      cleanCurrentPath === "/employee/attendance/register" ||
+      cleanCurrentPath.startsWith("/employee/attendance/register/")
     );
   }
 
@@ -74,6 +85,14 @@ export const getNavigationConfig = (userType: string): NavigationItem[] => {
         href: ROUTES.Client.ViewReservations,
         icon: ClipboardDocumentListIcon,
         key: "my-reservations",
+      },
+    ],
+    employee: [
+      {
+        name: "Asistencia",
+        href: ROUTES.Employee.RegisterAttendance,
+        icon: UserGroupIcon,
+        key: "attendance",
       },
     ],
   };

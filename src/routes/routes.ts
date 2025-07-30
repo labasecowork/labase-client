@@ -26,6 +26,10 @@ export const ROUTES = {
     EditSpace: "/admin/spaces/:id/edit",
   },
 
+  Employee: {
+    RegisterAttendance: "/employee/attendance/register",
+  },
+
   Error: {
     NotFound: "*",
     Internal: "/500",
