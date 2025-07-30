@@ -19,21 +19,26 @@ import { ROUTES } from "@/routes/routes";
 import { useGetAvailableSpaces } from "@/modules/client/space/features/get_spaces/service";
 import { useCheckAvailability, useCreateReservation } from "../service";
 import { useTitle } from "@/hooks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useInitializePayment } from "../../payment/hooks/useInitializePayment";
 import { useNiubizCheckout } from "../../payment/hooks/useNiubizCheckout";
 
 export default function CreateReservationPage() {
   const navigate = useNavigate();
   const { changeTitle } = useTitle();
+  const [purchaseNumber, setPurchaseNumber] = useState("");
   const { data: spacesData, isLoading: isLoadingSpaces } =
     useGetAvailableSpaces();
   const { mutate: checkAvailability, isPending: isChecking } =
     useCheckAvailability();
   const { mutate: createReservation, isPending: isCreating } =
     useCreateReservation();
+
+  // primero se haría esto
   const { mutate: initializePayment, isPending: isInitializingPayment } =
     useInitializePayment();
+
+  // luego se haría esto
   const { openCheckout } = useNiubizCheckout();
 
   useEffect(() => {
@@ -60,13 +65,13 @@ export default function CreateReservationPage() {
   const watchedValues = watch();
   const selectedSpace =
     spacesData?.spaces.find(
-      (space: Space) => space.id === watchedValues.spaceId,
+      (space: Space) => space.id === watchedValues.spaceId
     ) || null;
   const calculatedAmount = 50.0;
 
   const handleCreateReservation = (
     availabilityData: AvailabilityRequest,
-    data: ReservationFormData,
+    data: ReservationFormData
   ) => {
     const reservationData = {
       spaceId: data.spaceId,
@@ -92,26 +97,17 @@ export default function CreateReservationPage() {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handlePaymentProcess = (data: ReservationFormData) => {
+  const handlePaymentProcess = () => {
     initializePayment(
       { amount: calculatedAmount },
       {
         onSuccess: ({ sessionKey, purchaseNumber }) => {
+          setPurchaseNumber(purchaseNumber);
           toast.info("Iniciando pasarela de pago...");
           openCheckout({
             sessionKey,
             purchaseNumber,
             amount: calculatedAmount,
-            onSuccess: (data) => {
-              console.log("Pago exitoso desde el frontend:", data);
-            },
-            onError: (error) => {
-              console.error("Error en el checkout:", error);
-              toast.error("Error en el pago", {
-                description:
-                  "Ocurrió un error al procesar tu pago. Por favor, intenta de nuevo.",
-              });
-            },
           });
         },
         onError: (err) => {
@@ -119,7 +115,7 @@ export default function CreateReservationPage() {
             description: err.message,
           });
         },
-      },
+      }
     );
   };
 
@@ -152,7 +148,7 @@ export default function CreateReservationPage() {
         });
 
         handleCreateReservation(availabilityData, data);
-        handlePaymentProcess(data);
+        handlePaymentProcess();
       },
       onError: (err) => {
         toast.error("Error al verificar disponibilidad", {
@@ -164,6 +160,12 @@ export default function CreateReservationPage() {
 
   return (
     <div className="w-full max-w-5xl mx-auto px-4 py-10">
+      <form
+        id="frmVisaNet"
+        action={`http://localhost:3001/visa-callback?amount=${calculatedAmount}&purchaseNumber=${purchaseNumber}`}
+      >
+        {/* Aquí se pone el script de niubiz dinamicamente por el hook useNiubizCheckout  y este script tiene un botoón y ese botoón abre el modal*/}
+      </form>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <div className="flex items-end justify-between gap-4 mb-6 flex-wrap">
@@ -171,7 +173,7 @@ export default function CreateReservationPage() {
               title="Crear reserva"
               to={ROUTES.Client.ViewReservations}
             />
-            <Button
+            {/* <Button
               type="submit"
               variant="default"
               disabled={isChecking || isCreating}
@@ -182,6 +184,14 @@ export default function CreateReservationPage() {
                 : isCreating
                   ? "Creando reserva..."
                   : "Crear reserva"}
+            </Button> */}
+            <Button
+              type="submit"
+              variant="default"
+              className=" text-xs sm:text-sm"
+              onClick={() => handlePaymentProcess()}
+            >
+              Pagar
             </Button>
           </div>
         </div>

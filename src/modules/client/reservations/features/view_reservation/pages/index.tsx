@@ -74,7 +74,7 @@ export default function ViewReservationPage() {
   const { reservation, status } = reservationData;
   const statusLabel = getStatusLabel(status);
   const price = `S/${parseFloat(reservation.price).toFixed(2)}`;
-
+  // Aquí agregamos el botoón de pago para que se pueda pagar la reserva
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-8">
       <div className="flex flex-col gap-4 mb-6">
