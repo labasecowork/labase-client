@@ -20,7 +20,6 @@ import { useGetAvailableSpaces } from "@/modules/client/space/features/get_space
 import { useCheckAvailability, useCreateReservation } from "../service";
 import { useTitle } from "@/hooks";
 import { useEffect } from "react";
-
 export default function CreateReservationPage() {
   const navigate = useNavigate();
   const { changeTitle } = useTitle();
@@ -55,12 +54,12 @@ export default function CreateReservationPage() {
   const watchedValues = watch();
   const selectedSpace =
     spacesData?.spaces.find(
-      (space: Space) => space.id === watchedValues.spaceId
+      (space: Space) => space.id === watchedValues.spaceId,
     ) || null;
 
   const handleCreateReservation = (
     availabilityData: AvailabilityRequest,
-    data: ReservationFormData
+    data: ReservationFormData,
   ) => {
     const reservationData = {
       spaceId: data.spaceId,
@@ -75,7 +74,7 @@ export default function CreateReservationPage() {
         toast.success("¡Reserva creada con éxito!", {
           description: `Tu código de reserva es ${res.codeQr}.`,
         });
-        navigate(ROUTES.Client.ViewReservations);
+        navigate(`/client/reservations/code/${res.codeQr}`);
       },
       onError: (err) => {
         toast.error("Error al crear la reserva", {
@@ -132,7 +131,7 @@ export default function CreateReservationPage() {
               title="Crear reserva"
               to={ROUTES.Client.ViewReservations}
             />
-            <Button
+            {/* <Button
               type="submit"
               variant="default"
               disabled={isChecking || isCreating}
@@ -141,8 +140,15 @@ export default function CreateReservationPage() {
               {isChecking
                 ? "Verificando..."
                 : isCreating
-                ? "Creando reserva..."
-                : "Crear reserva"}
+                  ? "Creando reserva..."
+                  : "Crear reserva"}
+            </Button> */}
+            <Button
+              type="submit"
+              variant="default"
+              className=" text-xs sm:text-sm"
+            >
+              Pagar
             </Button>
           </div>
         </div>
