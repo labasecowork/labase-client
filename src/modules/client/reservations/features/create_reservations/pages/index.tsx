@@ -20,9 +20,6 @@ import { useGetAvailableSpaces } from "@/modules/client/space/features/get_space
 import { useCheckAvailability, useCreateReservation } from "../service";
 import { useTitle } from "@/hooks";
 import { useEffect } from "react";
-import { useInitializePayment } from "../../payment/hooks/useInitializePayment";
-import { useNiubizCheckout } from "../../payment/hooks/useNiubizCheckout";
-
 export default function CreateReservationPage() {
   const navigate = useNavigate();
   const { changeTitle } = useTitle();
@@ -32,9 +29,6 @@ export default function CreateReservationPage() {
     useCheckAvailability();
   const { mutate: createReservation, isPending: isCreating } =
     useCreateReservation();
-  const { mutate: initializePayment, isPending: isInitializingPayment } =
-    useInitializePayment();
-  const { openCheckout } = useNiubizCheckout();
 
   useEffect(() => {
     changeTitle("Crear reserva - La base");
@@ -62,7 +56,6 @@ export default function CreateReservationPage() {
     spacesData?.spaces.find(
       (space: Space) => space.id === watchedValues.spaceId,
     ) || null;
-  const calculatedAmount = 50.0;
 
   const handleCreateReservation = (
     availabilityData: AvailabilityRequest,
@@ -81,7 +74,7 @@ export default function CreateReservationPage() {
         toast.success("¡Reserva creada con éxito!", {
           description: `Tu código de reserva es ${res.codeQr}.`,
         });
-        navigate(ROUTES.Client.ViewReservations);
+        navigate(`/client/reservations/code/${res.codeQr}`);
       },
       onError: (err) => {
         toast.error("Error al crear la reserva", {
@@ -89,38 +82,6 @@ export default function CreateReservationPage() {
         });
       },
     });
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handlePaymentProcess = (data: ReservationFormData) => {
-    initializePayment(
-      { amount: calculatedAmount },
-      {
-        onSuccess: ({ sessionKey, purchaseNumber }) => {
-          toast.info("Iniciando pasarela de pago...");
-          openCheckout({
-            sessionKey,
-            purchaseNumber,
-            amount: calculatedAmount,
-            onSuccess: (data) => {
-              console.log("Pago exitoso desde el frontend:", data);
-            },
-            onError: (error) => {
-              console.error("Error en el checkout:", error);
-              toast.error("Error en el pago", {
-                description:
-                  "Ocurrió un error al procesar tu pago. Por favor, intenta de nuevo.",
-              });
-            },
-          });
-        },
-        onError: (err) => {
-          toast.error("Error al inicializar el pago", {
-            description: err.message,
-          });
-        },
-      },
-    );
   };
 
   const onSubmit = (data: ReservationFormData) => {
@@ -152,7 +113,6 @@ export default function CreateReservationPage() {
         });
 
         handleCreateReservation(availabilityData, data);
-        handlePaymentProcess(data);
       },
       onError: (err) => {
         toast.error("Error al verificar disponibilidad", {
@@ -171,7 +131,7 @@ export default function CreateReservationPage() {
               title="Crear reserva"
               to={ROUTES.Client.ViewReservations}
             />
-            <Button
+            {/* <Button
               type="submit"
               variant="default"
               disabled={isChecking || isCreating}
@@ -182,6 +142,13 @@ export default function CreateReservationPage() {
                 : isCreating
                   ? "Creando reserva..."
                   : "Crear reserva"}
+            </Button> */}
+            <Button
+              type="submit"
+              variant="default"
+              className=" text-xs sm:text-sm"
+            >
+              Pagar
             </Button>
           </div>
         </div>

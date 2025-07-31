@@ -11,11 +11,10 @@ export const useInitializePayment = () => {
     mutationFn: async ({ amount }: InitializePaymentData) => {
       const purchaseNumber = generatePurchaseNumber();
       const token = await generateSecurityToken();
-
       const sessionKey = await createPaymentSession(
         amount,
         purchaseNumber,
-        token,
+        token
       );
 
       if (!sessionKey) {

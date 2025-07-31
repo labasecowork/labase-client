@@ -1,11 +1,19 @@
-import { NIUBIZ_URL_JS, NIUBIZ_MERCHANT_ID, API_URL } from "@/config";
+import { NIUBIZ_URL_JS, NIUBIZ_MERCHANT_ID } from "@/config";
+import { toast } from "sonner";
 
 interface NiubizCheckoutProps {
   sessionKey: string;
   purchaseNumber: string;
   amount: number;
-  onSuccess: (data: any) => void;
-  onError: (error: any) => void;
+}
+
+// Declaramos VisanetCheckout en el scope global de window para que TypeScript no se queje.
+declare global {
+  interface Window {
+    VisanetCheckout?: {
+      open: () => void;
+    };
+  }
 }
 
 export const useNiubizCheckout = () => {
@@ -13,48 +21,49 @@ export const useNiubizCheckout = () => {
     sessionKey,
     purchaseNumber,
     amount,
-    onSuccess,
-    onError,
   }: NiubizCheckoutProps) => {
+    document.getElementById("frmVisaNet")?.remove();
+
+    const form = document.createElement("form");
+    form.id = "frmVisaNet";
+    form.action = `http://localhost:3001/visa-callback?amount=${amount}&purchaseNumber=${purchaseNumber}`;
+    form.style.display = "none";
+
     const script = document.createElement("script");
     script.src = NIUBIZ_URL_JS;
     script.setAttribute("data-sessiontoken", sessionKey);
     script.setAttribute("data-channel", "web");
     script.setAttribute("data-merchantid", NIUBIZ_MERCHANT_ID);
-    script.setAttribute("data-purchasenumber", purchaseNumber);
+    script.setAttribute("data-purchasenumber", purchaseNumber || "");
     script.setAttribute("data-amount", amount.toString());
-    script.setAttribute("data-expirationminutes", "5");
-    script.setAttribute("data-timeouturl", "/");
-    script.setAttribute("data-merchantlogo", "URL_DE_TU_LOGO.png");
-    script.setAttribute("data-formbuttoncolor", "#000000");
-    // URL a la que tu backend recibirá la respuesta de Niubiz
+
     script.setAttribute(
-      "data-action",
-      `${API_URL}/payment/callback?purchaseNumber=${purchaseNumber}`,
+      "data-merchantlogo",
+      `${window.location.origin}/logo.png`,
     );
+    script.setAttribute("data-expirationminutes", "10");
+    script.setAttribute("data-timeouturl", window.location.origin);
+    script.setAttribute("data-formbuttoncolor", "#0A0A0A");
 
     script.onload = () => {
-      try {
-        (window as any).VisaCheckout.run(
-          onSuccess,
-          onError,
-          undefined,
-          undefined,
-          (data: unknown) => {
-            console.log("Datos de la configuración:", data);
-          },
-        );
-      } catch (error) {
-        console.error("Error al ejecutar VisaCheckout:", error);
-        onError(error);
+      console.log("Script de Niubiz cargado. Abriendo checkout...");
+      if (window.VisanetCheckout) {
+        window.VisanetCheckout.open();
+      } else {
+        console.error("El objeto VisanetCheckout no se encontró en window.");
+        toast.error("Error al cargar la pasarela de pago", {
+          description:
+            "No se pudo inicializar el componente de pago de Niubiz.",
+        });
       }
     };
+
     script.onerror = () => {
-      console.error("No se pudo cargar el script de Niubiz.");
-      onError(new Error("No se pudo cargar el script de Niubiz."));
+      toast.error("No se pudo cargar el script de la pasarela de pago.");
     };
 
-    document.body.appendChild(script);
+    form.appendChild(script);
+    document.body.appendChild(form);
   };
 
   return { openCheckout };
