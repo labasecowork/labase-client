@@ -1,9 +1,16 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks";
 import { ROUTES } from "@/routes/routes";
+//import type { User } from "@/types/user";
 
 export default function RoleGuard() {
   const { user } = useAuth();
+  /* const user: User = {
+    name: "John Doe",
+    email: "john.doe@example.com",
+    userType: "employee",
+    id: "132451",
+  }; */
   const location = useLocation();
   const path = location.pathname;
 

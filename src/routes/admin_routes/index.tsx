@@ -40,5 +40,9 @@ export const adminRoutes = {
       path: ROUTES.Admin.EditSpace,
       element: <admin.EditSpacePage />,
     },
+    {
+      path: ROUTES.Admin.ViewEmployees,
+      element: <admin.ViewEmployeePage />,
+    },
   ],
 };

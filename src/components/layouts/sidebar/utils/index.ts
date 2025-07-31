@@ -78,6 +78,12 @@ export const getNavigationConfig = (userType: string): NavigationItem[] => {
         icon: BuildingOfficeIcon,
         key: "spaces",
       },
+      {
+        name: "Empleados",
+        href: ROUTES.Admin.ViewEmployees,
+        icon: UserGroupIcon,
+        key: "employees",
+      },
     ],
     client: [
       {

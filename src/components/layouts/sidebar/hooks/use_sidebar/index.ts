@@ -7,9 +7,16 @@ import {
 } from "@/components/layouts/sidebar/utils";
 import { userNavigation } from "@/components/layouts/sidebar/constants";
 import { useAuth } from "@/hooks";
+//import type { User } from "@/types/user";
 
 export const useSidebar = () => {
-  const { user, logout } = useAuth();
+  const { logout, user } = useAuth();
+  /* const user: User = {
+    name: "John Doe",
+    email: "john.doe@example.com",
+    userType: "employee",
+    id: "132451",
+  }; */
   const location = useLocation();
   const navigate = useNavigate();
 
