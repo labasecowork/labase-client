@@ -25,6 +25,9 @@ export const ROUTES = {
     ViewSpace: "/admin/spaces/:id",
     EditSpace: "/admin/spaces/:id/edit",
     ViewEmployees: "/admin/employees",
+    ViewArticles: "/admin/articles",
+    CreateArticle: "/admin/articles/create",
+    EditArticle: "/admin/articles/:id/edit",
   },
 
   Employee: {
