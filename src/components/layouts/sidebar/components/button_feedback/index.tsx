@@ -2,7 +2,7 @@ import { MessageCircleIcon } from "lucide-react";
 
 export const ButtonFeedback = () => {
   return (
-    <div className="fixed bottom-4 right-4 z-50 opacity-55 hover:opacity-100 ">
+    <div className="fixed bottom-4 left-4 z-50 opacity-55 hover:opacity-100 ">
       <a
         href="https://forms.gle/pYU3v1GwJrmjhQVU6"
         target="_blank"
