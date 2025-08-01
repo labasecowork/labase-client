@@ -92,7 +92,7 @@ export const ReservationTable = ({ reservations }: ReservationTableProps) => {
               key={reservation.id}
               onClick={() => {
                 navigate(
-                  `${ROUTES.Admin.ViewAllReservations}/${reservation.codeQr}`
+                  `${ROUTES.Admin.ViewAllReservations}/${reservation.id}`
                 );
               }}
               className={`border-b border-stone-100 hover:bg-stone-100 cursor-pointer transition-colors ${
@@ -100,7 +100,7 @@ export const ReservationTable = ({ reservations }: ReservationTableProps) => {
               }`}
             >
               <TableCell className="font-mono text-xs font-medium px-4 py-4 text-stone-600 truncate max-w-[100px]">
-                ...{reservation.id.slice(-6)}
+                ...{reservation.id.slice(-4)}
               </TableCell>
               <TableCell className="font-medium px-4 py-4 text-stone-900 truncate max-w-[140px] ">
                 {reservation.user.first_name} {reservation.user.last_name}

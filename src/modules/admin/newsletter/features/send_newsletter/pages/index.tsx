@@ -341,36 +341,36 @@ export default function SendNewsletterPage() {
 
       {subscribers?.data?.total === 0 && <EmptyState />}
 
-      {subscribers?.data?.total && subscribers?.data?.total > 0 && (
-        <>
-          <MobileSubscribersList
-            isExpanded={isSubscribersExpanded}
-            onToggle={toggleSubscribersExpansion}
-            isPending={isPendingSubscribers}
-            isError={isError}
-            data={subscribers?.data}
-          />
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <NewsletterForm
-              onSubmit={onSubmit}
-              register={register}
-              handleSubmit={handleSubmit}
-              errors={errors}
-              isPending={isPending}
-              subscriberData={subscribers?.data}
-              isPendingSubscribers={isPendingSubscribers}
-              isError={isError}
-            />
-
-            <DesktopSubscribersList
+      {subscribers?.data?.total !== undefined &&
+        subscribers?.data?.total > 0 && (
+          <>
+            <MobileSubscribersList
+              isExpanded={isSubscribersExpanded}
+              onToggle={toggleSubscribersExpansion}
               isPending={isPendingSubscribers}
               isError={isError}
               data={subscribers?.data}
             />
-          </div>
-        </>
-      )}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <NewsletterForm
+                onSubmit={onSubmit}
+                register={register}
+                handleSubmit={handleSubmit}
+                errors={errors}
+                isPending={isPending}
+                subscriberData={subscribers?.data}
+                isPendingSubscribers={isPendingSubscribers}
+                isError={isError}
+              />
+
+              <DesktopSubscribersList
+                isPending={isPendingSubscribers}
+                isError={isError}
+                data={subscribers?.data}
+              />
+            </div>
+          </>
+        )}
     </div>
   );
 }

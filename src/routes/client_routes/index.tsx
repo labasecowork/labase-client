@@ -12,7 +12,7 @@ export const clientRoutes = {
       element: <client.CreateReservationPage />,
     },
     {
-      path: "reservations/code/:code",
+      path: "reservations/:id",
       element: <client.ViewReservationPage />,
     },
   ],

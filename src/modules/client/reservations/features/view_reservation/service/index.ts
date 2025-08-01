@@ -4,24 +4,26 @@ import type { Response } from "@/types/services";
 import type { ResolveReservationResponse } from "../types";
 
 const resolveReservationRequest = async (
-  code: string
+  id: string
 ): Promise<ResolveReservationResponse> => {
-  const { data } = await axiosInstance.post<
+  const { data } = await axiosInstance.get<
     Response<ResolveReservationResponse>
-  >("/reservations/resolve", { code });
+  >(`/reservations/${id}`);
 
   if (!data.data) {
     throw new Error(
       "La respuesta del servidor no contiene los datos de la reserva."
     );
   }
+
+  console.log(data.data);
   return data.data;
 };
 
-export const useResolveReservationByCode = (code: string) => {
+export const useResolveReservation = (id: string) => {
   return useQuery({
-    queryKey: ["reservation", code],
-    queryFn: () => resolveReservationRequest(code),
-    enabled: !!code,
+    queryKey: ["reservation", id],
+    queryFn: () => resolveReservationRequest(id),
+    enabled: !!id,
   });
 };

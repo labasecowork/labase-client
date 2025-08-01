@@ -3,11 +3,11 @@ import type { Response } from "@/types/services";
 import type { AdminResolveReservationResponse } from "../types";
 
 export const resolveReservationRequest = async (
-  code: string
+  id: string
 ): Promise<AdminResolveReservationResponse> => {
-  const { data } = await axiosInstance.post<
+  const { data } = await axiosInstance.get<
     Response<AdminResolveReservationResponse>
-  >("/reservations/resolve", { code });
+  >(`/reservations/${id}`);
 
   if (!data.data) {
     throw new Error(

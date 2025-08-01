@@ -92,7 +92,7 @@ export const ListCard = () => {
 
         return (
           <Link
-            to={`/client/reservations/code/${reservation.codeQr}`}
+            to={`/client/reservations/${reservation.id}`}
             key={reservation.id}
           >
             <SpaceCard

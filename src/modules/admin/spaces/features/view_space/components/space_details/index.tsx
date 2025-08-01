@@ -1,4 +1,13 @@
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
   Button,
   Card,
   CardContent,
@@ -23,6 +32,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { useDeactivateSpace } from "../../../../features/desactivate_space/service";
 import { InfoItem } from "../info_item";
 import { PermissionItem } from "../permission_item";
@@ -33,42 +43,70 @@ export const SpaceDetails: React.FC<SpaceDetailsProps> = ({ spaceData }) => {
   const { space } = spaceData;
   const { mutate: deactivateSpace, isPending: isDeactivating } =
     useDeactivateSpace();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const editUrl = ROUTES.Admin.EditSpace.replace(":id", space.id);
 
-  const handleDeactivateClick = () => {
-    if (
-      window.confirm(
-        `¿Estás seguro de que quieres DESACTIVAR el espacio "${space.name}"?`
-      )
-    ) {
-      deactivateSpace(space.id);
-    }
+  const handleConfirmDeactivate = () => {
+    deactivateSpace(space.id);
   };
+
+  useEffect(() => {
+    if (!isDeactivating && isDialogOpen) {
+      setIsDialogOpen(false);
+    }
+  }, [isDeactivating, isDialogOpen]);
 
   return (
     <Card className="mt-8 border-stone-200">
       <CardHeader className="">
         <div className="flex justify-between items-end flex-wrap gap-4">
           <div className="w-full">
-            <CardTitle className="text-2xl flex justify-between items-end gap-3">
+            <CardTitle className="text-2xl flex justify-between items-end gap-3 flex-wrap">
               <div className="flex items-center gap-2 font-serif font-semibold">
                 <BuildingOfficeIcon className="size-6 text-stone-600" />
                 {space.name}
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap w-full md:w-auto md:flex-nowrap">
                 {!space.disabled && (
-                  <Button
-                    onClick={handleDeactivateClick}
-                    disabled={isDeactivating}
-                    className="text-stone-800 hover:text-stone-700 bg-stone-100 hover:bg-stone-200 border-none font-sans shadow-none"
-                  >
-                    <Trash2 className="size-4 mr-2" />
-                    {isDeactivating ? "Desactivando..." : "Desactivar"}
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        disabled={isDeactivating}
+                        className="text-stone-800 hover:text-stone-700 bg-stone-100 hover:bg-stone-200 border-none font-sans shadow-none w-full flex md:w-auto"
+                      >
+                        <Trash2 className="size-4 mr-2" />
+                        {isDeactivating ? "Desactivando..." : "Desactivar"}
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          ¿Confirmar desactivación?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Con esta acción desactivaras el espacio "{space.name}"
+                          en esta versión no puedes activar un espacio
+                          desactivado.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel disabled={isDeactivating}>
+                          Cancelar
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={handleConfirmDeactivate}
+                          disabled={isDeactivating}
+                          className="bg-stone-900 hover:bg-stone-700"
+                        >
+                          {isDeactivating ? "Desactivando..." : "Continuar"}
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 )}
 
-                <Link to={editUrl}>
-                  <Button className="bg-stone-800 text-stone-100 border-stone-200 hover:bg-stone-600 font-sans shadow-none">
+                <Link to={editUrl} className="w-full">
+                  <Button className="bg-stone-800 text-stone-100 border-stone-200 hover:bg-stone-600 font-sans shadow-none w-full flex md:w-auto">
                     <Edit className="size-4 mr-2" />
                     Editar
                   </Button>

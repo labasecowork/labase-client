@@ -72,7 +72,6 @@ export default function ViewReservationPage() {
   // Si no hay datos del state, usar AsyncBoundary para manejar la petición
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-8">
-      <Header />
       <AsyncBoundary
         isLoading={isLoading}
         isError={isError}

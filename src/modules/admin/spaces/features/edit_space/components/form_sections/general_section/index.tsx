@@ -94,8 +94,12 @@ export const Form: React.FC<FormProps> = ({ spaceId, defaultValues }) => {
       />
 
       <div className="flex justify-end">
-        <Button type="submit" disabled={isPending} size="lg">
-          {isPending ? "Guardando Cambios..." : "Guardar Cambios"}
+        <Button
+          type="submit"
+          disabled={isPending}
+          className="w-full md:w-auto rounded-full px-8 py-3.5"
+        >
+          {isPending ? "Guardando cambios..." : "Guardar cambios"}
         </Button>
       </div>
     </form>

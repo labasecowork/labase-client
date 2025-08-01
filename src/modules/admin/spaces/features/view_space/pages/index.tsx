@@ -18,10 +18,7 @@ export default function ViewSpacePage() {
   const { data: spaceResponse, isLoading, isError } = useGetSpaceById(spaceId);
 
   useEffect(() => {
-    const spaceName = spaceResponse?.space.name;
-    changeTitle(
-      spaceName ? `Detalle: ${spaceName} - La base` : "Ver Espacio - La base"
-    );
+    changeTitle("Ver espacio - La base");
   }, [changeTitle, spaceResponse]);
 
   return (

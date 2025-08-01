@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { useSidebar } from "./hooks";
 import {
+  ButtonFeedback,
   MobileMenu,
   MobileMenuButton,
   NavigationMenu,
@@ -86,6 +87,7 @@ export default function Sidebar() {
           </div>
         </main>
       </div>
+      <ButtonFeedback />
     </>
   );
 }

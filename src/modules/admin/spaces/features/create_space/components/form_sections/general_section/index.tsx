@@ -85,8 +85,12 @@ export const Form = () => {
         remove={remove}
       />
       <div className="flex justify-end">
-        <Button type="submit" disabled={isPending} size="lg">
-          {isPending ? "Creando Espacio..." : "Crear Espacio"}
+        <Button
+          type="submit"
+          disabled={isPending}
+          className="w-full md:w-auto rounded-full px-8 py-3.5"
+        >
+          {isPending ? "Creando espacio..." : "Crear espacio"}
         </Button>
       </div>
     </form>

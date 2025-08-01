@@ -1,7 +1,7 @@
 import { ROUTES } from "@/routes/routes";
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import { Link, useParams } from "react-router-dom";
-import { useResolveReservationByCode } from "../service";
+import { useResolveReservation } from "../service";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
 import { format } from "date-fns";
@@ -16,13 +16,13 @@ import { useNiubizCheckout } from "../../payment/hooks/useNiubizCheckout";
 import { toast } from "sonner";
 
 export default function ViewReservationPage() {
-  const { code } = useParams<{ code: string }>();
+  const { id } = useParams<{ id: string }>();
   const [purchaseNumber, setPurchaseNumber] = useState("");
   const {
     data: reservationData,
     isLoading,
     isError,
-  } = useResolveReservationByCode(code!);
+  } = useResolveReservation(id!);
   const { changeTitle } = useTitle();
 
   // primero se haría esto
@@ -105,11 +105,10 @@ export default function ViewReservationPage() {
             description: err.message,
           });
         },
-      },
+      }
     );
   };
 
-  // Aquí agregamos el botoón de pago para que se pueda pagar la reserva
   return (
     <>
       {/* Form requerido por Niubiz */}
