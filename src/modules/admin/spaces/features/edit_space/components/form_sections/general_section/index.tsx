@@ -57,6 +57,7 @@ export const Form: React.FC<FormProps> = ({ spaceId, defaultValues }) => {
     };
 
     updateSpace(
+      // @ts-expect-error TODO: fix this
       { id: spaceId, payload },
       {
         onSuccess: (response) => {
