@@ -131,7 +131,7 @@ const EmptyState = () => (
     title="Sin registros"
     description="No hay registros de asistencia disponibles en este momento."
     icon={DocumentIcon}
-    color="gray"
+    color="stone"
   />
 );
 
@@ -172,7 +172,7 @@ interface StatsGridProps {
 }
 
 const StatsGrid: React.FC<StatsGridProps> = ({ data }) => (
-  <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
     <StatsCard
       title="Días registrados"
       value={data.length}
@@ -372,7 +372,9 @@ export default function ViewEmployeesPage() {
 
   return (
     <div className="mx-auto max-w-5xl w-full px-4 py-8">
-      <CustomHeader title="Empleados" />
+      <div className="mb-8">
+        <CustomHeader title="Empleados" />
+      </div>
 
       <AsyncBoundary
         isLoading={isPending}

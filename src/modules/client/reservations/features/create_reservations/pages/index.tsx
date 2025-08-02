@@ -74,7 +74,7 @@ export default function CreateReservationPage() {
         toast.success("¡Reserva creada con éxito!", {
           description: `Tu código de reserva es ${res.codeQr}.`,
         });
-        navigate(`/client/reservations/code/${res.codeQr}`);
+        navigate(`/client/reservations/code/${res.reservation_id}`);
       },
       onError: (err) => {
         toast.error("Error al crear la reserva", {
