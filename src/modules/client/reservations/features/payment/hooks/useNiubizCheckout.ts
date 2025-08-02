@@ -5,6 +5,7 @@ interface NiubizCheckoutProps {
   sessionKey: string;
   purchaseNumber: string;
   amount: number;
+  reservationId: string;
 }
 
 // Declaramos VisanetCheckout en el scope global de window para que TypeScript no se queje.
@@ -21,12 +22,13 @@ export const useNiubizCheckout = () => {
     sessionKey,
     purchaseNumber,
     amount,
+    reservationId,
   }: NiubizCheckoutProps) => {
     document.getElementById("frmVisaNet")?.remove();
 
     const form = document.createElement("form");
     form.id = "frmVisaNet";
-    form.action = `http://localhost:3001/visa-callback?amount=${amount}&purchaseNumber=${purchaseNumber}`;
+    form.action = `http://localhost:3001/visa-callback?purchaseNumber=${purchaseNumber}&amount=${amount}&reservation=${reservationId}`;
     form.style.display = "none";
 
     const script = document.createElement("script");
@@ -39,7 +41,7 @@ export const useNiubizCheckout = () => {
 
     script.setAttribute(
       "data-merchantlogo",
-      `${window.location.origin}/logo.png`,
+      `${window.location.origin}/logo_payment.png`
     );
     script.setAttribute("data-expirationminutes", "10");
     script.setAttribute("data-timeouturl", window.location.origin);

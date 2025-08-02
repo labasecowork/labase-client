@@ -71,3 +71,35 @@ export const formatDateToShort = (isoString: string): string => {
     year: "2-digit",
   });
 };
+
+export const calculateTotalWorkedHours = (
+  records: { time: string; type: string }[]
+) => {
+  const entries = records.filter((r) => r.type === "ENTRY").map((r) => r.time);
+  const exits = records.filter((r) => r.type === "EXIT").map((r) => r.time);
+
+  if (entries.length === 0) return "--";
+
+  let totalMinutes = 0;
+
+  // Calculamos las horas por cada par entrada-salida
+  for (let i = 0; i < entries.length; i++) {
+    if (exits[i]) {
+      // Solo si hay salida correspondiente
+      const [entryHour, entryMin] = entries[i].split(":").map(Number);
+      const [exitHour, exitMin] = exits[i].split(":").map(Number);
+
+      const entryMinutes = entryHour * 60 + entryMin;
+      const exitMinutes = exitHour * 60 + exitMin;
+
+      totalMinutes += exitMinutes - entryMinutes;
+    }
+  }
+
+  if (totalMinutes === 0) return "--";
+
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  return `${hours}h ${minutes}m`;
+};

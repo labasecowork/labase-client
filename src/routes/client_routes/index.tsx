@@ -1,19 +1,28 @@
 import * as client from "@/modules/client";
+import { ROUTES } from "../routes";
 
 export const clientRoutes = {
   path: "/client",
   children: [
     {
-      path: "reservations",
+      path: ROUTES.Client.ViewReservations,
       element: <client.ViewReservationsPage />,
     },
     {
-      path: "reservations/create",
+      path: ROUTES.Client.CreateReservation,
       element: <client.CreateReservationPage />,
     },
     {
-      path: "reservations/:id",
+      path: ROUTES.Client.ViewReservation,
       element: <client.ViewReservationPage />,
+    },
+    {
+      path: ROUTES.Client.PaymentSuccess,
+      element: <client.PaymentSuccessPage />,
+    },
+    {
+      path: ROUTES.Client.PaymentError,
+      element: <client.PaymentErrorPage />,
     },
   ],
 };

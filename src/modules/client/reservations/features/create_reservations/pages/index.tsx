@@ -54,12 +54,12 @@ export default function CreateReservationPage() {
   const watchedValues = watch();
   const selectedSpace =
     spacesData?.spaces.find(
-      (space: Space) => space.id === watchedValues.spaceId,
+      (space: Space) => space.id === watchedValues.spaceId
     ) || null;
 
   const handleCreateReservation = (
     availabilityData: AvailabilityRequest,
-    data: ReservationFormData,
+    data: ReservationFormData
   ) => {
     const reservationData = {
       spaceId: data.spaceId,
@@ -131,7 +131,7 @@ export default function CreateReservationPage() {
               title="Crear reserva"
               to={ROUTES.Client.ViewReservations}
             />
-            {/* <Button
+            <Button
               type="submit"
               variant="default"
               disabled={isChecking || isCreating}
@@ -140,15 +140,8 @@ export default function CreateReservationPage() {
               {isChecking
                 ? "Verificando..."
                 : isCreating
-                  ? "Creando reserva..."
-                  : "Crear reserva"}
-            </Button> */}
-            <Button
-              type="submit"
-              variant="default"
-              className=" text-xs sm:text-sm"
-            >
-              Pagar
+                ? "Creando reserva..."
+                : "Crear reserva"}
             </Button>
           </div>
         </div>

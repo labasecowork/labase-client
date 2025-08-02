@@ -12,6 +12,8 @@ export const ROUTES = {
     ViewReservations: "/client/reservations",
     CreateReservation: "/client/reservations/create",
     ViewReservation: "/client/reservations/:id",
+    PaymentSuccess: "/client/payment/success",
+    PaymentError: "/client/payment/error",
   },
 
   Admin: {

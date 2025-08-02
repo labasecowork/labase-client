@@ -42,7 +42,7 @@ export const adminRoutes = {
     },
     {
       path: ROUTES.Admin.ViewEmployees,
-      element: <admin.ViewEmployeePage />,
+      element: <admin.ViewEmployeesPage />,
     },
     {
       path: ROUTES.Admin.ViewArticles,
