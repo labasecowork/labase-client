@@ -28,7 +28,7 @@ export const useNiubizCheckout = () => {
 
     const form = document.createElement("form");
     form.id = "frmVisaNet";
-    form.action = `http://31.97.218.15:3001/visa-callback?purchaseNumber=${purchaseNumber}&amount=${amount}&reservation=${reservationId}`;
+    form.action = `https://test.labase.pe/visa-callback?purchaseNumber=${purchaseNumber}&amount=${amount}&reservation=${reservationId}`;
     form.style.display = "none";
 
     const script = document.createElement("script");
