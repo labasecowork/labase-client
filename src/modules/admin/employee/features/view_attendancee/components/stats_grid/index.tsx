@@ -1,5 +1,5 @@
 import { UsersIcon, ClockIcon, ChartBarIcon } from "@heroicons/react/24/solid";
-import { StatsCard } from "../";
+import { StatsCard } from "..";
 import {
   calculateGrandTotalHours,
   type transformAttendanceData,

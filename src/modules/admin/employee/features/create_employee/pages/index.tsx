@@ -24,33 +24,53 @@ import { useState } from "react";
 import { ROUTES } from "@/routes/routes";
 import { type CreateEmployeeForm } from "../types";
 import { createEmployeeSchema } from "../schema";
+import { createEmployee } from "../services";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateEmployeePage() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     setValue,
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<CreateEmployeeForm>({
     resolver: zodResolver(createEmployeeSchema),
     defaultValues: {},
   });
 
-  const onSubmit = async (data: CreateEmployeeForm) => {
-    try {
-      const employeeData = {
-        ...data,
-        birth_date: format(data.birth_date, "yyyy-MM-dd"),
-        user_type: "employee",
-      };
+  const { mutate: createEmployeeMutation, isPending } = useMutation({
+    mutationFn: createEmployee,
+  });
 
-      console.log("Datos del empleado:", employeeData);
-    } catch (error) {
-      console.error("Error al crear empleado:", error);
-    }
+  const onSubmit = async (data: CreateEmployeeForm) => {
+    const employeeData = {
+      ...data,
+      profile_image:
+        "https://portfolio-harvey.netlify.app/images/photo-harvey.png",
+      user_type: "employee",
+    };
+
+    createEmployeeMutation(employeeData, {
+      onSuccess: () => {
+        toast.success("Empleado creado correctamente", {
+          description:
+            "El empleado se ha creado correctamente, puedes verlo en la lista de empleados.",
+        });
+        navigate(ROUTES.Admin.ViewEmployees);
+      },
+      onError: () => {
+        toast.error("Error al crear empleado", {
+          description:
+            "Sucedio un error al crear el empleado, si el error persiste, por favor contacta al administrador.",
+        });
+      },
+    });
   };
 
   return (
@@ -61,13 +81,9 @@ export default function CreateEmployeePage() {
             title="Crear empleado"
             to={ROUTES.Admin.ViewEmployees}
           />
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            className="min-w-[200px]"
-          >
+          <Button type="submit" disabled={isPending} className="min-w-[200px]">
             <UserPlusIcon className="w-4 h-4 mr-2" />
-            {isSubmitting ? "Creando..." : "Crear empleado"}
+            {isPending ? "Creando..." : "Crear empleado"}
           </Button>
         </div>
 

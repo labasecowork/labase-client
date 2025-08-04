@@ -1,6 +1,6 @@
 import { Table, TableBody } from "@/components/ui";
-import { TableHeaders } from "../";
-import { AttendanceRow } from "../";
+import { TableHeaders } from "..";
+import { AttendanceRow } from "..";
 import { transformAttendanceData } from "../../utils";
 
 interface Props {
