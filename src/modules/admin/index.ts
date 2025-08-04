@@ -8,6 +8,7 @@ export { default as CreateSpacePage } from "./spaces/features/create_space/pages
 export { default as EditSpacePage } from "./spaces/features/edit_space/pages";
 export { default as ViewSpacePage } from "./spaces/features/view_space/pages";
 export { default as ViewEmployeesPage } from "./employee/features/view_employees/pages";
+export { default as CreateEmployeePage } from "./employee/features/create_employee/pages";
 export { default as ViewArticlesPage } from "./articles/features/view_articles/pages";
 export { default as CreateArticlePage } from "./articles/features/create_article/pages";
 export { default as EditArticlePage } from "./articles/features/edit_article/pages";

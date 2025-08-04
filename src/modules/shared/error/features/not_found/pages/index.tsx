@@ -1,5 +1,6 @@
 import { ROUTES } from "@/routes/routes";
 import { Link } from "react-router-dom";
+import { Image } from "@/components/ui";
 
 export default function NotFoundPage() {
   return (
@@ -26,9 +27,9 @@ export default function NotFoundPage() {
       </main>
 
       <div className="hidden lg:relative lg:col-start-2 lg:row-start-1 lg:row-end-4 lg:block">
-        <img
+        <Image
           alt="El Hangar"
-          src="http://31.97.218.15:4321/images/espacios/base_operativa/1.webp"
+          src="/images/base_operativa.webp"
           className="absolute inset-0 size-full object-cover"
         />
       </div>

@@ -1,4 +1,4 @@
-import { CustomHeader, AsyncBoundary } from "@/components/ui";
+import { CustomHeader, AsyncBoundary, Button } from "@/components/ui";
 import { useTitle } from "@/hooks";
 import { useEffect, useMemo } from "react";
 import { getAttendance } from "../services";
@@ -11,6 +11,8 @@ import {
   EmployeeTable,
 } from "../components";
 import { transformAttendanceData } from "../utils";
+import { Link } from "react-router-dom";
+import { PlusIcon } from "lucide-react";
 
 export default function ViewEmployeesPage() {
   const { changeTitle } = useTitle();
@@ -27,7 +29,6 @@ export default function ViewEmployeesPage() {
     changeTitle("Empleados - Labase");
   }, [changeTitle]);
 
-  // Transformar datos usando la función utilitaria
   const employeeAttendance = useMemo(
     () => transformAttendanceData(attendance || { attendances: [] }),
     [attendance]
@@ -35,8 +36,14 @@ export default function ViewEmployeesPage() {
 
   return (
     <div className="mx-auto max-w-5xl w-full px-4 mt-8">
-      <div className="mb-8">
+      <div className="mb-8 flex items-center justify-between">
         <CustomHeader title="Empleados" />
+        <Link to="/admin/employees/create">
+          <Button>
+            <PlusIcon className="w-4 h-4" />
+            Agregar empleado
+          </Button>
+        </Link>
       </div>
 
       <AsyncBoundary

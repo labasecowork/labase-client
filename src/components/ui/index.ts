@@ -18,3 +18,4 @@ export * from "./table";
 export * from "./textarea";
 export * from "./select";
 export * from "./dialog";
+export * from "./image";
