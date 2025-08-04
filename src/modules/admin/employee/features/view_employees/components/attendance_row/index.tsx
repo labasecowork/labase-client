@@ -13,7 +13,7 @@ export const AttendanceRow: React.FC<Props> = ({
   record,
   recordIndex,
 }) => (
-  <TableRow key={record.id}>
+  <TableRow>
     {recordIndex === 0 ? (
       <TableCell
         rowSpan={dayRecord.records.length}

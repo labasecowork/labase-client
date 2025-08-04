@@ -9,7 +9,7 @@ interface Props {
   data: ReturnType<typeof transformAttendanceData>;
 }
 export const StatsGrid: React.FC<Props> = ({ data }) => (
-  <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
     <StatsCard
       title="Días registrados"
       value={data.length}

@@ -12,18 +12,16 @@ export const EmployeeTable: React.FC<Props> = ({ data }) => (
     <Table>
       <TableHeaders />
       <TableBody>
-        {data.map((dayRecord) => (
-          <>
-            {dayRecord.records.map((record, recordIndex) => (
-              <AttendanceRow
-                key={record.id}
-                dayRecord={dayRecord}
-                record={record}
-                recordIndex={recordIndex}
-              />
-            ))}
-          </>
-        ))}
+        {data.map((dayRecord, idx) =>
+          dayRecord.records.map((record, recordIndex) => (
+            <AttendanceRow
+              key={`${idx}-${recordIndex}`}
+              dayRecord={dayRecord}
+              record={record}
+              recordIndex={recordIndex}
+            />
+          ))
+        )}
       </TableBody>
     </Table>
   </div>
