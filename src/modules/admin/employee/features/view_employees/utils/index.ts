@@ -7,7 +7,6 @@ export const transformAttendanceData = (attendance: {
 
   const groupedByEmployeeAndDate: { [key: string]: Attendance[] } = {};
 
-  // Agrupar por empleado y fecha
   attendance.attendances.forEach((record) => {
     const key = `${record.employee.user.id}-${record.date}`;
     if (!groupedByEmployeeAndDate[key]) {
@@ -16,7 +15,6 @@ export const transformAttendanceData = (attendance: {
     groupedByEmployeeAndDate[key].push(record);
   });
 
-  // Convertir a la estructura esperada
   return Object.entries(groupedByEmployeeAndDate).map(([, records]) => {
     const firstRecord = records[0];
     const date = new Date(firstRecord.date);
@@ -36,7 +34,7 @@ export const transformAttendanceData = (attendance: {
       dayName: dayNames[date.getDay()],
       records: records.map((record) => ({
         id: parseInt(record.id),
-        time: record.check_time.substring(0, 5), // Convertir "HH:MM:SS" a "HH:MM"
+        time: record.check_time.substring(0, 5),
         type: record.type,
       })),
     };
