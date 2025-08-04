@@ -17,14 +17,9 @@ axiosInstance.interceptors.request.use((config) => {
 
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error: AxiosError<ErrorResponse> & { customMessage?: string }) => {
+  (error: AxiosError<ErrorResponse>) => {
     const status = error.response?.status;
-    const defaultMessage = getErrorMessageByStatus(status, error);
-
-    if (!error.customMessage) {
-      error.customMessage = defaultMessage;
-    }
-
-    return Promise.reject(error);
+    const message = getErrorMessageByStatus(status, error);
+    return Promise.reject(new Error(message));
   }
 );

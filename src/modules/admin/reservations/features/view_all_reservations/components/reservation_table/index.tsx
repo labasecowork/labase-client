@@ -29,10 +29,7 @@ export const ReservationTable = ({ reservations }: ReservationTableProps) => {
   const navigate = useNavigate();
 
   return (
-    <div
-      className="bg-stone-50 w-full mt-8"
-      style={{ height: "calc(100vh - 250px)" }}
-    >
+    <div className="bg-stone-50 w-full">
       <Table className="w-full">
         <TableHeader>
           <TableRow className="border-b border-stone-200">

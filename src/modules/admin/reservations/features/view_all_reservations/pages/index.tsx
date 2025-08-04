@@ -83,18 +83,20 @@ export default function ViewAllReservationsPage() {
   }, []);
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 py-8">
+    <div className="w-full max-w-5xl mx-auto px-4 mt-8">
       <Header />
-      <AsyncBoundary
-        isLoading={isPending}
-        isError={isError}
-        data={reservationsData?.data || []}
-        LoadingComponent={<LoadingState />}
-        ErrorComponent={<ErrorState />}
-        EmptyComponent={<EmptyState />}
-      >
-        {() => <ReservationTable reservations={allReservations} />}
-      </AsyncBoundary>
+      <div className="h-full w-full mt-8">
+        <AsyncBoundary
+          isLoading={isPending}
+          isError={isError}
+          data={reservationsData?.data || []}
+          LoadingComponent={<LoadingState />}
+          ErrorComponent={<ErrorState />}
+          EmptyComponent={<EmptyState />}
+        >
+          {() => <ReservationTable reservations={allReservations} />}
+        </AsyncBoundary>
+      </div>
     </div>
   );
 }
