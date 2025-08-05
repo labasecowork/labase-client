@@ -4,6 +4,7 @@ export * from "./async_boundary";
 export * from "./button";
 export * from "./calendar";
 export * from "./card";
+export * from "./context_menu";
 export * from "./custom_header";
 export * from "./dropdown_menu";
 export * from "./input";
