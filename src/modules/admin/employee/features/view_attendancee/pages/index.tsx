@@ -25,7 +25,7 @@ export default function ViewAttendancePage() {
   });
 
   useEffect(() => {
-    changeTitle("Empleados - Labase");
+    changeTitle("Asistencia - La base");
   }, [changeTitle]);
 
   const employeeAttendance = useMemo(

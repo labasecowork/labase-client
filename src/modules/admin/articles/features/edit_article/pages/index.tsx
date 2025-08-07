@@ -13,10 +13,7 @@ export default function EditArticlePage() {
   const articleToEdit = mockArticles.find((article) => article.id === id);
 
   useEffect(() => {
-    const title = articleToEdit
-      ? `Editando: ${articleToEdit.title}`
-      : "Editar Artículo";
-    changeTitle(`${title} - La base`);
+    changeTitle(`Editar artículo - La base`);
   }, [changeTitle, articleToEdit]);
 
   if (!articleToEdit) {

@@ -20,7 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { UserPlusIcon, CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ROUTES } from "@/routes/routes";
 import { type CreateEmployeeForm } from "../types";
 import { createEmployeeSchema } from "../schema";
@@ -28,10 +28,12 @@ import { createEmployee } from "../services";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { useTitle } from "@/hooks";
 
 export default function CreateEmployeePage() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const navigate = useNavigate();
+  const { changeTitle } = useTitle();
 
   const {
     register,
@@ -72,6 +74,10 @@ export default function CreateEmployeePage() {
       },
     });
   };
+
+  useEffect(() => {
+    changeTitle("Crear empleado - La base");
+  }, []);
 
   return (
     <div className="mx-auto max-w-5xl w-full px-4 mt-8">

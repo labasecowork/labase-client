@@ -20,3 +20,4 @@ export * from "./textarea";
 export * from "./select";
 export * from "./dialog";
 export * from "./image";
+export * from "./card_navigation";

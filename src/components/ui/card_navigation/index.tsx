@@ -1,0 +1,26 @@
+import { Link } from "react-router-dom";
+interface Props {
+  to: string;
+  title: string;
+  description: string;
+  icon: React.ElementType;
+}
+export const CardNavigation: React.FC<Props> = ({
+  to,
+  title,
+  description,
+  icon: Icon,
+}) => (
+  <Link
+    to={to}
+    className="rounded-none w-full bg-orange-700/10 p-6 flex items-start justify-center text-sm text-orange-900 gap-2 hover:bg-orange-700/20 transition-all duration-300 cursor-pointer"
+  >
+    <div className="p-2 bg-orange-500/10">
+      <Icon className="h-4 w-4" />
+    </div>
+    <div className="flex flex-col gap-1">
+      <p className="text-sm font-medium text-left w-full">{title}</p>
+      <p className="text-xs text-orange-800 text-left w-full">{description}</p>
+    </div>
+  </Link>
+);

@@ -47,20 +47,9 @@ export const EmployeeCard = ({ employee }: { employee: Employee }) => {
                   {user.email}
                 </span>
               </div>
-              <div className="mb-3">
-                <span
-                  className={`inline-flex px-4 py-1 text-xs font-medium rounded-full ${
-                    user.status === "active"
-                      ? "bg-emerald-800/10 text-emerald-800"
-                      : "bg-rose-800/10 text-rose-800"
-                  }`}
-                >
-                  {user.status === "active" ? "Activo" : "Inactivo"}
-                </span>
-              </div>
             </div>
 
-            <div className="space-y-2 text-sm text-stone-600">
+            <div className="space-y-2 text-stone-600 text-xs">
               <div className="flex items-center">
                 <PhoneIcon className="h-4 w-4 mr-2 text-stone-400 flex-shrink-0" />
                 <span>{user.phone}</span>
@@ -81,13 +70,16 @@ export const EmployeeCard = ({ employee }: { employee: Employee }) => {
       </ContextMenuTrigger>
 
       <ContextMenuContent className="w-48">
-        <ContextMenuItem onClick={handleUpdate} className="cursor-pointer">
+        <ContextMenuItem
+          onClick={handleUpdate}
+          className="cursor-pointer text-xs"
+        >
           <EditIcon className="h-4 w-4 mr-2" />
           Actualizar
         </ContextMenuItem>
         <ContextMenuItem
           onClick={handleDesactivate}
-          className="cursor-pointer"
+          className="cursor-pointer text-xs"
           variant="destructive"
         >
           <UserXIcon className="h-4 w-4 mr-2" />

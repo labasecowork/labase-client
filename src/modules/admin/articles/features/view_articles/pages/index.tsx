@@ -8,7 +8,7 @@ export default function ViewArticlesPage() {
   const { changeTitle } = useTitle();
 
   useEffect(() => {
-    changeTitle("Gestionar Artículos - La base");
+    changeTitle("Gestionar artículos - La base");
   }, [changeTitle]);
 
   return (

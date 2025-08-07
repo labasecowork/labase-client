@@ -7,7 +7,7 @@ export default function CreateArticlePage() {
   const { changeTitle } = useTitle();
 
   useEffect(() => {
-    changeTitle("Crear Nuevo Artículo - La base");
+    changeTitle("Crear artículo - La base");
   }, [changeTitle]);
 
   return (
