@@ -3,8 +3,6 @@ import { useTitle } from "@/hooks";
 import { useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { resolveReservationRequest } from "../service";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
 import type { AdminApiResponse } from "../types";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -19,7 +17,6 @@ export default function ViewReservationPage() {
   const { id } = useParams<{ id: string }>();
   const reservationDataFromState = location.state as AdminApiResponse | null;
 
-  // Solo hacer petición si no hay datos en state pero sí hay código
   const shouldFetch = !reservationDataFromState && !!id;
   const {
     data: reservationDataFromAPI,
@@ -37,41 +34,29 @@ export default function ViewReservationPage() {
     changeTitle("Ver reserva - La base");
   }, [changeTitle]);
 
-  // Determinar qué datos usar: state o API
   const reservationData =
     reservationDataFromState ||
     (reservationDataFromAPI ? { data: reservationDataFromAPI } : null);
 
-  // No hay datos ni en state ni de API, y no hay código para buscar
   if (!reservationData && !shouldFetch) {
     return (
-      <div className="w-full max-w-4xl mx-auto px-4 py-8">
-        <Header />
-        <Alert variant="default" className="mt-8">
-          <ExclamationTriangleIcon className="h-4 w-4" />
-          <AlertTitle>No encontrado</AlertTitle>
-          <AlertDescription>
-            No se pudo encontrar la reserva solicitada. Por favor, regresa a la
-            lista de reservas.
-          </AlertDescription>
-        </Alert>
+      <div className="w-full max-w-5xl mx-auto px-4 py-8">
+        <ErrorState />
       </div>
     );
   }
 
-  // Si hay datos del state, mostrarlos directamente sin AsyncBoundary
   if (reservationDataFromState) {
     return (
-      <div className="w-full max-w-4xl mx-auto px-4 py-8">
+      <div className="w-full max-w-5xl mx-auto px-4 py-8">
         <Header status={reservationDataFromState.data.status} />
         <ReservationTicket reservationData={reservationDataFromState} />
       </div>
     );
   }
 
-  // Si no hay datos del state, usar AsyncBoundary para manejar la petición
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-8">
+    <div className="w-full max-w-5xl mx-auto px-4 py-8">
       <AsyncBoundary
         isLoading={isLoading}
         isError={isError}

@@ -10,7 +10,7 @@ export const ButtonFeedback = () => {
       >
         <MessageCircleIcon className="size-5 flex-shrink-0" />
         <span className="whitespace-nowrap opacity-0 w-0 group-hover:opacity-100 group-hover:w-auto transition-all duration-300 group-hover:ml-2">
-          Feedback
+          Valorar
         </span>
       </a>
     </div>
