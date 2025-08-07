@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { Scrollbars } from "react-custom-scrollbars-2";
 import type { Event } from "@/types";
+import { Link } from "react-router-dom";
 
 interface CalendarProps {
   events: Event[];
 }
 
-export const Calendar = ({ events }: CalendarProps) => {
-  const container = useRef<Scrollbars | null>(null);
+export const CalendarWeek = ({ events }: CalendarProps) => {
+  const container = useRef<HTMLDivElement | null>(null);
   const containerNav = useRef<HTMLDivElement | null>(null);
   const containerOffset = useRef<HTMLDivElement | null>(null);
 
@@ -71,13 +71,13 @@ export const Calendar = ({ events }: CalendarProps) => {
 
   // Función para obtener la columna del evento
   const getEventColumn = (dayIndex: number) => {
-    if (dayIndex === 0) return 6; // Domingo
-    if (dayIndex === 1) return -1; // Lunes
-    if (dayIndex === 2) return 0;
-    if (dayIndex === 3) return 1;
-    if (dayIndex === 4) return 2;
-    if (dayIndex === 5) return 3;
-    if (dayIndex === 6) return 4; // Sábado
+    if (dayIndex === 0) return 2;
+    if (dayIndex === 1) return 3;
+    if (dayIndex === 2) return 4;
+    if (dayIndex === 3) return 5;
+    if (dayIndex === 4) return 6;
+    if (dayIndex === 5) return 7;
+    if (dayIndex === 6) return 8;
     return dayIndex;
   };
 
@@ -90,12 +90,12 @@ export const Calendar = ({ events }: CalendarProps) => {
     if (container.current && containerNav.current && containerOffset.current) {
       const currentMinute = 0; // Empezar en el inicio (9AM)
       const scrollTop =
-        ((container.current.getScrollHeight() -
+        ((container.current.scrollHeight -
           containerNav.current.offsetHeight -
           containerOffset.current.offsetHeight) *
           currentMinute) /
         600; // 600 minutos (10 horas de 9AM a 7PM)
-      container.current.scrollTop(scrollTop);
+      container.current.scrollTop = scrollTop;
     }
   }, []);
 
@@ -130,7 +130,11 @@ export const Calendar = ({ events }: CalendarProps) => {
 
   return (
     <div className="flex h-full flex-col min-h-[600px]">
-      <Scrollbars ref={container} autoHide style={{ height: "100%" }}>
+      <div
+        ref={container}
+        className="overflow-auto h-full"
+        style={{ height: "100%" }}
+      >
         <div className="isolate flex flex-auto flex-col bg-stone-50">
           <div
             style={{ width: "165%" }}
@@ -239,8 +243,8 @@ export const Calendar = ({ events }: CalendarProps) => {
                         )} / ${getEventColumn(event.day)}`,
                       }}
                     >
-                      <a
-                        href="#"
+                      <Link
+                        to={`/admin/reservations/${event.id}`}
                         className={`group absolute inset-1 flex flex-col justify-between overflow-y-auto p-2 text-xs/5 bg-stone-200 text-stone-900 hover:bg-stone-300 transition-all border-l-4 border-stone-400`}
                       >
                         <div>
@@ -252,7 +256,7 @@ export const Calendar = ({ events }: CalendarProps) => {
                           <p className="order-1 font-semibold">{event.title}</p>
                         </div>
                         <p className="order-2 font-normal text-xs"></p>
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ol>
@@ -260,7 +264,7 @@ export const Calendar = ({ events }: CalendarProps) => {
             </div>
           </div>
         </div>
-      </Scrollbars>
+      </div>
     </div>
   );
 };

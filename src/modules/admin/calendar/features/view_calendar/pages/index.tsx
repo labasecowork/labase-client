@@ -1,14 +1,13 @@
 import { formatDate } from "@/utilities";
-import { Calendar } from "../components";
+import { CalendarDay, CalendarWeek } from "../components";
 import { useEffect, useState } from "react";
-import { useTitle } from "@/hooks";
+import { useTitle, useWindowSize } from "@/hooks";
 import { CustomHeader } from "@/components/ui";
 import { useGetCalendar } from "../service";
 import { socket } from "@/lib/socket";
 import type { Event } from "@/types";
 import { ROUTES } from "@/routes/routes";
 
-// Función para mapear los eventos del tipo original al tipo que espera el componente Calendar
 const mapEventsForCalendar = (
   events: Array<{
     id: string;
@@ -34,14 +33,15 @@ export default function ViewCalendarPage() {
   const { changeTitle } = useTitle();
   const { data: calendarData, isLoading, isError } = useGetCalendar();
   const [allEvents, setAllEvents] = useState<Event[]>([]);
+  const { width } = useWindowSize();
 
-  // Función para obtener la semana actual
+  const isMobile = width < 700;
+
   const getCurrentWeek = () => {
     const today = new Date();
     const currentDay = today.getDay();
     const monday = new Date(today);
 
-    // Ajustar para que Lunes sea el primer día (getDay() devuelve 0 para Domingo)
     const daysToMonday = currentDay === 0 ? -6 : 1 - currentDay;
     monday.setDate(today.getDate() + daysToMonday);
 
@@ -55,7 +55,6 @@ export default function ViewCalendarPage() {
     return week;
   };
 
-  // Actualizar eventos cuando llegan los datos de la API
   useEffect(() => {
     if (calendarData) {
       const mappedEvents = mapEventsForCalendar(calendarData);
@@ -63,7 +62,6 @@ export default function ViewCalendarPage() {
     }
   }, [calendarData]);
 
-  // Escuchar websockets para nuevos eventos
   useEffect(() => {
     const currentWeek = getCurrentWeek();
 
@@ -75,7 +73,6 @@ export default function ViewCalendarPage() {
     }) => {
       const reservationDate = new Date(reservation.startTime);
 
-      // Comprueba si la fecha de la reservación está en la semana actual que se muestra.
       const isInCurrentWeek = currentWeek.some(
         (dayInWeek) =>
           dayInWeek.toDateString() === reservationDate.toDateString()
@@ -85,7 +82,6 @@ export default function ViewCalendarPage() {
         return;
       }
 
-      // Formatear HH:mm
       const formatTime = (date: Date) => {
         const hours = String(date.getHours()).padStart(2, "0");
         const minutes = String(date.getMinutes()).padStart(2, "0");
@@ -107,10 +103,8 @@ export default function ViewCalendarPage() {
       setAllEvents((prevEvents) => [...prevEvents, newEvent]);
     };
 
-    // Suscríbete al evento
     socket.on("RESERVATION_CREATED", onNewReservation);
 
-    // Limpia la suscripción cuando el componente se desmonte
     return () => {
       socket.off("RESERVATION_CREATED", onNewReservation);
     };
@@ -118,11 +112,7 @@ export default function ViewCalendarPage() {
 
   useEffect(() => {
     changeTitle("Calendario - La base");
-  }, []);
-
-  useEffect(() => {
-    console.log(calendarData);
-  }, [calendarData]);
+  }, [changeTitle]);
 
   if (isLoading || isError || !calendarData) {
     return (
@@ -149,7 +139,11 @@ export default function ViewCalendarPage() {
         to={ROUTES.Admin.ViewAllReservations}
       />
       <div className="w-full mt-8 h-[calc(100vh-14rem)] bg-stone-50 min-h-[600px]">
-        <Calendar events={allEvents} />
+        {isMobile ? (
+          <CalendarDay events={allEvents} />
+        ) : (
+          <CalendarWeek events={allEvents} />
+        )}
       </div>
     </div>
   );
