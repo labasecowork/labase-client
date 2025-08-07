@@ -13,3 +13,4 @@ export { default as CreateEmployeePage } from "./employee/features/create_employ
 export { default as ViewArticlesPage } from "./articles/features/view_articles/pages";
 export { default as CreateArticlePage } from "./articles/features/create_article/pages";
 export { default as EditArticlePage } from "./articles/features/edit_article/pages";
+export { default as ViewToolsPage } from "./content/features/view_tools/pages";

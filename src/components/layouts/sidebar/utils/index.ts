@@ -1,9 +1,8 @@
 import { ROUTES } from "@/routes/routes";
 import {
-  CalendarIcon,
   ClipboardDocumentListIcon,
-  NewspaperIcon,
   UserGroupIcon,
+  WrenchIcon,
 } from "@heroicons/react/24/outline";
 import type { NavigationItem } from "../types";
 
@@ -54,24 +53,11 @@ export const getNavigationConfig = (userType: string): NavigationItem[] => {
   const baseConfig = {
     admin: [
       {
-        name: "Calendario",
-        href: ROUTES.Admin.ViewCalendar,
-        icon: CalendarIcon,
-        key: "calendar",
-      },
-      {
         name: "Reservaciones",
         href: ROUTES.Admin.ViewAllReservations,
         icon: ClipboardDocumentListIcon,
         key: "reservations",
       },
-      {
-        name: "Newsletter",
-        href: ROUTES.Admin.SendNewsletter,
-        icon: NewspaperIcon,
-        key: "newsletter",
-      },
-
       {
         name: "Empleados",
         href: ROUTES.Admin.ViewEmployees,
@@ -79,10 +65,10 @@ export const getNavigationConfig = (userType: string): NavigationItem[] => {
         key: "employees",
       },
       {
-        name: "Artículos",
-        href: ROUTES.Admin.ViewArticles,
-        icon: NewspaperIcon,
-        key: "articles",
+        name: "Herramientas",
+        href: ROUTES.Admin.ViewTools,
+        icon: WrenchIcon,
+        key: "tools",
       },
     ],
     client: [

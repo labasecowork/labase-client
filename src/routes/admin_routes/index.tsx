@@ -64,5 +64,9 @@ export const adminRoutes = {
       path: ROUTES.Admin.EditArticle,
       element: <admin.EditArticlePage />,
     },
+    {
+      path: ROUTES.Admin.ViewTools,
+      element: <admin.ViewToolsPage />,
+    },
   ],
 };

@@ -6,6 +6,7 @@ import { CustomHeader } from "@/components/ui";
 import { useGetCalendar } from "../service";
 import { socket } from "@/lib/socket";
 import type { Event } from "@/types";
+import { ROUTES } from "@/routes/routes";
 
 // Función para mapear los eventos del tipo original al tipo que espera el componente Calendar
 const mapEventsForCalendar = (
@@ -126,7 +127,10 @@ export default function ViewCalendarPage() {
   if (isLoading || isError || !calendarData) {
     return (
       <div className="w-full max-w-5xl mx-auto px-4 py-8">
-        <CustomHeader title={`Calendario - ${formatDate(currentDate)}`} />
+        <CustomHeader
+          title={`Calendario - ${formatDate(currentDate)}`}
+          to={ROUTES.Admin.ViewAllReservations}
+        />
         <div className="w-full mt-8 h-[calc(100vh-14rem)] bg-stone-50 min-h-[600px]">
           <div className="w-full animate-pulse bg-stone-50 h-[500px] mt-8"></div>
         </div>
@@ -140,7 +144,10 @@ export default function ViewCalendarPage() {
 
   return (
     <div className="w-full max-w-5xl mx-auto px-4 py-8">
-      <CustomHeader title={`Calendario - ${formatDate(currentDate)}`} />
+      <CustomHeader
+        title={`Calendario - ${formatDate(currentDate)}`}
+        to={ROUTES.Admin.ViewAllReservations}
+      />
       <div className="w-full mt-8 h-[calc(100vh-14rem)] bg-stone-50 min-h-[600px]">
         <Calendar events={allEvents} />
       </div>

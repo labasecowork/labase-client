@@ -32,6 +32,7 @@ export const ROUTES = {
     ViewArticles: "/admin/articles",
     CreateArticle: "/admin/articles/create",
     EditArticle: "/admin/articles/:id/edit",
+    ViewTools: "/admin/tools",
   },
 
   Employee: {

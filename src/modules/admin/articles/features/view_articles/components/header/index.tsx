@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 export const Header = () => (
   <div className="flex items-center justify-between gap-4 flex-wrap">
-    <CustomHeader title="Gestionar Artículos" />
+    <CustomHeader title="Gestionar Artículos" to={ROUTES.Admin.ViewTools} />
     <Link
       to={ROUTES.Admin.CreateArticle}
       className="bg-stone-200 text-xs text-stone-700 font-medium hover:bg-stone-300 transition-all sm:text-sm px-8 py-3 rounded-full flex items-center gap-2"

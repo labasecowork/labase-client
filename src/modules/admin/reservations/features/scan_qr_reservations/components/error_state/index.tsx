@@ -1,3 +1,4 @@
+import { CustomHeader } from "@/components/ui";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/routes/routes";
 import { CameraIcon } from "lucide-react";
@@ -12,8 +13,12 @@ export const ErrorState = ({ requestPermission }: Props) => {
     navigate(ROUTES.Admin.ViewAllReservations);
   };
   return (
-    <div className="px-4 py-8 flex h-full w-full">
-      <div className="flex h-full w-full items-center justify-center bg-rose-500/10 mx-auto max-w-5xl p-8 sm:p-24">
+    <div className="px-4 py-8 h-full w-full max-w-5xl mx-auto">
+      <CustomHeader
+        title="Escanear código QR"
+        to={ROUTES.Admin.ViewAllReservations}
+      />
+      <div className="flex h-full w-full items-center justify-center bg-rose-500/10 mx-auto max-w-5xl p-8 sm:p-24 mt-8">
         <div className="text-center mx-auto max-w-md">
           <h1 className="text-lg sm:text-2xl font-serif text-rose-800 font-bold">
             No tienes acceso a la cámara
