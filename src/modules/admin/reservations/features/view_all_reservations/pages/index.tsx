@@ -1,4 +1,9 @@
-import { AsyncBoundary, CardNavigation, CustomHeader } from "@/components/ui";
+import {
+  AsyncBoundary,
+  Button,
+  CardNavigation,
+  CustomHeader,
+} from "@/components/ui";
 import { useTitle } from "@/hooks";
 import { useEffect, useState } from "react";
 import { getReservationsRequest } from "../service";
@@ -12,6 +17,8 @@ import {
 import { socket } from "@/lib/socket";
 import type { Reservation } from "../types";
 import { actions } from "../constants";
+import { PlusIcon } from "lucide-react";
+import { toast } from "sonner";
 
 export default function ViewAllReservationsPage() {
   const { changeTitle } = useTitle();
@@ -78,15 +85,30 @@ export default function ViewAllReservationsPage() {
     };
   }, []);
 
+  const handleCreateReservation = () => {
+    toast.info("Esta funcionalidad no está disponible", {
+      description:
+        "Si quieres esta funcionalidad, pulsa en el botón de 'Valora' y escribe un comentario.",
+    });
+  };
+
   useEffect(() => {
     changeTitle("Ver reservas - La base");
   }, []);
 
   return (
     <div className="w-full max-w-5xl mx-auto px-4 mt-8">
-      <CustomHeader title="Reservas" />
+      <div className="flex justify-between items-center">
+        <CustomHeader title="Reservas" />
+        <div className="flex items-center gap-2">
+          <Button onClick={handleCreateReservation}>
+            <PlusIcon className="w-4 h-4" />
+            Nueva reserva
+          </Button>
+        </div>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-6 mt-4">
         {actions.map((action) => (
           <CardNavigation
             key={action.title}

@@ -4,7 +4,7 @@ import { PlusIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const Header = () => (
-  <div className="flex items-center justify-between gap-4 flex-wrap">
+  <div className="flex items-end justify-between gap-4 flex-wrap">
     <CustomHeader title="Gestionar Artículos" to={ROUTES.Admin.ViewTools} />
     <Link
       to={ROUTES.Admin.CreateArticle}

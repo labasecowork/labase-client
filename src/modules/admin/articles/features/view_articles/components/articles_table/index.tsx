@@ -5,8 +5,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
 } from "@/components/ui";
-import { Button } from "@/components/ui/button";
 import {
   CheckCircle,
   Edit,
@@ -72,11 +75,6 @@ export const ArticlesTable: React.FC<{ articles: Article[] }> = ({
                 Fecha de Publicación
               </div>
             </TableHead>
-            <TableHead className="px-4 py-4 text-right">
-              <div className="font-semibold text-stone-700 text-center">
-                Acciones
-              </div>
-            </TableHead>
           </TableRow>
         </TableHeader>
 
@@ -84,41 +82,45 @@ export const ArticlesTable: React.FC<{ articles: Article[] }> = ({
           {articles.map((article) => {
             const editUrl = ROUTES.Admin.EditArticle.replace(":id", article.id);
             return (
-              <TableRow key={article.id} className="border-b border-stone-100">
-                <TableCell
-                  className="font-medium px-4 py-4 text-stone-900 max-w-xs truncate"
-                  title={article.title}
-                >
-                  {article.title}
-                </TableCell>
-                <TableCell className="px-4 py-4 text-stone-700">
-                  {article.author}
-                </TableCell>
-                <TableCell className="px-4 py-4">
-                  <StatusBadge status={article.status} />
-                </TableCell>
-                <TableCell className="px-4 py-4 text-stone-700">
-                  {format(new Date(article.publicationDate), "dd MMM, yyyy")}
-                </TableCell>
-                <TableCell className="px-4 py-4 text-right">
-                  <div className="flex items-center justify-end gap-2">
-                    <Link to={editUrl}>
-                      <Button variant="outline" size="sm" className="bg-white">
-                        <Edit className="size-3 mr-1.5" />
-                        Editar
-                      </Button>
-                    </Link>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-stone-700 hover:bg-stone-200 border border-stone-200"
+              <ContextMenu key={article.id}>
+                <ContextMenuTrigger asChild>
+                  <TableRow className="border-b border-stone-100 cursor-context-menu hover:bg-stone-50">
+                    <TableCell
+                      className="font-medium px-4 py-4 text-stone-900 max-w-xs truncate"
+                      title={article.title}
                     >
-                      <Trash2 className="size-3 mr-1.5" />
-                      Eliminar
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
+                      {article.title}
+                    </TableCell>
+                    <TableCell className="px-4 py-4 text-stone-700">
+                      {article.author}
+                    </TableCell>
+                    <TableCell className="px-4 py-4">
+                      <StatusBadge status={article.status} />
+                    </TableCell>
+                    <TableCell className="px-4 py-4 text-stone-700">
+                      {format(
+                        new Date(article.publicationDate),
+                        "dd MMM, yyyy"
+                      )}
+                    </TableCell>
+                  </TableRow>
+                </ContextMenuTrigger>
+                <ContextMenuContent>
+                  <Link to={editUrl}>
+                    <ContextMenuItem className="cursor-pointer">
+                      <Edit className="size-4 mr-2" />
+                      Editar artículo
+                    </ContextMenuItem>
+                  </Link>
+                  <ContextMenuItem
+                    variant="destructive"
+                    className="cursor-pointer"
+                  >
+                    <Trash2 className="size-4 mr-2" />
+                    Eliminar artículo
+                  </ContextMenuItem>
+                </ContextMenuContent>
+              </ContextMenu>
             );
           })}
         </TableBody>

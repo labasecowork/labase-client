@@ -1,9 +1,14 @@
-import { CustomHeader, AsyncBoundary, CardNavigation } from "@/components/ui";
+import {
+  CustomHeader,
+  AsyncBoundary,
+  CardNavigation,
+  Button,
+} from "@/components/ui";
 import { getEmployees } from "../services";
 import { useQuery } from "@tanstack/react-query";
 import type { EmployeesResponse } from "../types";
 import {
-  EmployeeCard,
+  EmployeesTable,
   EmptyState,
   ErrorState,
   LoadingState,
@@ -11,6 +16,9 @@ import {
 import { actions } from "../constants";
 import { useTitle } from "@/hooks";
 import { useEffect } from "react";
+import { PlusIcon } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ROUTES } from "@/routes/routes";
 
 export default function ViewEmployeesPage() {
   const { changeTitle } = useTitle();
@@ -21,13 +29,23 @@ export default function ViewEmployeesPage() {
 
   useEffect(() => {
     changeTitle("Empleados - La base");
-  }, []);
+  }, [changeTitle]);
 
   return (
     <div className="mx-auto max-w-5xl w-full px-4 mt-8">
-      <CustomHeader title="Empleados" />
+      <div className="flex justify-between items-center">
+        <CustomHeader title="Empleados" />
+        <div className="flex items-center gap-2">
+          <Link to={ROUTES.Admin.CreateEmployee}>
+            <Button>
+              <PlusIcon className="w-4 h-4" />
+              Nuevo empleado
+            </Button>
+          </Link>
+        </div>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 lg:gap-6 my-4">
         {actions.map((action) => (
           <CardNavigation
             key={action.title}
@@ -48,10 +66,8 @@ export default function ViewEmployeesPage() {
         EmptyComponent={<EmptyState />}
       >
         {(employees) => (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-8">
-            {employees.map((employee) => (
-              <EmployeeCard key={employee.employee_id} employee={employee} />
-            ))}
+          <div className="mb-8">
+            <EmployeesTable employees={employees} />
           </div>
         )}
       </AsyncBoundary>

@@ -80,7 +80,7 @@ export default function CreateEmployeePage() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-5xl w-full px-4 mt-8">
+    <div className="mx-auto max-w-4xl w-full px-4 mt-8">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex items-end justify-between mb-8">
           <CustomHeader
