@@ -12,7 +12,9 @@ import {
 } from "@/components/ui";
 import {
   CalendarIcon,
+  CircleCheck,
   EditIcon,
+  Loader2,
   LucideUserSquare,
   MailIcon,
   PhoneIcon,
@@ -20,18 +22,42 @@ import {
   UserXIcon,
 } from "lucide-react";
 import type { Employee } from "../../types";
+import { toast } from "sonner";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { desactivateEmployee } from "../../services";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "@/routes/routes";
 
 interface EmployeesTableProps {
   employees: Employee[];
 }
 
 export const EmployeesTable = ({ employees }: EmployeesTableProps) => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: desactivateEmployee,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["employees"] });
+      toast.success("Empleado desactivado correctamente", {
+        description: "El empleado ha sido desactivado correctamente.",
+      });
+    },
+    onError: () => {
+      toast.error("Error al desactivar empleado", {
+        description: "El empleado no ha sido desactivado correctamente.",
+      });
+    },
+  });
+
   const handleDesactivate = (userId: string) => {
-    console.log(`Desactivar empleado:`, userId);
+    toast.promise(mutateAsync(userId), {
+      loading: "Desactivando empleado...",
+    });
   };
 
   const handleUpdate = (userId: string) => {
-    console.log(`Actualizar empleado:`, userId);
+    navigate(ROUTES.Admin.EditEmployee.replace(":id", userId));
   };
 
   const formatDate = (dateString: string) => {
@@ -77,6 +103,12 @@ export const EmployeesTable = ({ employees }: EmployeesTableProps) => {
                 Fecha de Nacimiento
               </div>
             </TableHead>
+            <TableHead className="w-[120px] px-4 py-4">
+              <div className="flex items-center gap-2 font-semibold text-stone-700">
+                <CircleCheck className="size-4" />
+                Estado
+              </div>
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -105,6 +137,17 @@ export const EmployeesTable = ({ employees }: EmployeesTableProps) => {
                     <TableCell className="px-4 py-4 text-stone-700 truncate max-w-[180px]">
                       {formatDate(user.birth_date)}
                     </TableCell>
+                    <TableCell className="px-4 py-4 text-stone-700 truncate max-w-[120px] font-mono tracking-tighter text-xs">
+                      {user.status === "active" ? (
+                        <span className="bg-emerald-800/10 text-emerald-800 px-2 py-1 rounded-md">
+                          Activo
+                        </span>
+                      ) : (
+                        <span className="bg-rose-800/10 text-rose-800 px-2 py-1 rounded-md">
+                          Inactivo
+                        </span>
+                      )}
+                    </TableCell>
                   </TableRow>
                 </ContextMenuTrigger>
 
@@ -116,14 +159,21 @@ export const EmployeesTable = ({ employees }: EmployeesTableProps) => {
                     <EditIcon className="h-4 w-4 mr-2" />
                     Actualizar
                   </ContextMenuItem>
-                  <ContextMenuItem
-                    onClick={() => handleDesactivate(user.id)}
-                    className="cursor-pointer text-sm"
-                    variant="destructive"
-                  >
-                    <UserXIcon className="h-4 w-4 mr-2" />
-                    Desactivar
-                  </ContextMenuItem>
+                  {user.status === "active" && (
+                    <ContextMenuItem
+                      onClick={() => handleDesactivate(user.id)}
+                      className="cursor-pointer text-sm"
+                      variant="destructive"
+                      disabled={isPending}
+                    >
+                      {isPending ? (
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      ) : (
+                        <UserXIcon className="h-4 w-4 mr-2" />
+                      )}
+                      Desactivar
+                    </ContextMenuItem>
+                  )}
                 </ContextMenuContent>
               </ContextMenu>
             );

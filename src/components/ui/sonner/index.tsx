@@ -16,6 +16,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
           error: "text-rose-800 bg-rose-50 ",
           success: "text-emerald-800 bg-emerald-50",
           warning: "text-orange-800 bg-orange-50",
+          loading: "text-stone-700 bg-stone-100 gap-2 pl-8",
+          loader: " mt-[18px] text-stone-700 pl-6",
           info: "text-sky-800 bg-sky-50",
           icon: "text-sm mt-[2px]  self-start flex h-full",
           actionButton: "bg-white text-black font-medium rounded px-2 py-1",

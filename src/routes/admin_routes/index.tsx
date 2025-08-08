@@ -4,10 +4,12 @@ import { ROUTES } from "../routes";
 export const adminRoutes = {
   path: "/admin",
   children: [
+    // Calendar
     {
       path: ROUTES.Admin.ViewCalendar,
       element: <admin.ViewCalendarPage />,
     },
+    // Reservations
     {
       path: ROUTES.Admin.ScanCodeQRReservation,
       element: <admin.ScanQRReservationsPage />,
@@ -20,10 +22,12 @@ export const adminRoutes = {
       path: ROUTES.Admin.ViewAllReservations,
       element: <admin.ViewAllReservationsPage />,
     },
+    // Newsletter
     {
       path: ROUTES.Admin.SendNewsletter,
       element: <admin.SendNewsletterPage />,
     },
+    // Spaces
     {
       path: ROUTES.Admin.ViewSpaces,
       element: <admin.ViewSpacesPage />,
@@ -40,6 +44,7 @@ export const adminRoutes = {
       path: ROUTES.Admin.EditSpace,
       element: <admin.EditSpacePage />,
     },
+    // Employees
     {
       path: ROUTES.Admin.ViewEmployees,
       element: <admin.ViewEmployeesPage />,
@@ -49,9 +54,15 @@ export const adminRoutes = {
       element: <admin.CreateEmployeePage />,
     },
     {
+      path: ROUTES.Admin.EditEmployee,
+      element: <admin.EditEmployeePage />,
+    },
+    // Attendances
+    {
       path: ROUTES.Admin.ViewAttendances,
       element: <admin.ViewAttendancesPage />,
     },
+    // Articles
     {
       path: ROUTES.Admin.ViewArticles,
       element: <admin.ViewArticlesPage />,
@@ -64,6 +75,7 @@ export const adminRoutes = {
       path: ROUTES.Admin.EditArticle,
       element: <admin.EditArticlePage />,
     },
+    // Tools
     {
       path: ROUTES.Admin.ViewTools,
       element: <admin.ViewToolsPage />,

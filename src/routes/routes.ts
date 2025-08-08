@@ -28,6 +28,7 @@ export const ROUTES = {
     EditSpace: "/admin/spaces/:id/edit",
     ViewEmployees: "/admin/employees",
     CreateEmployee: "/admin/employees/create",
+    EditEmployee: "/admin/employees/:id/edit",
     ViewAttendances: "/admin/attendances",
     ViewArticles: "/admin/articles",
     CreateArticle: "/admin/articles/create",
