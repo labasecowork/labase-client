@@ -13,7 +13,7 @@ import {
 import { transformAttendanceData } from "../utils";
 import { ROUTES } from "@/routes/routes";
 
-export default function ViewAttendancePage() {
+export default function ViewAttendancesPage() {
   const { changeTitle } = useTitle();
   const {
     data: attendance,
@@ -26,7 +26,13 @@ export default function ViewAttendancePage() {
 
   useEffect(() => {
     changeTitle("Asistencia - La base");
-  }, [changeTitle]);
+  }, []);
+
+  useEffect(() => {
+    if (attendance) {
+      console.log(attendance);
+    }
+  }, [attendance]);
 
   const employeeAttendance = useMemo(
     () => transformAttendanceData(attendance || { attendances: [] }),

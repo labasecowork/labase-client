@@ -82,10 +82,8 @@ export const calculateTotalWorkedHours = (
 
   let totalMinutes = 0;
 
-  // Calculamos las horas por cada par entrada-salida
   for (let i = 0; i < entries.length; i++) {
     if (exits[i]) {
-      // Solo si hay salida correspondiente
       const [entryHour, entryMin] = entries[i].split(":").map(Number);
       const [exitHour, exitMin] = exits[i].split(":").map(Number);
 

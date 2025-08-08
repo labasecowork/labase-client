@@ -1,3 +1,4 @@
+import { Image } from "@/components/ui";
 import { Outlet } from "react-router-dom";
 
 export default function AuthLayout() {
@@ -6,7 +7,7 @@ export default function AuthLayout() {
       {/* Panel Izquierdo - Imagen */}
       <div className="hidden lg:flex flex-1 ">
         <div className="w-full h-full relative overflow-hidden">
-          <img
+          <Image
             src="/images/recepcion.jpg"
             alt="Recepción"
             className="w-full h-full object-cover"

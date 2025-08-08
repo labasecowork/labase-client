@@ -49,8 +49,8 @@ export const adminRoutes = {
       element: <admin.CreateEmployeePage />,
     },
     {
-      path: ROUTES.Admin.ViewAttendance,
-      element: <admin.ViewAttendancePage />,
+      path: ROUTES.Admin.ViewAttendances,
+      element: <admin.ViewAttendancesPage />,
     },
     {
       path: ROUTES.Admin.ViewArticles,

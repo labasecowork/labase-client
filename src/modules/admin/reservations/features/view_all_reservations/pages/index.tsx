@@ -86,9 +86,9 @@ export default function ViewAllReservationsPage() {
   }, []);
 
   const handleCreateReservation = () => {
-    toast.info("Esta funcionalidad no está disponible", {
+    toast.info("Esta funcionalidad esta en desarrollo", {
       description:
-        "Si quieres esta funcionalidad, pulsa en el botón de 'Valora' y escribe un comentario.",
+        "Esta funcionalidad pronto estará disponible, gracias por tu comprensión.",
     });
   };
 

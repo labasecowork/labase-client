@@ -6,6 +6,6 @@ export const actions = [
     title: "Ver asistencia",
     description: "Con esto podras ver la asistencia de los empleados.",
     icon: Clock,
-    to: ROUTES.Admin.ViewAttendance,
+    to: ROUTES.Admin.ViewAttendances,
   },
 ];
