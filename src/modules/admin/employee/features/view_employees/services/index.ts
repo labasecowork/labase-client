@@ -9,3 +9,8 @@ export const desactivateEmployee = async (userId: string) => {
   const response = await axiosInstance.delete(`/employee/${userId}`);
   return response.data.data;
 };
+
+export const activateEmployee = async (userId: string) => {
+  const response = await axiosInstance.patch(`/employee/${userId}/activate`);
+  return response.data.data;
+};

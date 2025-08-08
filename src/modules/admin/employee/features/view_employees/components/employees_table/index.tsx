@@ -19,40 +19,63 @@ import {
   MailIcon,
   PhoneIcon,
   UserIcon,
+  UserPlusIcon,
   UserXIcon,
 } from "lucide-react";
 import type { Employee } from "../../types";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { desactivateEmployee } from "../../services";
+import { activateEmployee, desactivateEmployee } from "../../services";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 
-interface EmployeesTableProps {
+interface Props {
   employees: Employee[];
 }
-
-export const EmployeesTable = ({ employees }: EmployeesTableProps) => {
+export const EmployeesTable = ({ employees }: Props) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { mutateAsync, isPending } = useMutation({
-    mutationFn: desactivateEmployee,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["employees"] });
-      toast.success("Empleado desactivado correctamente", {
-        description: "El empleado ha sido desactivado correctamente.",
-      });
-    },
-    onError: () => {
-      toast.error("Error al desactivar empleado", {
-        description: "El empleado no ha sido desactivado correctamente.",
-      });
-    },
-  });
+  const { mutateAsync: mutateDesactivate, isPending: isPendingDesactivate } =
+    useMutation({
+      mutationFn: desactivateEmployee,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["employees"] });
+        toast.success("Empleado desactivado correctamente", {
+          description: "El empleado ha sido desactivado correctamente.",
+        });
+      },
+      onError: () => {
+        toast.error("Error al desactivar empleado", {
+          description: "El empleado no ha sido desactivado correctamente.",
+        });
+      },
+    });
+
+  const { mutateAsync: mutateActivate, isPending: isPendingActivate } =
+    useMutation({
+      mutationFn: activateEmployee,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["employees"] });
+        toast.success("Empleado activado correctamente", {
+          description: "El empleado ha sido activado correctamente.",
+        });
+      },
+      onError: () => {
+        toast.error("Error al activar empleado", {
+          description: "El empleado no ha sido activado correctamente.",
+        });
+      },
+    });
 
   const handleDesactivate = (userId: string) => {
-    toast.promise(mutateAsync(userId), {
+    toast.promise(mutateDesactivate(userId), {
       loading: "Desactivando empleado...",
+    });
+  };
+
+  const handleActivate = (userId: string) => {
+    toast.promise(mutateActivate(userId), {
+      loading: "Activando empleado...",
     });
   };
 
@@ -159,19 +182,33 @@ export const EmployeesTable = ({ employees }: EmployeesTableProps) => {
                     <EditIcon className="h-4 w-4 mr-2" />
                     Actualizar
                   </ContextMenuItem>
-                  {user.status === "active" && (
+                  {user.status === "active" ? (
                     <ContextMenuItem
                       onClick={() => handleDesactivate(user.id)}
                       className="cursor-pointer text-sm"
                       variant="destructive"
-                      disabled={isPending}
+                      disabled={isPendingDesactivate}
                     >
-                      {isPending ? (
+                      {isPendingDesactivate ? (
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                       ) : (
                         <UserXIcon className="h-4 w-4 mr-2" />
                       )}
                       Desactivar
+                    </ContextMenuItem>
+                  ) : (
+                    <ContextMenuItem
+                      onClick={() => handleActivate(user.id)}
+                      className="cursor-pointer text-sm"
+                      variant="default"
+                      disabled={isPendingActivate}
+                    >
+                      {isPendingActivate ? (
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      ) : (
+                        <UserPlusIcon className="h-4 w-4 mr-2" />
+                      )}
+                      Activar
                     </ContextMenuItem>
                   )}
                 </ContextMenuContent>
