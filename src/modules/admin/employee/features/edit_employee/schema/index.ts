@@ -1,27 +1,23 @@
 import { z } from "zod";
 
-export const createEmployeeSchema = z.object({
+export const editEmployeeSchema = z.object({
   first_name: z
     .string()
-    .min(1, "El nombre es requerido")
-    .min(2, "El nombre debe tener al menos 2 caracteres"),
+    .min(2, "El nombre debe tener al menos 2 caracteres")
+    .optional(),
   last_name: z
     .string()
-    .min(1, "El apellido es requerido")
-    .min(2, "El apellido debe tener al menos 2 caracteres"),
-  email: z
+    .min(2, "El apellido debe tener al menos 2 caracteres")
+    .optional(),
+  email: z.string().email("Formato de email inválido").optional(),
+  password: z
     .string()
-    .min(1, "El email es requerido")
-    .email("Formato de email inválido"),
-  password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
+    .min(6, "La contraseña debe tener al menos 6 caracteres")
+    .optional(),
   phone: z
     .string()
-    .min(1, "El teléfono es requerido")
-    .regex(/^\+?[1-9]\d{1,14}$/, "Formato de teléfono inválido"),
-  birth_date: z.date({
-    required_error: "La fecha de nacimiento es requerida",
-  }),
-  gender: z.enum(["Masculino", "Femenino", "Otro"], {
-    required_error: "El género es requerido",
-  }),
+    .regex(/^\+?[1-9]\d{1,14}$/, "Formato de teléfono inválido")
+    .optional(),
+  birth_date: z.date().optional(),
+  gender: z.enum(["Masculino", "Femenino", "Otro"]).optional(),
 });

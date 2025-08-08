@@ -14,24 +14,33 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  StatusMessage,
 } from "@/components/ui";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UserPlusIcon, CalendarIcon } from "lucide-react";
+import { CalendarIcon, PencilIcon } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { ROUTES } from "@/routes/routes";
-import { type CreateEmployeeForm } from "../types";
-import { createEmployeeSchema } from "../schema";
-import { editEmployee } from "../services";
-import { useMutation } from "@tanstack/react-query";
+import { type EditEmployeeForm } from "../types";
+import { editEmployeeSchema } from "../schema";
+import { editEmployee, getEmployee } from "../services";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTitle } from "@/hooks";
+import {
+  ExclamationTriangleIcon,
+  UserMinusIcon,
+} from "@heroicons/react/24/solid";
 
 export default function EditEmployeePage() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [originalValues, setOriginalValues] = useState<EditEmployeeForm | null>(
+    null
+  );
+  const params = useParams();
   const navigate = useNavigate();
   const { changeTitle } = useTitle();
 
@@ -41,16 +50,66 @@ export default function EditEmployeePage() {
     setValue,
     control,
     formState: { errors },
-  } = useForm<CreateEmployeeForm>({
-    resolver: zodResolver(createEmployeeSchema),
-    defaultValues: {},
+  } = useForm<EditEmployeeForm>({
+    resolver: zodResolver(editEmployeeSchema),
+    defaultValues: {
+      first_name: "",
+      last_name: "",
+      email: "",
+      password: "",
+      phone: "",
+      birth_date: new Date(),
+      gender: "Masculino",
+    },
+  });
+
+  const watchedValues = useWatch({ control });
+
+  const hasChanges = useMemo(() => {
+    if (!originalValues || !watchedValues) return false;
+
+    const fieldsToCompare: (keyof EditEmployeeForm)[] = [
+      "first_name",
+      "last_name",
+      "email",
+      "password",
+      "phone",
+      "birth_date",
+      "gender",
+    ];
+
+    return fieldsToCompare.some((field) => {
+      const currentValue = watchedValues[field];
+      const originalValue = originalValues[field];
+
+      if (field === "birth_date") {
+        const currentDate =
+          currentValue instanceof Date ? currentValue.getTime() : null;
+        const originalDate =
+          originalValue instanceof Date ? originalValue.getTime() : null;
+        return currentDate !== originalDate;
+      }
+
+      return currentValue !== originalValue;
+    });
+  }, [originalValues, watchedValues]);
+
+  const {
+    data: employee,
+    isLoading: isLoadingEmployee,
+    isError,
+  } = useQuery({
+    queryKey: ["employee", params.id],
+    queryFn: () => getEmployee(params.id as string),
+    enabled: !!params.id,
   });
 
   const { mutate: editEmployeeMutation, isPending } = useMutation({
-    mutationFn: editEmployee,
+    mutationFn: ({ id, data }: { id: string; data: EditEmployeeForm }) =>
+      editEmployee(id, data),
   });
 
-  const onSubmit = async (data: CreateEmployeeForm) => {
+  const onSubmit = async (data: EditEmployeeForm) => {
     const employeeData = {
       ...data,
       profile_image:
@@ -58,26 +117,100 @@ export default function EditEmployeePage() {
       user_type: "employee",
     };
 
-    editEmployeeMutation(employeeData, {
-      onSuccess: () => {
-        toast.success("Empleado creado correctamente", {
-          description:
-            "El empleado se ha creado correctamente, puedes verlo en la lista de empleados.",
-        });
-        navigate(ROUTES.Admin.ViewEmployees);
+    editEmployeeMutation(
+      {
+        id: params.id as string,
+        data: employeeData,
       },
-      onError: () => {
-        toast.error("Error al crear empleado", {
-          description:
-            "Sucedio un error al crear el empleado, si el error persiste, por favor contacta al administrador.",
-        });
-      },
+      {
+        onSuccess,
+        onError,
+      }
+    );
+  };
+
+  const onSuccess = () => {
+    toast.success("Empleado editado correctamente", {
+      description:
+        "El empleado se ha editado correctamente, puedes verlo en la lista de empleados.",
+    });
+    navigate(ROUTES.Admin.ViewEmployees);
+  };
+
+  const onError = () => {
+    toast.error("Error al editar empleado", {
+      description:
+        "Sucedio un error al editar el empleado, si el error persiste, por favor contacta al administrador.",
     });
   };
 
   useEffect(() => {
-    changeTitle("Crear empleado - La base");
-  }, []);
+    changeTitle("Editar empleado - La base");
+  }, [changeTitle]);
+
+  useEffect(() => {
+    console.log(employee);
+    if (employee) {
+      const employeeData = {
+        first_name: employee.user.first_name,
+        last_name: employee.user.last_name,
+        email: employee.user.email,
+        password: "",
+        phone: employee.user.phone,
+        birth_date: new Date(employee.user.birth_date),
+        gender: employee.user.gender as "Masculino" | "Femenino" | "Otro",
+      };
+
+      setValue("first_name", employeeData.first_name);
+      setValue("last_name", employeeData.last_name);
+      setValue("email", employeeData.email);
+      setValue("password", employeeData.password);
+      setValue("phone", employeeData.phone);
+      setValue("birth_date", employeeData.birth_date);
+      setValue("gender", employeeData.gender);
+
+      setOriginalValues(employeeData);
+    }
+  }, [employee, setValue]);
+
+  if (!params.id) {
+    return (
+      <div className="mx-auto max-w-4xl w-full px-4 mt-8">
+        <CustomHeader title="Editar empleado" to={ROUTES.Admin.ViewEmployees} />
+        <div className="mt-4">
+          <StatusMessage
+            title="No se encontró el empleado"
+            description="El empleado no existe, por favor verifica la URL o regresa a la lista de empleados, si el error persiste, contacta al administrador."
+            icon={UserMinusIcon}
+            color="stone"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="mx-auto max-w-4xl w-full px-4 mt-8">
+        <CustomHeader title="Editar empleado" to={ROUTES.Admin.ViewEmployees} />
+        <div className="mt-4">
+          <StatusMessage
+            title="Error al obtener el empleado"
+            description="Sucedio un error al obtener el empleado, si el error persiste, contacta al administrador."
+            icon={ExclamationTriangleIcon}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (isLoadingEmployee)
+    return (
+      <div className="mx-auto max-w-4xl w-full px-4 mt-8">
+        <CustomHeader title="Editar empleado" to={ROUTES.Admin.ViewEmployees} />
+        <div className="w-full h-[600px] mt-4 bg-stone-50 animate-pulse"></div>
+      </div>
+    );
 
   return (
     <div className="mx-auto max-w-4xl w-full px-4 mt-8">
@@ -87,8 +220,12 @@ export default function EditEmployeePage() {
             title="Editar empleado"
             to={ROUTES.Admin.ViewEmployees}
           />
-          <Button type="submit" disabled={isPending} className="min-w-[200px]">
-            <UserPlusIcon className="w-4 h-4 mr-2" />
+          <Button
+            type="submit"
+            disabled={isPending || !hasChanges}
+            className="min-w-[200px]"
+          >
+            <PencilIcon className="w-4 h-4 mr-2" />
             {isPending ? "Editando..." : "Editar empleado"}
           </Button>
         </div>
@@ -131,7 +268,7 @@ export default function EditEmployeePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">Correo electrónico</Label>
                 <Input
                   id="email"
                   type="email"
