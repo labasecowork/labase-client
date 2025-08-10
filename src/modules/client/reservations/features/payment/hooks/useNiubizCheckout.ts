@@ -28,7 +28,7 @@ export const useNiubizCheckout = () => {
 
     const form = document.createElement("form");
     form.id = "frmVisaNet";
-    form.action = `https://test.labase.pe/visa-callback?purchaseNumber=${purchaseNumber}&amount=${amount}&reservation=${reservationId}`;
+    form.action = `http://localhost:3000/api/v1/payment/visa-callback?purchaseNumber=${purchaseNumber}&reservationId=${reservationId}`;
     form.style.display = "none";
 
     const script = document.createElement("script");
@@ -48,20 +48,21 @@ export const useNiubizCheckout = () => {
     script.setAttribute("data-formbuttoncolor", "#0A0A0A");
 
     script.onload = () => {
-      console.log("Script de Niubiz cargado. Abriendo checkout...");
       if (window.VisanetCheckout) {
         window.VisanetCheckout.open();
       } else {
-        console.error("El objeto VisanetCheckout no se encontró en window.");
-        toast.error("Error al cargar la pasarela de pago", {
+        toast.error("Error al cargar la pasarela de pago.", {
           description:
-            "No se pudo inicializar el componente de pago de Niubiz.",
+            "Por favor, intenta nuevamente o contacta a soporte si el problema persiste.",
         });
       }
     };
 
     script.onerror = () => {
-      toast.error("No se pudo cargar el script de la pasarela de pago.");
+      toast.error("No se pudo cargar el script de la pasarela de pago.", {
+        description:
+          "Por favor, intenta nuevamente o contacta a soporte si el problema persiste.",
+      });
     };
 
     form.appendChild(script);

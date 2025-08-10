@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Button } from "@/components/ui";
+import { ImageSection } from "../image_section";
 import { createSpaceSchema } from "../../../schemas";
 import type { CreateSpaceData, CreateSpaceResponse } from "../../../types";
 import { useCreateSpace } from "../../../service";
@@ -10,11 +11,13 @@ import { ROUTES } from "@/routes/routes";
 import { GeneralInfoSection } from "../info_section";
 import { ConfigSection } from "../config_section";
 import { PricingSection } from "../pricing_section";
+import { useState } from "react";
 
 export const Form = () => {
   const navigate = useNavigate();
   const { mutate: createSpace, isPending } = useCreateSpace();
-
+  const [images, setImages] = useState<File[]>([]);
+  const [imageError, setImageError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -41,7 +44,16 @@ export const Form = () => {
   });
 
   const onSubmit = (data: CreateSpaceData) => {
-    const payload = {
+    if (images.length === 0) {
+      setImageError("Debes agregar al menos 1 imagen del espacio");
+      return;
+    }
+
+    setImageError(null);
+
+    const formData = new FormData();
+
+    const jsonData = {
       name: data.name,
       description: data.description,
       type: data.type,
@@ -57,7 +69,19 @@ export const Form = () => {
       })),
     };
 
-    createSpace(payload, {
+    Object.entries(jsonData).forEach(([key, value]) => {
+      if (key === "prices") {
+        formData.append(key, JSON.stringify(value));
+      } else {
+        formData.append(key, String(value));
+      }
+    });
+
+    images.forEach((image) => {
+      formData.append("images[]", image);
+    });
+
+    createSpace(formData, {
       onSuccess: (response: CreateSpaceResponse) => {
         toast.success("Espacio creado exitosamente", {
           description: `El espacio "${response.space.name}" ha sido creado.`,
@@ -74,6 +98,11 @@ export const Form = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-8">
+      <ImageSection
+        images={images}
+        onImagesChange={setImages}
+        error={imageError}
+      />
       <GeneralInfoSection register={register} errors={errors} />
       <ConfigSection register={register} errors={errors} />
       <PricingSection

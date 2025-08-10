@@ -1,4 +1,7 @@
+import { axiosInstance } from "@/interceptors";
+import type { Response } from "@/types";
 import axios from "axios";
+import type { CreatePaymentData, CreatePaymentResponse } from "../types";
 
 export const generateSecurityToken = async (): Promise<string> => {
   const { data } = await axios.get<string>(`https://test.labase.pe/token`);
@@ -26,4 +29,20 @@ export const getPaymentResult = async (purchaseNumber: string) => {
     `https://test.labase.pe/payment-result/${purchaseNumber}`
   );
   return data;
+};
+
+export const createPayment = async (
+  data: CreatePaymentData
+): Promise<CreatePaymentResponse> => {
+  const { data: response } = await axiosInstance.post<
+    Response<CreatePaymentResponse>
+  >(`/payment/create-payment`, data);
+
+  if (!response.data) {
+    throw new Error(
+      "Error al crear el pago, el servidor no contiene los datos del pago creado."
+    );
+  }
+
+  return response.data;
 };

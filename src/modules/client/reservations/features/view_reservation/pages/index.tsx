@@ -8,15 +8,14 @@ import {
 } from "@heroicons/react/20/solid";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useResolveReservation } from "../service";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
+import { ExclamationTriangleIcon, InboxIcon } from "@heroicons/react/24/solid";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { QRCodeSVG } from "qrcode.react";
 import { useTitle } from "@/hooks";
 import { useEffect, useCallback } from "react";
 import { getStatusLabel } from "@/utilities/status_utilities";
-import { CustomHeader } from "@/components/ui";
+import { CustomHeader, StatusMessage } from "@/components/ui";
 import { useInitializePayment } from "../../payment/hooks/useInitializePayment";
 import { useNiubizCheckout } from "../../payment/hooks/useNiubizCheckout";
 import { toast } from "sonner";
@@ -90,20 +89,13 @@ export default function ViewReservationPage() {
     return (
       <div className="w-full max-w-5xl mx-auto px-4 py-10">
         <CustomHeader title="Ver reserva" to={ROUTES.Client.ViewReservations} />
-        <div className="bg-red-500/10 p-10 sm:p-24 gap-2 mt-8">
-          <div className="mx-auto max-w-md text-center">
-            <ExclamationTriangleIcon className="size-10 text-rose-800 mx-auto" />
-            <div>
-              <h2 className="text-xl font-serif font-bold text-rose-800 mt-4">
-                Ups! Sucedio un error
-              </h2>
-              <p className="text-xs sm:text-sm text-rose-700 mt-0 sm:mt-2">
-                No se pudo encontrar la reserva solicitada, posiblemente no
-                existe o ya fue cancelada, si crees que esto es un error, por
-                favor contacta a soporte.
-              </p>
-            </div>
-          </div>
+        <div className="mt-4">
+          <StatusMessage
+            title="Ups! Sucedio un error"
+            description="No se pudo encontrar la reserva solicitada, posiblemente no existe o ya fue cancelada, si crees que esto es un error, por favor contacta a soporte."
+            color="rose"
+            icon={ExclamationTriangleIcon}
+          />
         </div>
       </div>
     );
@@ -111,14 +103,16 @@ export default function ViewReservationPage() {
 
   if (!reservationData) {
     return (
-      <div className="w-full max-w-5xl mx-auto">
-        <Alert variant="default">
-          <ExclamationTriangleIcon className="h-4 w-4" />
-          <AlertTitle>No encontrado</AlertTitle>
-          <AlertDescription>
-            No se pudo encontrar la reserva solicitada.
-          </AlertDescription>
-        </Alert>
+      <div className="w-full max-w-5xl mx-auto px-4 py-10">
+        <CustomHeader title="Ver reserva" to={ROUTES.Client.ViewReservations} />
+        <div className="mt-4">
+          <StatusMessage
+            title="No se pudo encontrar la reserva"
+            description="No se pudo encontrar la reserva solicitada, posiblemente no existe o ya fue cancelada, si crees que esto es un error, por favor contacta a soporte."
+            color="stone"
+            icon={InboxIcon}
+          />
+        </div>
       </div>
     );
   }
@@ -130,16 +124,16 @@ export default function ViewReservationPage() {
 
   const handlePaymentProcess = () => {
     initializePayment(
-      { amount: calculatedAmount },
+      { reservationId: id! },
       {
-        onSuccess: ({ sessionKey, purchaseNumber }) => {
+        onSuccess: ({ sessionToken, purchaseNumber }) => {
           toast.info("Iniciando pasarela de pago", {
             description:
               "Estamos creando la sesión de pago para tu reserva, por favor espera un momento...",
           });
 
           openCheckout({
-            sessionKey,
+            sessionKey: sessionToken,
             purchaseNumber,
             amount: calculatedAmount,
             reservationId: id!,
@@ -453,7 +447,7 @@ export default function ViewReservationPage() {
             {/* Círculos de perforación adicionales - Lado derecho */}
             <div className="absolute -right-3 top-[50%] size-6 lg:size-8 bg-white rounded-full"></div>
           </div>
-          <div className="w-full flex justify-end">
+          <div className="w-full flex justify-end lg:max-w-none max-w-[400px] mx-auto">
             <button
               onClick={handlePaymentProcess}
               className={cn(

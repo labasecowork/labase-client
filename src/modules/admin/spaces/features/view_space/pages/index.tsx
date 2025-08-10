@@ -18,6 +18,10 @@ export default function ViewSpacePage() {
   const { data: spaceResponse, isLoading, isError } = useGetSpaceById(spaceId);
 
   useEffect(() => {
+    console.log("spaceResponse", spaceResponse);
+  }, [spaceResponse, changeTitle]);
+
+  useEffect(() => {
     changeTitle("Ver espacio - La base");
   }, [changeTitle, spaceResponse]);
 

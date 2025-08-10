@@ -1,14 +1,24 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "@/interceptors";
 import type { Response } from "@/types/services";
-import type { CreateSpaceApiPayload, CreateSpaceResponse } from "../types";
+import type { CreateSpacePayload, CreateSpaceResponse } from "../types";
 
 const createSpaceRequest = async (
-  payload: CreateSpaceApiPayload
+  payload: CreateSpacePayload
 ): Promise<CreateSpaceResponse> => {
+  const config =
+    payload instanceof FormData
+      ? {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      : {};
+
   const { data } = await axiosInstance.post<Response<CreateSpaceResponse>>(
     "/spaces",
-    payload
+    payload,
+    config
   );
 
   if (!data.data) {

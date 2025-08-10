@@ -26,6 +26,9 @@ export interface CreateSpaceApiPayload {
   }[];
 }
 
+// Tipo para cuando enviamos FormData con imágenes
+export type CreateSpacePayload = CreateSpaceApiPayload | FormData;
+
 export interface CreateSpaceResponse {
   space: Space;
 }
