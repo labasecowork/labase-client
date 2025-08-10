@@ -26,7 +26,7 @@ export const SpaceCard: React.FC<Props> = ({
   timeReservation,
 }) => {
   return (
-    <li key={id} className="overflow-hidden shadow-md">
+    <li key={id} className="overflow-hidden bg-stone-50">
       <div className="flex items-end gap-x-4 border-b border-stone-900/5 relative h-[200px]">
         <img
           src={spaceImageUrl}

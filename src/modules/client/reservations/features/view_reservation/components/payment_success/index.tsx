@@ -5,15 +5,39 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import type { PaymentResponse } from "@/modules/client/payment/types";
 import { toast } from "sonner";
+import type { Reservation } from "../../types";
+import { generateReceiptPDF } from "../../utils/pdf-generator";
 
 interface Props {
   paymentResult: PaymentResponse;
+  reservation: Reservation;
 }
 
-export const PaymentSuccess = ({ paymentResult }: Props) => {
+export const PaymentSuccess = ({ paymentResult, reservation }: Props) => {
+  const handleDownloadReceipt = async () => {
+    if (!reservation) {
+      toast.error("No se pudo obtener la información de la reserva");
+      return;
+    }
+
+    try {
+      toast.info("Generando boleta...", {
+        description: "Espera un momento mientras generamos tu boleta",
+      });
+      await generateReceiptPDF(paymentResult, reservation);
+      toast.success("Boleta descargada exitosamente", {
+        description: "Tu boleta ha sido generada y descargada",
+      });
+    } catch (error) {
+      console.error("Error al generar la boleta:", error);
+      toast.error("Error al generar la boleta. Inténtalo de nuevo.", {
+        description:
+          "Por favor, intenta nuevamente, si el problema persiste, contacta al soporte",
+      });
+    }
+  };
   return (
     <>
-      {/* Éxito */}
       <div className="w-16 h-16 bg-emerald-800/10 rounded-full flex items-center justify-center mx-auto mb-4">
         <CheckCircleIcon className="size-10 text-emerald-800" />
       </div>
@@ -24,7 +48,6 @@ export const PaymentSuccess = ({ paymentResult }: Props) => {
         Pago completado exitosamente por S/{paymentResult.amount}
       </p>
 
-      {/* Detalles de transacción */}
       <div className="w-full bg-stone-100 p-6 space-y-3 text-left">
         <div className="space-y-4 text-sm">
           <div className="flex justify-between">
@@ -82,10 +105,8 @@ export const PaymentSuccess = ({ paymentResult }: Props) => {
 
       <Button
         className="w-full mt-6 bg-emerald-800 hover:bg-emerald-700 text-white"
-        onClick={() => {
-          // Aquí puedes agregar la lógica para descargar el recibo
-          toast.info("Descargando recibo...");
-        }}
+        onClick={handleDownloadReceipt}
+        disabled={!reservation}
       >
         <DocumentArrowDownIcon className="w-4 h-4 mr-2" />
         Descargar recibo

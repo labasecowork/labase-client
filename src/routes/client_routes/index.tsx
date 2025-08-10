@@ -17,12 +17,8 @@ export const clientRoutes = {
       element: <client.ViewReservationPage />,
     },
     {
-      path: ROUTES.Client.PaymentSuccess,
-      element: <client.PaymentSuccessPage />,
-    },
-    {
-      path: ROUTES.Client.PaymentError,
-      element: <client.PaymentErrorPage />,
+      path: ROUTES.Client.ViewPayments,
+      element: <client.ViewPaymentsPage />,
     },
   ],
 };

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useResolveReservation } from "../service";
 import { useTitle } from "@/hooks";
 import { useEffect } from "react";
-import { CustomHeader } from "@/components/ui";
+import { Button, CustomHeader } from "@/components/ui";
 import {
   CustomAlert,
   EmptyState,
@@ -14,6 +14,7 @@ import {
   TicketReservation,
 } from "../components";
 import { getStatusData } from "../constants";
+import { PrinterIcon } from "@heroicons/react/24/solid";
 
 export default function ViewReservationPage() {
   const { id } = useParams<{ id: string }>();
@@ -40,7 +41,7 @@ export default function ViewReservationPage() {
 
   return (
     <>
-      <PaymentModal />
+      <PaymentModal reservation={reservationData.reservation} />
       <div className="w-full max-w-4xl mx-auto px-4 py-8">
         <CustomHeader title="Ver reserva" to={ROUTES.Client.ViewReservations} />
 
@@ -52,12 +53,19 @@ export default function ViewReservationPage() {
             color={statusData.color}
           />
           <TicketReservation reservation={reservation} price={price} />
-          {reservation.status === "PENDING" && (
-            <PaymentButton
-              reservationId={id!}
-              calculatedAmount={calculatedAmount}
-            />
-          )}
+
+          <div className="w-full flex justify-end lg:max-w-none max-w-[700px] mx-auto mt-4">
+            <Button>
+              <PrinterIcon className="size-4" />
+              Imprimir boleta
+            </Button>
+            {reservation.status === "PENDING" && (
+              <PaymentButton
+                reservationId={id!}
+                calculatedAmount={calculatedAmount}
+              />
+            )}
+          </div>
         </div>
       </div>
     </>

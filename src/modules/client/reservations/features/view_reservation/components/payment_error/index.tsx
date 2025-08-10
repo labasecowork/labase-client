@@ -11,7 +11,9 @@ export const PaymentError = ({ paymentResult }: Props) => {
   return (
     <>
       {/* Error */}
-      <XCircleIcon className="size-15 text-rose-800 mb-4 mx-auto" />
+      <div className="w-16 h-16 bg-rose-800/10 rounded-full flex items-center justify-center mx-auto mb-4">
+        <XCircleIcon className="size-15 text-rose-800 mb-4 mx-auto" />
+      </div>
       <h3 className="text-xl font-bold text-stone-900 mb-1 font-serif">
         Error al procesar el pago
       </h3>

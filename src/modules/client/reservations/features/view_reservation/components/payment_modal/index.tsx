@@ -6,8 +6,13 @@ import { getPaymentResult } from "@/modules/client/payment/service";
 import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useCallback } from "react";
+import type { Reservation } from "../../types";
 
-export const PaymentModal = () => {
+interface Props {
+  reservation: Reservation;
+}
+
+export const PaymentModal = ({ reservation }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const purchaseNumber = searchParams.get("purchaseNumber");
 
@@ -60,7 +65,10 @@ export const PaymentModal = () => {
           ) : (
             <div className="w-full">
               {paymentResult?.status === "APPROVED" ? (
-                <PaymentSuccess paymentResult={paymentResult} />
+                <PaymentSuccess
+                  paymentResult={paymentResult}
+                  reservation={reservation}
+                />
               ) : (
                 <PaymentError paymentResult={paymentResult!} />
               )}
