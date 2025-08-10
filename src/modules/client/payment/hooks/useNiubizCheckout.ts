@@ -1,4 +1,4 @@
-import { NIUBIZ_URL_JS, NIUBIZ_MERCHANT_ID } from "@/config";
+import { NIUBIZ_URL_JS, NIUBIZ_MERCHANT_ID, API_URL } from "@/config";
 import { toast } from "sonner";
 
 interface NiubizCheckoutProps {
@@ -28,7 +28,7 @@ export const useNiubizCheckout = () => {
 
     const form = document.createElement("form");
     form.id = "frmVisaNet";
-    form.action = `http://localhost:3000/api/v1/payment/visa-callback?purchaseNumber=${purchaseNumber}&reservationId=${reservationId}`;
+    form.action = `${API_URL}payment/visa-callback?purchaseNumber=${purchaseNumber}&reservationId=${reservationId}`;
     form.style.display = "none";
 
     const script = document.createElement("script");

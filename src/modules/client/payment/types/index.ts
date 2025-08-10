@@ -37,3 +37,20 @@ export interface CreatePaymentData {
     };
   };
 }
+
+export interface PaymentResponse {
+  id: string;
+  transactionId: string;
+  purchaseNumber: string;
+  amount: number;
+  authorizationCode: string;
+  status: string;
+  actionDescription: string;
+  cardMasked: string;
+  transactionDate: string;
+  errorCode: number;
+  errorMessage: string;
+  createdAt: string;
+  reservationId: string;
+  userId: string;
+}

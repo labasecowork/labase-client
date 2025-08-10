@@ -14,6 +14,7 @@ export interface Reservation {
   createdAt: string;
   space: Space;
   user: User;
+  status: string;
 }
 
 export interface ResolveReservationResponse {
