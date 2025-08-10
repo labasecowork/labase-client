@@ -10,7 +10,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
         unstyled: true,
         classNames: {
           toast:
-            "group toast p-4 transition-all duration-300 border-none shadow-none flex gap-2",
+            "group toast p-4 transition-all duration-300 border-none shadow-none flex gap-2 rounded-sm",
           title: "text-sm font-bold font-serif",
           description: "text-sm opacity-70",
           error: "text-rose-800 bg-rose-50 ",

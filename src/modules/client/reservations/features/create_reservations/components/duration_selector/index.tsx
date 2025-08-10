@@ -118,19 +118,19 @@ export const TimeRangeSelector = forwardRef<
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                className={`w-full justify-start text-left font-normal text-sm px-4 py-2 rounded-none text-stone-500 ${
-                  startTimeError ? "border-red-500" : ""
+                className={`w-full justify-start text-left font-normal text-sm px-4 py-2 rounded-sm text-stone-500 ${
+                  startTimeError ? "border-rose-800" : ""
                 }`}
               >
                 <ClockIcon className="size-4" />
                 {startTime ? startTime : "Selecciona hora"}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-auto p-0 rounded-none max-h-60 overflow-y-auto">
+            <DropdownMenuContent className="w-auto p-0 rounded-sm max-h-60 overflow-y-auto">
               {startTimeSlots.map((time) => (
                 <DropdownMenuItem
                   key={time}
-                  className="px-3 py-1 rounded-none cursor-pointer"
+                  className="px-3 py-1 rounded-sm cursor-pointer"
                   onClick={() => handleStartTimeChange(time)}
                 >
                   <span>{time}</span>
@@ -139,7 +139,7 @@ export const TimeRangeSelector = forwardRef<
             </DropdownMenuContent>
           </DropdownMenu>
           {startTimeError && (
-            <p className="text-red-500 text-xs mt-1">{startTimeError}</p>
+            <p className="text-rose-800 text-xs mt-1">{startTimeError}</p>
           )}
         </div>
         <div className="flex flex-col">
@@ -150,8 +150,8 @@ export const TimeRangeSelector = forwardRef<
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                className={`w-full justify-start text-left font-normal text-sm px-4 py-2 rounded-none text-stone-500 ${
-                  endTimeError ? "border-red-500" : ""
+                className={`w-full justify-start text-left font-normal text-sm px-4 py-2 rounded-sm text-stone-500 ${
+                  endTimeError ? "border-rose-800" : ""
                 }`}
                 disabled={endTimeSlots.length === 0}
               >
@@ -163,11 +163,11 @@ export const TimeRangeSelector = forwardRef<
                   : "Selecciona hora"}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-auto p-0 rounded-none max-h-60 overflow-y-auto">
+            <DropdownMenuContent className="w-auto p-0 rounded-sm max-h-60 overflow-y-auto">
               {endTimeSlots.map((time) => (
                 <DropdownMenuItem
                   key={time}
-                  className="px-3 py-1 rounded-none cursor-pointer"
+                  className="px-3 py-1 rounded-sm cursor-pointer"
                   onClick={() => onEndTimeChange(time)}
                 >
                   <span>{time}</span>
@@ -176,7 +176,7 @@ export const TimeRangeSelector = forwardRef<
             </DropdownMenuContent>
           </DropdownMenu>
           {endTimeError && (
-            <p className="text-red-500 text-xs mt-1">{endTimeError}</p>
+            <p className="text-rose-800 text-xs mt-1">{endTimeError}</p>
           )}
         </div>
       </div>

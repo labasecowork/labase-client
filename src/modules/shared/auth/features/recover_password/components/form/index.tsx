@@ -58,11 +58,11 @@ export const Form = () => {
           id="email"
           type="email"
           placeholder="Ej. tucorreo@email.com"
-          className="h-12 px-4 border-stone-300 rounded-none focus:outline-none transition-colors"
+          className="h-12 px-4 border-stone-300 rounded-sm focus:outline-none transition-colors"
           {...register("email")}
         />
         {errors.email && (
-          <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+          <p className="text-rose-800 text-sm mt-1">{errors.email.message}</p>
         )}
       </div>
 

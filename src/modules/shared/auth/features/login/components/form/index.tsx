@@ -58,11 +58,11 @@ export const Form = () => {
           id="email"
           type="email"
           placeholder="Ej. tucorreo@email.com"
-          className="h-12 px-4 border-stone-300 focus:outline-none transition-colors rounded-none"
+          className="h-12 px-4 border-stone-300 focus:outline-none transition-colors rounded-sm"
           {...register("email")}
         />
         {errors.email && (
-          <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+          <p className="text-rose-800 text-sm mt-1">{errors.email.message}</p>
         )}
       </div>
 
@@ -77,11 +77,13 @@ export const Form = () => {
           id="password"
           type="password"
           placeholder="Ej. asgSWas%!ga12"
-          className="h-12 px-4 border-stone-300 rounded-none focus:outline-none transition-colors"
+          className="h-12 px-4 border-stone-300 rounded-sm focus:outline-none transition-colors"
           {...register("password")}
         />
         {errors.password && (
-          <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+          <p className="text-rose-800 text-sm mt-1">
+            {errors.password.message}
+          </p>
         )}
       </div>
 

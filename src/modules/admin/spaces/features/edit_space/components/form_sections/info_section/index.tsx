@@ -40,7 +40,7 @@ export const GeneralInfoSection: React.FC<GeneralInfoSectionProps> = ({
             {...register("name")}
           />
           {errors.name && (
-            <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+            <p className="text-rose-800 text-sm mt-1">{errors.name.message}</p>
           )}
         </div>
         <div>

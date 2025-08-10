@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useResolveReservation } from "../service";
 import { useTitle } from "@/hooks";
 import { useEffect } from "react";
-import { Button, CustomHeader } from "@/components/ui";
+import { CustomHeader } from "@/components/ui";
 import {
   CustomAlert,
   EmptyState,
@@ -14,7 +14,6 @@ import {
   TicketReservation,
 } from "../components";
 import { getStatusData } from "../constants";
-import { PrinterIcon } from "@heroicons/react/24/solid";
 
 export default function ViewReservationPage() {
   const { id } = useParams<{ id: string }>();
@@ -55,10 +54,6 @@ export default function ViewReservationPage() {
           <TicketReservation reservation={reservation} price={price} />
 
           <div className="w-full flex justify-end lg:max-w-none max-w-[700px] mx-auto mt-4">
-            <Button>
-              <PrinterIcon className="size-4" />
-              Imprimir boleta
-            </Button>
             {reservation.status === "PENDING" && (
               <PaymentButton
                 reservationId={id!}

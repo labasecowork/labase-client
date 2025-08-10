@@ -78,7 +78,7 @@ export const StatusMessage: React.FC<Props> = ({
   return (
     <div
       className={cn(
-        "col-span-1 lg:col-span-1 w-full h-full max-h-[675px] flex items-center justify-center flex-col text-center p-10 md:p-24",
+        "col-span-1 lg:col-span-1 w-full h-full max-h-[675px] flex items-center justify-center flex-col text-center p-10 md:p-24 rounded-sm",
         colorClasses.background
       )}
     >

@@ -35,7 +35,7 @@ export default function ViewSpacePage() {
         data={spaceResponse}
         LoadingComponent={<LoadingState />}
         ErrorComponent={
-          <p className="text-red-500 mt-8">
+          <p className="text-rose-800 mt-8">
             Error al cargar los datos del espacio.
           </p>
         }

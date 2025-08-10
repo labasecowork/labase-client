@@ -86,7 +86,7 @@ export const MobileMenu: React.FC<Props> = ({
           ))}
           <button
             onClick={handleLogoutClick}
-            className="w-full text-left rounded-full px-4 py-3 text-sm font-medium text-red-300 hover:bg-red-500/20 flex items-center gap-2"
+            className="w-full text-left rounded-full px-4 py-3 text-sm font-medium text-red-300 hover:bg-rose-800/20 flex items-center gap-2"
           >
             <ArrowLeftOnRectangleIcon className="size-5" />
             Cerrar sesión

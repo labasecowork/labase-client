@@ -43,11 +43,11 @@ export const NewsletterForm: React.FC<Props> = ({
             <Input
               id="subject"
               placeholder="Asunto del newsletter"
-              className="h-12 px-4 border-stone-300 focus:outline-none transition-colors rounded-none"
+              className="h-12 px-4 border-stone-300 focus:outline-none transition-colors rounded-sm"
               {...register("subject")}
             />
             {errors.subject && (
-              <p className="text-red-500 text-sm mt-1">
+              <p className="text-rose-800 text-sm mt-1">
                 {errors.subject.message}
               </p>
             )}
@@ -63,11 +63,11 @@ export const NewsletterForm: React.FC<Props> = ({
             <Textarea
               id="content"
               placeholder="Escribe el contenido de tu newsletter aquí..."
-              className="min-h-[390px] px-4 py-3 border-stone-300 focus:outline-none transition-colors rounded-none resize-none"
+              className="min-h-[390px] px-4 py-3 border-stone-300 focus:outline-none transition-colors rounded-sm resize-none"
               {...register("content")}
             />
             {errors.content && (
-              <p className="text-red-500 text-sm mt-1">
+              <p className="text-rose-800 text-sm mt-1">
                 {errors.content.message}
               </p>
             )}

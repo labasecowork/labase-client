@@ -89,7 +89,7 @@ export const Form: React.FC<Props> = ({ email }) => {
           )}
         />
         {errors.code && (
-          <p className="text-red-500 text-sm mt-1">{errors.code.message}</p>
+          <p className="text-rose-800 text-sm mt-1">{errors.code.message}</p>
         )}
       </div>
 

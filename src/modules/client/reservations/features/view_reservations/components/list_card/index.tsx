@@ -46,7 +46,7 @@ export const ListCard = () => {
 
   if (isErrorReservations || isErrorSpaces) {
     return (
-      <div className="text-center bg-red-500/10 p-10 sm:p-24 text-sm">
+      <div className="text-center bg-rose-800/10 p-10 sm:p-24 text-sm">
         <div className="w-full  mx-auto max-w-md ">
           <ExclamationTriangleIcon className="h-10 w-10 text-rose-800 mx-auto" />
           <h2 className="text-xl font-bold font-serif text-rose-800 mt-4">

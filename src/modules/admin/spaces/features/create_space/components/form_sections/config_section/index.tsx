@@ -39,7 +39,7 @@ export const ConfigSection: React.FC<ConfigSectionProps> = ({
             {...register("capacityMin", { valueAsNumber: true })}
           />
           {errors.capacityMin && (
-            <p className="text-red-500 text-sm mt-1">
+            <p className="text-rose-800 text-sm mt-1">
               {errors.capacityMin.message}
             </p>
           )}
@@ -54,7 +54,7 @@ export const ConfigSection: React.FC<ConfigSectionProps> = ({
             {...register("capacityMax", { valueAsNumber: true })}
           />
           {errors.capacityMax && (
-            <p className="text-red-500 text-sm mt-1">
+            <p className="text-rose-800 text-sm mt-1">
               {errors.capacityMax.message}
             </p>
           )}

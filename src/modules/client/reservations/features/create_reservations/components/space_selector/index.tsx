@@ -1,5 +1,13 @@
 import { forwardRef } from "react";
 import type { Space } from "@/modules/client/space/features/get_spaces/types";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  ScrollArea,
+  ScrollBar,
+} from "@/components/ui";
 
 interface SpaceSelectorProps {
   spaces: Space[];
@@ -10,7 +18,7 @@ interface SpaceSelectorProps {
 }
 
 const SpaceCardSkeleton = () => (
-  <div className="flex-shrink-0 w-80 h-[380px] bg-stone-50 shadow  rounded-none overflow-hidden animate-pulse">
+  <div className="flex-shrink-0 w-80 h-[380px] bg-stone-50 shadow  rounded-sm overflow-hidden animate-pulse">
     <div className="h-48 bg-stone-200"></div>
     <div className="p-4">
       <div className="h-4 bg-stone-200 rounded w-3/4 mb-3"></div>
@@ -24,13 +32,16 @@ const SpaceCardSkeleton = () => (
 export const SpaceSelector = forwardRef<HTMLDivElement, SpaceSelectorProps>(
   ({ spaces, selectedSpace, onSpaceSelect, error, isLoading }, ref) => {
     return (
-      <div ref={ref} className="mb-8">
-        <label className="text-sm/6 text-stone-500 block mb-4">
-          Selecciona el espacio:
-        </label>
+      <Card ref={ref} className="mb-8 w-full max-w-4xl">
+        <CardHeader>
+          <CardTitle>Selecciona tu espacio</CardTitle>
+          <CardDescription>
+            Espacios ideales para tu productividad y trabajo en equipo.
+          </CardDescription>
+        </CardHeader>
 
-        <div className="h-[400px] overflow-auto">
-          <div className="p-2">
+        <ScrollArea className="  overflow-auto h-[400px]">
+          <div className="px-6">
             <div className="flex gap-4" style={{ width: "max-content" }}>
               {isLoading ? (
                 <>
@@ -43,10 +54,10 @@ export const SpaceSelector = forwardRef<HTMLDivElement, SpaceSelectorProps>(
                   <div
                     key={space.id}
                     onClick={() => onSpaceSelect(space.id)}
-                    className={`flex-shrink-0 w-80 bg-white border-2 rounded-none overflow-hidden cursor-pointer transition-all duration-200 ${
+                    className={`flex-shrink-0 w-80 rounded-sm bg-stone-100 border-2 overflow-hidden cursor-pointer transition-all duration-200 ${
                       selectedSpace === space.id
-                        ? "border-stone-900 shadow-lg"
-                        : " border-white shadow hover:shadow-md"
+                        ? "border-stone-900"
+                        : " border-stone-50"
                     }`}
                   >
                     <div className="relative h-48 overflow-hidden">
@@ -107,28 +118,28 @@ export const SpaceSelector = forwardRef<HTMLDivElement, SpaceSelectorProps>(
                       <div className="flex items-center justify-between">
                         <div className="flex gap-1 flex-wrap">
                           {space.allowByUnit && (
-                            <span className="text-xs bg-stone-100 text-stone-800 px-2 py-1 rounded">
+                            <span className="text-xs bg-stone-200 text-stone-800 px-2 py-1 rounded">
                               Individual
                             </span>
                           )}
                           {space.allowFullRoom && (
-                            <span className="text-xs bg-stone-100 text-stone-800 px-2 py-1 rounded">
+                            <span className="text-xs bg-stone-200 text-stone-800 px-2 py-1 rounded">
                               Grupal
                             </span>
                           )}
                           {space.access === "PRIVATE" && (
-                            <span className="text-xs bg-stone-100 text-stone-800 px-2 py-1 rounded">
+                            <span className="text-xs bg-stone-200 text-stone-800 px-2 py-1 rounded">
                               Privado
                             </span>
                           )}
                           {space.disabled && (
-                            <span className="text-xs bg-stone-100 text-stone-800 px-2 py-1 rounded">
+                            <span className="text-xs bg-stone-200 text-stone-800 px-2 py-1 rounded">
                               Deshabilitado
                             </span>
                           )}
                         </div>
                         {selectedSpace === space.id && (
-                          <span className="text-xs font-medium text-stone-900 bg-stone-100 px-2 py-1 rounded">
+                          <span className="text-xs font-medium text-stone-50 bg-stone-900 px-2 py-1 rounded">
                             Seleccionado
                           </span>
                         )}
@@ -139,10 +150,12 @@ export const SpaceSelector = forwardRef<HTMLDivElement, SpaceSelectorProps>(
               )}
             </div>
           </div>
-        </div>
 
-        {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
-      </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+
+        {error && <p className="text-rose-800 text-xs px-6 pb-4">{error}</p>}
+      </Card>
     );
   }
 );

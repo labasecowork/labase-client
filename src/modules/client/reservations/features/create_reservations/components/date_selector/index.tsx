@@ -28,8 +28,8 @@ export const DateSelector = forwardRef<HTMLDivElement, DateSelectorProps>(
             <Button
               variant="outline"
               data-empty={!date}
-              className={`data-[empty=true]:text-muted-foreground rounded-none w-full justify-start text-left font-normal text-sm px-4 py-2 shadow-none ${
-                error ? "border-red-500" : ""
+              className={`data-[empty=true]:text-muted-foreground rounded-sm w-full justify-start text-left font-normal text-sm px-4 py-2 shadow-none ${
+                error ? "border-rose-800" : ""
               }`}
             >
               <CalendarIcon className="size-4" />
@@ -40,12 +40,12 @@ export const DateSelector = forwardRef<HTMLDivElement, DateSelectorProps>(
               )}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0 rounded-none">
+          <PopoverContent className="w-auto p-0 rounded-sm">
             <Calendar mode="single" selected={date} onSelect={onDateChange} />
           </PopoverContent>
         </Popover>
 
-        {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+        {error && <p className="text-rose-800 text-xs mt-1">{error}</p>}
       </div>
     );
   }

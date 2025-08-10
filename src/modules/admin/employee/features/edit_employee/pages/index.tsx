@@ -240,10 +240,10 @@ export default function EditEmployeePage() {
                   type="text"
                   placeholder="Ingresa el nombre"
                   {...register("first_name")}
-                  className={errors.first_name ? "border-red-500" : ""}
+                  className={errors.first_name ? "border-rose-800" : ""}
                 />
                 {errors.first_name && (
-                  <p className="text-sm text-red-500">
+                  <p className="text-sm text-rose-800">
                     {errors.first_name.message}
                   </p>
                 )}
@@ -256,10 +256,10 @@ export default function EditEmployeePage() {
                   type="text"
                   placeholder="Ingresa el apellido"
                   {...register("last_name")}
-                  className={errors.last_name ? "border-red-500" : ""}
+                  className={errors.last_name ? "border-rose-800" : ""}
                 />
                 {errors.last_name && (
-                  <p className="text-sm text-red-500">
+                  <p className="text-sm text-rose-800">
                     {errors.last_name.message}
                   </p>
                 )}
@@ -274,10 +274,12 @@ export default function EditEmployeePage() {
                   type="email"
                   placeholder="ejemplo@labase.com"
                   {...register("email")}
-                  className={errors.email ? "border-red-500" : ""}
+                  className={errors.email ? "border-rose-800" : ""}
                 />
                 {errors.email && (
-                  <p className="text-sm text-red-500">{errors.email.message}</p>
+                  <p className="text-sm text-rose-800">
+                    {errors.email.message}
+                  </p>
                 )}
               </div>
 
@@ -288,10 +290,10 @@ export default function EditEmployeePage() {
                   type="password"
                   placeholder="Mínimo 6 caracteres"
                   {...register("password")}
-                  className={errors.password ? "border-red-500" : ""}
+                  className={errors.password ? "border-rose-800" : ""}
                 />
                 {errors.password && (
-                  <p className="text-sm text-red-500">
+                  <p className="text-sm text-rose-800">
                     {errors.password.message}
                   </p>
                 )}
@@ -306,10 +308,12 @@ export default function EditEmployeePage() {
                   type="tel"
                   placeholder="+1234567890"
                   {...register("phone")}
-                  className={errors.phone ? "border-red-500" : ""}
+                  className={errors.phone ? "border-rose-800" : ""}
                 />
                 {errors.phone && (
-                  <p className="text-sm text-red-500">{errors.phone.message}</p>
+                  <p className="text-sm text-rose-800">
+                    {errors.phone.message}
+                  </p>
                 )}
               </div>
 
@@ -325,9 +329,9 @@ export default function EditEmployeePage() {
                     >
                       <PopoverTrigger asChild>
                         <Button
-                          className={`w-full justify-start rounded-none hover:bg-stone-100 text-stone-500 bg-white border border-stone-200 text-left font-normal px-4 py-2 ${
+                          className={`w-full justify-start rounded-sm hover:bg-stone-100 text-stone-500 bg-white border border-stone-200 text-left font-normal px-4 py-2 ${
                             !field.value && "text-stone-500"
-                          } ${errors.birth_date ? "border-red-500" : ""}`}
+                          } ${errors.birth_date ? "border-rose-800" : ""}`}
                         >
                           <CalendarIcon className="mr-2 h-4 w-4" />
                           {field.value ? (
@@ -356,7 +360,7 @@ export default function EditEmployeePage() {
                   )}
                 />
                 {errors.birth_date && (
-                  <p className="text-sm text-red-500">
+                  <p className="text-sm text-rose-800">
                     {errors.birth_date.message}
                   </p>
                 )}
@@ -376,7 +380,7 @@ export default function EditEmployeePage() {
                 >
                   <SelectTrigger
                     className={`w-full ${
-                      errors.gender ? "border-red-500" : ""
+                      errors.gender ? "border-rose-800" : ""
                     }`}
                   >
                     <SelectValue placeholder="Selecciona el género" />
@@ -388,7 +392,7 @@ export default function EditEmployeePage() {
                   </SelectContent>
                 </Select>
                 {errors.gender && (
-                  <p className="text-sm text-red-500">
+                  <p className="text-sm text-rose-800">
                     {errors.gender.message}
                   </p>
                 )}

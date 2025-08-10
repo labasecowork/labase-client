@@ -127,7 +127,7 @@ export default function ViewReservationPage() {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="flex justify-center items-center">
             <Button
-              className="flex items-center gap-2 flex-col h-[200px] sm:h-[300px] bg-stone-800/50 text-white rounded-none w-full hover:bg-stone-800/70 text-sm md:text-base"
+              className="flex items-center gap-2 flex-col h-[200px] sm:h-[300px] bg-stone-800/50 text-white rounded-sm w-full hover:bg-stone-800/70 text-sm md:text-base"
               onClick={() => handleRegisterAttendance("ENTRY")}
               disabled={isRegistering}
             >
@@ -137,7 +137,7 @@ export default function ViewReservationPage() {
           </div>
           <div className="flex justify-center items-center">
             <Button
-              className="flex items-center gap-2 flex-col h-[200px] sm:h-[300px] bg-orange-800/50 text-white rounded-none w-full hover:bg-orange-800/70 text-sm md:text-base"
+              className="flex items-center gap-2 flex-col h-[200px] sm:h-[300px] bg-orange-800/50 text-white rounded-sm w-full hover:bg-orange-800/70 text-sm md:text-base"
               onClick={() => handleRegisterAttendance("EXIT")}
               disabled={isRegistering}
             >
@@ -180,7 +180,7 @@ export default function ViewReservationPage() {
             }
           >
             {(attendanceData) => (
-              <div className="rounded-none bg-stone-50">
+              <div className="rounded-sm bg-stone-50">
                 <Table className="table-fixed">
                   <TableHeader>
                     <TableRow className="bg-stone-50/80">

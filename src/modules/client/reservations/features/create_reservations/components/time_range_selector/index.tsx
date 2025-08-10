@@ -20,7 +20,7 @@ const PriceCard = ({
 }) => (
   <div
     onClick={onClick}
-    className={`p-4 border rounded-none cursor-pointer transition-all ${
+    className={`p-4 border rounded-sm cursor-pointer transition-all ${
       isSelected
         ? "bg-stone-900 text-white border-stone-900"
         : "bg-white hover:border-stone-400"
@@ -70,14 +70,14 @@ export const DurationSelector = forwardRef<
             ))}
           </div>
         ) : (
-          <div className="p-4 border border-dashed rounded-none text-center text-stone-500">
+          <div className="p-4 border border-dashed rounded-sm text-center text-stone-500">
             <p className="text-sm">
               No hay tarifas disponibles para el modo de reserva seleccionado.
             </p>
           </div>
         )}
 
-        {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
+        {error && <p className="text-rose-800 text-xs mt-2">{error}</p>}
       </div>
     );
   }

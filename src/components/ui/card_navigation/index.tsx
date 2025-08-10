@@ -13,9 +13,9 @@ export const CardNavigation: React.FC<Props> = ({
 }) => (
   <Link
     to={to}
-    className="rounded-none w-full bg-yellow-700/10 p-6 flex items-start text-sm text-yellow-900 gap-2 hover:bg-yellow-700/20 transition-all duration-300 cursor-pointer"
+    className="rounded-sm w-full bg-yellow-700/10 p-6 flex items-start text-sm text-yellow-900 gap-2 hover:bg-yellow-700/20 transition-all duration-300 cursor-pointer"
   >
-    <div className="p-2 bg-yellow-500/10">
+    <div className="p-2 bg-yellow-500/10 rounded-sm">
       <Icon className="h-4 w-4" />
     </div>
     <div className="flex flex-col gap-1 ">

@@ -10,7 +10,7 @@ interface Props {
 
 export const TicketReservation: React.FC<Props> = ({ reservation, price }) => {
   return (
-    <div className="bg-stone-100 relative w-full max-w-700px mx-auto lg:max-w-none">
+    <div className="bg-stone-100 relative w-full max-w-700px mx-auto lg:max-w-none rounded-sm overflow-hidden">
       {/* Encabezado del ticket */}
       <div className="text-left px-6 sm:px-10 py-4 bg-stone-200">
         <h3 className="text-xl font-bold text-stone-900">RESERVA</h3>

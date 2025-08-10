@@ -1,4 +1,12 @@
-import { Button, CustomHeader } from "@/components/ui";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CustomHeader,
+} from "@/components/ui";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -20,6 +28,8 @@ import { useGetAvailableSpaces } from "@/modules/client/space/features/get_space
 import { useCheckAvailability, useCreateReservation } from "../service";
 import { useTitle } from "@/hooks";
 import { useEffect } from "react";
+import { PlusIcon } from "lucide-react";
+
 export default function CreateReservationPage() {
   const navigate = useNavigate();
   const { changeTitle } = useTitle();
@@ -123,7 +133,7 @@ export default function CreateReservationPage() {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 py-10">
+    <div className="w-full max-w-4xl mx-auto px-4 py-10">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <div className="flex items-end justify-between gap-4 mb-6 flex-wrap">
@@ -137,6 +147,7 @@ export default function CreateReservationPage() {
               disabled={isChecking || isCreating}
               className=" text-xs sm:text-sm"
             >
+              <PlusIcon className="w-4 h-4" />
               {isChecking
                 ? "Verificando..."
                 : isCreating
@@ -146,7 +157,7 @@ export default function CreateReservationPage() {
           </div>
         </div>
 
-        <div className="w-full grid grid-cols-1 lg:grid-cols-[600px_400px] justify-between">
+        <div className="w-full  justify-between">
           <div>
             <SpaceSelector
               spaces={spacesData?.spaces || []}
@@ -156,50 +167,62 @@ export default function CreateReservationPage() {
               error={errors.spaceId?.message}
             />
 
-            <div className="mb-6  items-start gap-4 grid grid-cols-1 lg:grid-cols-2">
-              <DateSelector
-                date={watchedValues.date}
-                onDateChange={(date) => setValue("date", date as Date)}
-                error={errors.date?.message}
-              />
+            <Card className="mb-24">
+              <CardHeader>
+                <CardTitle>Selecciona tu horario</CardTitle>
+                <CardDescription>
+                  Selecciona la hora que mejor se adapte a tu reserva. Si
+                  prefieres un plan personalizado, puedes contactarnos a través
+                  de nuestra página web.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="mb-6  items-start gap-4 grid grid-cols-1 lg:grid-cols-2">
+                  <DateSelector
+                    date={watchedValues.date}
+                    onDateChange={(date) => setValue("date", date as Date)}
+                    error={errors.date?.message}
+                  />
 
-              <PeopleCountInput
-                value={watchedValues.people || 1}
-                onChange={(value) => setValue("people", value)}
-                minCapacity={selectedSpace?.capacityMin}
-                maxCapacity={selectedSpace?.capacityMax}
-                error={errors.people?.message}
-              />
-            </div>
+                  <PeopleCountInput
+                    value={watchedValues.people || 1}
+                    onChange={(value) => setValue("people", value)}
+                    minCapacity={selectedSpace?.capacityMin}
+                    maxCapacity={selectedSpace?.capacityMax}
+                    error={errors.people?.message}
+                  />
+                </div>
 
-            <TimeRangeSelector
-              startTime={watchedValues.startTime || null}
-              endTime={watchedValues.endTime || null}
-              onStartTimeChange={(time) => setValue("startTime", time)}
-              onEndTimeChange={(time) => setValue("endTime", time)}
-              startTimeError={errors.startTime?.message}
-              endTimeError={errors.endTime?.message}
-            />
+                <TimeRangeSelector
+                  startTime={watchedValues.startTime || null}
+                  endTime={watchedValues.endTime || null}
+                  onStartTimeChange={(time) => setValue("startTime", time)}
+                  onEndTimeChange={(time) => setValue("endTime", time)}
+                  startTimeError={errors.startTime?.message}
+                  endTimeError={errors.endTime?.message}
+                />
 
-            <FullSpaceSwitch
-              checked={watchedValues.fullRoom || false}
-              onCheckedChange={(checked) => setValue("fullRoom", checked)}
-              selectedSpace={selectedSpace}
-              peopleCount={watchedValues.people || 1}
-              error={errors.fullRoom?.message}
-            />
+                <FullSpaceSwitch
+                  checked={watchedValues.fullRoom || false}
+                  onCheckedChange={(checked) => setValue("fullRoom", checked)}
+                  selectedSpace={selectedSpace}
+                  peopleCount={watchedValues.people || 1}
+                  error={errors.fullRoom?.message}
+                />
+              </CardContent>
+            </Card>
           </div>
-
-          <ReservationSummary
-            selectedSpace={selectedSpace}
-            date={watchedValues.date}
-            startTime={watchedValues.startTime || null}
-            endTime={watchedValues.endTime || null}
-            personCount={watchedValues.people || 1}
-            isFullSpace={watchedValues.fullRoom || false}
-          />
         </div>
       </form>
+
+      <ReservationSummary
+        selectedSpace={selectedSpace}
+        date={watchedValues.date}
+        startTime={watchedValues.startTime || null}
+        endTime={watchedValues.endTime || null}
+        personCount={watchedValues.people || 1}
+        isFullSpace={watchedValues.fullRoom || false}
+      />
     </div>
   );
 }

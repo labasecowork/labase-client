@@ -42,13 +42,13 @@ export const FullSpaceSwitch = forwardRef<HTMLDivElement, FullSpaceSwitchProps>(
     }, [selectedSpace, peopleCount]);
 
     return (
-      <div ref={ref} className="w-full mb-6">
+      <div ref={ref} className="w-full">
         <div className="flex items-center gap-2 justify-between pr-4 mb-3">
           <div className="flex flex-col">
             <label className="text-sm/6 text-stone-500" htmlFor="full-space">
               Modalidad de reserva
             </label>
-            {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+            {error && <p className="text-rose-800 text-xs mt-1">{error}</p>}
           </div>
           <Switch
             id="full-space"
@@ -74,7 +74,7 @@ export const FullSpaceSwitch = forwardRef<HTMLDivElement, FullSpaceSwitchProps>(
                 ></span>
                 <span className="font-medium">Individual</span>
                 {!priceInfo.individual?.available && (
-                  <span className="text-red-500 text-xs">(No disponible)</span>
+                  <span className="text-rose-800 text-xs">(No disponible)</span>
                 )}
               </div>
               {priceInfo.individual?.available && (
@@ -90,7 +90,9 @@ export const FullSpaceSwitch = forwardRef<HTMLDivElement, FullSpaceSwitchProps>(
             {/* Modalidad Grupal */}
             <div
               className={`flex items-center justify-between p-2 ${
-                checked ? "bg-stone-50 border border-stone-200" : "bg-stone-50"
+                checked
+                  ? "bg-stone-100 border border-stone-200"
+                  : "bg-stone-100"
               } ${!priceInfo.group?.available ? "opacity-50" : ""}`}
             >
               <div className="flex items-center gap-2">
@@ -101,7 +103,7 @@ export const FullSpaceSwitch = forwardRef<HTMLDivElement, FullSpaceSwitchProps>(
                 ></span>
                 <span className="font-medium">Espacio completo</span>
                 {!priceInfo.group?.available && (
-                  <span className="text-red-500 text-xs">(No disponible)</span>
+                  <span className="text-rose-800 text-xs">(No disponible)</span>
                 )}
               </div>
               {priceInfo.group?.available && (

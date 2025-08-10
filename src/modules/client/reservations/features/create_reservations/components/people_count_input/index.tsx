@@ -49,7 +49,7 @@ export const PeopleCountInput = forwardRef<
           type="number"
           value={value}
           onChange={handleInputChange}
-          className={`pr-8 rounded-none h-9.5 ${error ? "border-red-500" : ""}`}
+          className={`pr-8 rounded-sm h-9.5 ${error ? "border-rose-800" : ""}`}
           min={minCapacity}
           max={maxCapacity}
         />
@@ -73,7 +73,7 @@ export const PeopleCountInput = forwardRef<
         </div>
       </div>
 
-      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+      {error && <p className="text-rose-800 text-xs mt-1">{error}</p>}
       {(minCapacity || maxCapacity) && (
         <p className="text-xs text-stone-400 mt-1">
           {minCapacity && maxCapacity && minCapacity !== maxCapacity

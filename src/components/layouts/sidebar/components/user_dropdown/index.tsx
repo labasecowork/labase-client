@@ -27,7 +27,7 @@ export const UserDropdown: React.FC<Props> = ({
         <UserAvatar name={user?.name ?? "U"} size="sm" />
       </DropdownMenuTrigger>
       {user && (
-        <DropdownMenuContent className="absolute px-0 right-0 z-10 mt-2 w-48 origin-top-right rounded-none bg-white py-1 shadow-lg ring-1 ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
+        <DropdownMenuContent className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-sm bg-white py-1 shadow-lg ring-1 ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
           {/* Información del usuario */}
           <div className="px-4 py-2 border-b border-stone-200">
             <p className="text-sm font-medium text-stone-900">{user.name}</p>
@@ -38,10 +38,7 @@ export const UserDropdown: React.FC<Props> = ({
           </div>
 
           {userNavigation.map((item) => (
-            <DropdownMenuItem
-              key={item.name}
-              className="rounded-none transition"
-            >
+            <DropdownMenuItem key={item.name} className="rounded-sm transition">
               <a
                 href={item.href}
                 className="block px-2 py-1 text-sm text-stone-700 data-focus:bg-stone-100 data-focus:outline-hidden"
@@ -52,7 +49,7 @@ export const UserDropdown: React.FC<Props> = ({
           ))}
 
           <DropdownMenuItem
-            className="rounded-none transition hover:bg-red-50 focus:bg-red-50"
+            className="rounded-sm transition hover:bg-red-50 focus:bg-red-50 mt-1"
             onClick={handleLogoutClick}
           >
             <button className="flex items-center gap-2 w-full text-left cursor-pointer px-2 py-1 text-sm text-red-600 data-focus:bg-red-50 data-focus:outline-hidden">

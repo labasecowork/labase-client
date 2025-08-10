@@ -16,14 +16,14 @@ export const CustomAlert = ({
   return (
     <div
       className={cn(
-        "bg-sky-50 p-4 mb-4 flex gap-4 items-center flex-wrap",
-        `bg-${color}-50`
+        "p-4 mb-4 flex gap-4 items-center flex-wrap rounded-sm",
+        `bg-${color}-800/10`
       )}
     >
       <div
         className={cn(
-          "size-10 flex items-center justify-center",
-          `bg-${color}-100`
+          "size-10 flex items-center justify-center rounded-sm",
+          `bg-${color}-800/10`
         )}
       >
         <Icon className={cn("size-5", `text-${color}-800`)} />

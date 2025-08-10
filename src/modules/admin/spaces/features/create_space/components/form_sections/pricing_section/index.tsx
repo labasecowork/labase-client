@@ -76,19 +76,19 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
             variant="ghost"
             size="icon"
             onClick={() => remove(index)}
-            className="text-stone-500 bg-stone-200 rounded-none m-0 hover:bg-rose-100 hover:text-rose-800 h-[40px]"
+            className="text-stone-500 bg-stone-200 rounded-sm m-0 hover:bg-rose-100 hover:text-rose-800 h-[40px]"
           >
             <Trash2Icon className="size-4" />
           </Button>
         </div>
       ))}
       {errors.prices && (
-        <p className="text-red-500 text-sm mt-1">{errors.prices.message}</p>
+        <p className="text-rose-800 text-sm mt-1">{errors.prices.message}</p>
       )}
       <Button
         type="button"
         variant="outline"
-        className="mt-4 w-full border-dashed bg-stone-50 shadow-none rounded-none"
+        className="mt-4 w-full border-dashed bg-stone-50 shadow-none rounded-sm"
         onClick={() =>
           append({ duration: "HOUR", amount: 0, mode: "INDIVIDUAL" })
         }

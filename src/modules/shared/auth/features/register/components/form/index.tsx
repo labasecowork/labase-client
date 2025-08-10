@@ -55,11 +55,11 @@ export const Form = () => {
           <Input
             id="first_name"
             placeholder="Juan"
-            className="h-12 px-4 border-stone-300 rounded-none focus:outline-none transition-colors"
+            className="h-12 px-4 border-stone-300 rounded-sm focus:outline-none transition-colors"
             {...register("first_name")}
           />
           {errors.first_name && (
-            <p className="text-red-500 text-sm mt-1">
+            <p className="text-rose-800 text-sm mt-1">
               {errors.first_name.message}
             </p>
           )}
@@ -74,11 +74,11 @@ export const Form = () => {
           <Input
             id="last_name"
             placeholder="Pérez"
-            className="h-12 px-4 border-stone-300 rounded-none focus:outline-none transition-colors"
+            className="h-12 px-4 border-stone-300 rounded-sm focus:outline-none transition-colors"
             {...register("last_name")}
           />
           {errors.last_name && (
-            <p className="text-red-500 text-sm mt-1">
+            <p className="text-rose-800 text-sm mt-1">
               {errors.last_name.message}
             </p>
           )}
@@ -96,11 +96,11 @@ export const Form = () => {
           id="email"
           type="email"
           placeholder="tucorreo@email.com"
-          className="h-12 px-4 border-stone-300 rounded-none focus:outline-none transition-colors"
+          className="h-12 px-4 border-stone-300 rounded-sm focus:outline-none transition-colors"
           {...register("email")}
         />
         {errors.email && (
-          <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+          <p className="text-rose-800 text-sm mt-1">{errors.email.message}</p>
         )}
       </div>
 
@@ -115,11 +115,13 @@ export const Form = () => {
           id="password"
           type="password"
           placeholder="Ej: Jk92@lZp"
-          className="h-12 px-4 border-stone-300 rounded-none focus:outline-none transition-colors"
+          className="h-12 px-4 border-stone-300 rounded-sm focus:outline-none transition-colors"
           {...register("password")}
         />
         {errors.password && (
-          <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+          <p className="text-rose-800 text-sm mt-1">
+            {errors.password.message}
+          </p>
         )}
       </div>
 
@@ -134,11 +136,11 @@ export const Form = () => {
           id="confirm_password"
           type="password"
           placeholder="Ej: Jk92@lZp"
-          className="h-12 px-4 border-stone-300 rounded-none focus:outline-none transition-colors"
+          className="h-12 px-4 border-stone-300 rounded-sm focus:outline-none transition-colors"
           {...register("confirm_password")}
         />
         {errors.confirm_password && (
-          <p className="text-red-500 text-sm mt-1">
+          <p className="text-rose-800 text-sm mt-1">
             {errors.confirm_password.message}
           </p>
         )}

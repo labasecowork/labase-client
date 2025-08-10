@@ -1,6 +1,7 @@
 import { ROUTES } from "@/routes/routes";
 import {
   ClipboardDocumentListIcon,
+  CreditCardIcon,
   UserGroupIcon,
   WrenchIcon,
 } from "@heroicons/react/24/outline";
@@ -77,6 +78,12 @@ export const getNavigationConfig = (userType: string): NavigationItem[] => {
         href: ROUTES.Client.ViewReservations,
         icon: ClipboardDocumentListIcon,
         key: "my-reservations",
+      },
+      {
+        name: "Mis pagos",
+        href: ROUTES.Client.ViewPayments,
+        icon: CreditCardIcon,
+        key: "my-payments",
       },
     ],
     employee: [
