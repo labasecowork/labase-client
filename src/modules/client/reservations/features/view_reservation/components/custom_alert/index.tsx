@@ -29,12 +29,10 @@ export const CustomAlert = ({
         <Icon className={cn("size-5", `text-${color}-800`)} />
       </div>
       <div>
-        <h3 className={cn("text-sm font-bold", `text-${color}-800 font-serif`)}>
+        <h3 className={cn("text-sm font-bold", `text-${color}-800 `)}>
           {title}
         </h3>
-        <p className={cn("text-sm", `text-${color}-800 font-serif`)}>
-          {description}
-        </p>
+        <p className={cn("text-sm", `text-${color}-800`)}>{description}</p>
       </div>
     </div>
   );

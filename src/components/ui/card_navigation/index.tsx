@@ -19,7 +19,7 @@ export const CardNavigation: React.FC<Props> = ({
       <Icon className="h-4 w-4" />
     </div>
     <div className="flex flex-col gap-1 ">
-      <p className="text-sm font-medium text-left w-full">{title}</p>
+      <p className="text-sm font-semibold text-left w-full">{title}</p>
       <p className="text-xs text-yellow-800 text-left w-full">{description}</p>
     </div>
   </Link>

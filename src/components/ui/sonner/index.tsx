@@ -11,7 +11,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
         classNames: {
           toast:
             "group toast p-4 transition-all duration-300 border-none shadow-none flex gap-2 rounded-sm",
-          title: "text-sm font-bold font-serif",
+          title: "text-sm font-bold",
           description: "text-sm opacity-70",
           error: "text-rose-800 bg-rose-50 ",
           success: "text-emerald-800 bg-emerald-50",

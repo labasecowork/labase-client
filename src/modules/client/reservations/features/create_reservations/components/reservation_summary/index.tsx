@@ -73,8 +73,8 @@ export const ReservationSummary = forwardRef<
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white p-4 border-t border-stone-200">
       <div className="max-w-4xl mx-auto px-4">
-        <div className="flex items-center justify-between">
-          <div className="grid grid-cols-2 items-start gap-4">
+        <div className="flex items-center justify-between flex-col sm:flex-row">
+          <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-4">
             <div>
               <div className="flex flex-col">
                 <span className="text-sm text-stone-500">Espacio: </span>
