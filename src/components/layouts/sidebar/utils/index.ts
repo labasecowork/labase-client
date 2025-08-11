@@ -9,7 +9,7 @@ import type { NavigationItem } from "../types";
 
 export const isActiveRoute = (
   navHref: string,
-  currentPath: string
+  currentPath: string,
 ): boolean => {
   const cleanNavHref = navHref.replace(/\/:\w+/g, "");
   const cleanCurrentPath = currentPath;

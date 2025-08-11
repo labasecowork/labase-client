@@ -19,24 +19,30 @@ import {
   User,
 } from "lucide-react";
 import type { Article, ArticleStatus } from "../../types";
-import { Link } from "react-router-dom";
-import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
+import { format, parseISO } from "date-fns";
 import { ROUTES } from "@/routes/routes";
 
 const StatusBadge: React.FC<{ status: ArticleStatus }> = ({ status }) => {
-  const isPublished = status === "published";
+  const isAccepted = status === "accepted";
+  const isDraft = status === "draft";
+
   return (
     <span
       className={`flex items-center gap-2 ${
-        isPublished ? "text-emerald-600" : "text-stone-500"
+        isAccepted
+          ? "text-emerald-600"
+          : isDraft
+            ? "text-stone-500"
+            : "text-red-500"
       }`}
     >
-      {isPublished ? (
+      {isAccepted ? (
         <CheckCircle className="size-4" />
       ) : (
         <PenSquare className="size-4" />
       )}
-      {isPublished ? "Publicado" : "Borrador"}
+      {isAccepted ? "Publicado" : isDraft ? "Borrador" : "Rechazado"}
     </span>
   );
 };
@@ -44,6 +50,17 @@ const StatusBadge: React.FC<{ status: ArticleStatus }> = ({ status }) => {
 export const ArticlesTable: React.FC<{ articles: Article[] }> = ({
   articles,
 }) => {
+  const navigate = useNavigate();
+
+  const handleEdit = (articleId: string) => {
+    const editUrl = ROUTES.Admin.EditArticle.replace(":id", articleId);
+    navigate(editUrl);
+  };
+
+  const handleDelete = (articleId: string) => {
+    const deleteUrl = ROUTES.Admin.DeleteArticle.replace(":id", articleId);
+    navigate(deleteUrl);
+  };
   return (
     <div
       className="bg-stone-50 w-full mt-8"
@@ -80,7 +97,6 @@ export const ArticlesTable: React.FC<{ articles: Article[] }> = ({
 
         <TableBody>
           {articles.map((article) => {
-            const editUrl = ROUTES.Admin.EditArticle.replace(":id", article.id);
             return (
               <ContextMenu key={article.id}>
                 <ContextMenuTrigger asChild>
@@ -92,29 +108,31 @@ export const ArticlesTable: React.FC<{ articles: Article[] }> = ({
                       {article.title}
                     </TableCell>
                     <TableCell className="px-4 py-4 text-stone-700">
-                      {article.author}
+                      {article.author.first_name} {article.author.last_name}
                     </TableCell>
                     <TableCell className="px-4 py-4">
                       <StatusBadge status={article.status} />
                     </TableCell>
                     <TableCell className="px-4 py-4 text-stone-700">
                       {format(
-                        new Date(article.publicationDate),
-                        "dd MMM, yyyy"
+                        parseISO(article.publication_timestamp),
+                        "dd MMM, yyyy",
                       )}
                     </TableCell>
                   </TableRow>
                 </ContextMenuTrigger>
                 <ContextMenuContent>
-                  <Link to={editUrl}>
-                    <ContextMenuItem className="cursor-pointer">
-                      <Edit className="size-4 mr-2" />
-                      Editar artículo
-                    </ContextMenuItem>
-                  </Link>
+                  <ContextMenuItem
+                    className="cursor-pointer"
+                    onClick={() => handleEdit(article.id)}
+                  >
+                    <Edit className="size-4 mr-2" />
+                    Editar artículo
+                  </ContextMenuItem>
                   <ContextMenuItem
                     variant="destructive"
                     className="cursor-pointer"
+                    onClick={() => handleDelete(article.id)}
                   >
                     <Trash2 className="size-4 mr-2" />
                     Eliminar artículo

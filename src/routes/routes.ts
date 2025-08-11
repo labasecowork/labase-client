@@ -32,6 +32,11 @@ export const ROUTES = {
     ViewArticles: "/admin/articles",
     CreateArticle: "/admin/articles/create",
     EditArticle: "/admin/articles/:id/edit",
+    DeleteArticle: "/admin/articles/:id/delete",
+    ViewCategories: "/admin/categories",
+    CreateCategory: "/admin/categories/create",
+    EditCategory: "/admin/categories/:id/edit",
+    DeleteCategory: "/admin/categories/:id/delete",
     ViewTools: "/admin/tools",
   },
 
