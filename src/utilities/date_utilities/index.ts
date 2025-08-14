@@ -75,26 +75,33 @@ export const formatDateToShort = (isoString: string): string => {
 export const calculateTotalWorkedHours = (
   records: { time: string; type: string }[]
 ) => {
-  const entries = records.filter((r) => r.type === "ENTRY").map((r) => r.time);
-  const exits = records.filter((r) => r.type === "EXIT").map((r) => r.time);
+  if (!records.length) return "--";
 
-  if (entries.length === 0) return "--";
+  // Ordenamos por hora ascendente
+  const sorted = [...records].sort((a, b) => {
+    const [ha, ma] = a.time.split(":").map(Number);
+    const [hb, mb] = b.time.split(":").map(Number);
+    return ha * 60 + ma - (hb * 60 + mb);
+  });
 
   let totalMinutes = 0;
+  let lastEntry: number | null = null;
 
-  for (let i = 0; i < entries.length; i++) {
-    if (exits[i]) {
-      const [entryHour, entryMin] = entries[i].split(":").map(Number);
-      const [exitHour, exitMin] = exits[i].split(":").map(Number);
+  for (const record of sorted) {
+    const [hour, min] = record.time.split(":").map(Number);
+    const minutes = hour * 60 + min;
 
-      const entryMinutes = entryHour * 60 + entryMin;
-      const exitMinutes = exitHour * 60 + exitMin;
-
-      totalMinutes += exitMinutes - entryMinutes;
+    if (record.type === "ENTRY") {
+      lastEntry = minutes;
+    } else if (record.type === "EXIT" && lastEntry !== null) {
+      const diff = minutes - lastEntry;
+      if (diff > 0) totalMinutes += diff;
+      lastEntry = null;
     }
   }
 
-  if (totalMinutes === 0) return "--";
+  // Si nunca hubo pares válidos, mostrar "--"
+  if (totalMinutes <= 0) return "--";
 
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;

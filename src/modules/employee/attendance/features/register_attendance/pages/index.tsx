@@ -1,3 +1,4 @@
+import React from "react";
 import {
   AsyncBoundary,
   Button,
@@ -74,7 +75,7 @@ export default function ViewReservationPage() {
   };
 
   useEffect(() => {
-    changeTitle("Asistencias - Labase");
+    changeTitle("Asistencias - La base");
   }, [changeTitle]);
 
   const getDayName = (dateString: string) => {
@@ -212,68 +213,75 @@ export default function ViewReservationPage() {
                   </TableHeader>
                   <TableBody>
                     {attendanceData.map(
-                      (day: AttendanceDay, dayIndex: number) => (
-                        <>
-                          {day.records.map(
-                            (record: AttendanceRecord, recordIndex: number) => (
-                              <TableRow
-                                key={`${dayIndex}-${recordIndex}`}
-                                className={`hover:bg-stone-50/50 ${
-                                  recordIndex === 0 && dayIndex > 0
-                                    ? "border-t border-stone-200"
-                                    : ""
-                                }`}
-                              >
-                                {recordIndex === 0 ? (
-                                  <TableCell
-                                    rowSpan={day.records.length}
-                                    className="py-6 px-4 bg-stone-50/60 border-r border-stone-200 text-center align-middle"
-                                  >
-                                    <div className="space-y-1">
-                                      <div className="font-semibold text-stone-900 text-sm">
-                                        {day.dayName}
+                      (day: AttendanceDay, dayIndex: number) => {
+                        return (
+                          <React.Fragment key={dayIndex}>
+                            {day.records.map(
+                              (
+                                record: AttendanceRecord,
+                                recordIndex: number
+                              ) => (
+                                <TableRow
+                                  key={`${dayIndex}-${recordIndex}`}
+                                  className={`hover:bg-stone-50/50 ${
+                                    recordIndex === 0 && dayIndex > 0
+                                      ? "border-t border-stone-200"
+                                      : ""
+                                  }`}
+                                >
+                                  {recordIndex === 0 ? (
+                                    <TableCell
+                                      rowSpan={day.records.length}
+                                      className="py-6 px-4 bg-stone-50/60 border-r border-stone-200 text-center align-middle"
+                                    >
+                                      <div className="space-y-1">
+                                        <div className="font-semibold text-stone-900 text-sm">
+                                          {day.dayName}
+                                        </div>
+                                        <div className="text-xs text-stone-600 font-medium">
+                                          {day.date}
+                                        </div>
                                       </div>
-                                      <div className="text-xs text-stone-600 font-medium">
-                                        {day.date}
+                                    </TableCell>
+                                  ) : null}
+                                  {recordIndex === 0 ? (
+                                    <TableCell
+                                      rowSpan={day.records.length}
+                                      className="py-6 px-4 bg-stone-50/60 border-r border-stone-200 text-center align-middle"
+                                    >
+                                      <div className="flex items-center justify-center gap-2">
+                                        <span className="font-mono text-sm font-semibold text-stone-700">
+                                          {calculateTotalWorkedHours(
+                                            day.records
+                                          )}
+                                        </span>
                                       </div>
-                                    </div>
+                                    </TableCell>
+                                  ) : null}
+                                  <TableCell className="py-4 px-4 text-center align-middle border-r border-stone-200">
+                                    <span className="font-mono text-sm font-medium text-stone-700">
+                                      {record.time}
+                                    </span>
                                   </TableCell>
-                                ) : null}
-                                {recordIndex === 0 ? (
-                                  <TableCell
-                                    rowSpan={day.records.length}
-                                    className="py-6 px-4 bg-stone-50/60 border-r border-stone-200 text-center align-middle"
-                                  >
-                                    <div className="flex items-center justify-center gap-2">
-                                      <span className="font-mono text-sm font-semibold text-stone-700">
-                                        {calculateTotalWorkedHours(day.records)}
-                                      </span>
-                                    </div>
+                                  <TableCell className="py-4 px-4 text-center align-middle">
+                                    <span
+                                      className={`flex w-full items-center gap-1.5 px-3 py-1.5 text-xs font-medium justify-center ${
+                                        record.type === "ENTRY"
+                                          ? "bg-stone-100 text-stone-800"
+                                          : "bg-orange-100 text-orange-800"
+                                      }`}
+                                    >
+                                      {record.type === "ENTRY"
+                                        ? "Entrada"
+                                        : "Salida"}
+                                    </span>
                                   </TableCell>
-                                ) : null}
-                                <TableCell className="py-4 px-4 text-center align-middle border-r border-stone-200">
-                                  <span className="font-mono text-sm font-medium text-stone-700">
-                                    {record.time}
-                                  </span>
-                                </TableCell>
-                                <TableCell className="py-4 px-4 text-center align-middle">
-                                  <span
-                                    className={`flex w-full items-center gap-1.5 px-3 py-1.5 text-xs font-medium justify-center ${
-                                      record.type === "ENTRY"
-                                        ? "bg-stone-100 text-stone-800"
-                                        : "bg-orange-100 text-orange-800"
-                                    }`}
-                                  >
-                                    {record.type === "ENTRY"
-                                      ? "Entrada"
-                                      : "Salida"}
-                                  </span>
-                                </TableCell>
-                              </TableRow>
-                            )
-                          )}
-                        </>
-                      )
+                                </TableRow>
+                              )
+                            )}
+                          </React.Fragment>
+                        );
+                      }
                     )}
                   </TableBody>
                 </Table>
