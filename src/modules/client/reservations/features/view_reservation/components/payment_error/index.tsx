@@ -1,4 +1,4 @@
-import { XCircleIcon } from "@heroicons/react/24/outline";
+import { XCircleIcon } from "@heroicons/react/24/solid";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import type { PaymentResponse } from "@/modules/client/payment/types";
@@ -12,7 +12,7 @@ export const PaymentError = ({ paymentResult }: Props) => {
     <>
       {/* Error */}
       <div className="w-16 h-16 bg-rose-800/10 rounded-full flex items-center justify-center mx-auto mb-4">
-        <XCircleIcon className="size-15 text-rose-800 mb-4 mx-auto" />
+        <XCircleIcon className="size-12 text-rose-800  mx-auto" />
       </div>
       <h3 className="text-xl font-bold text-stone-900 mb-1 font-serif">
         Error al procesar el pago
@@ -28,13 +28,13 @@ export const PaymentError = ({ paymentResult }: Props) => {
           <div className="flex justify-between">
             <span className="text-stone-500">ID de la transacción</span>
             <span className="text-stone-900 font-mono tracking-tighter font-medium">
-              {paymentResult?.purchaseNumber}
+              {paymentResult?.purchaseNumber || "N/A"}
             </span>
           </div>
           <div className="flex justify-between">
             <span className="text-stone-500">Fecha</span>
             <span className="text-stone-900 font-mono tracking-tighter font-medium">
-              {paymentResult?.transactionDate &&
+              {(paymentResult?.transactionDate &&
                 (() => {
                   // Convertir formato "250810071257" a fecha legible
                   const dateStr = paymentResult.transactionDate;
@@ -49,13 +49,14 @@ export const PaymentError = ({ paymentResult }: Props) => {
                   return format(date, "dd.MM.yy HH:mm", {
                     locale: es,
                   });
-                })()}
+                })()) ||
+                "N/A"}
             </span>
           </div>
           <div className="flex justify-between">
             <span className="text-stone-500">Monto</span>
             <span className="text-stone-900 font-mono tracking-tighter font-medium">
-              S/{paymentResult?.amount}
+              {paymentResult?.amount ? `S/${paymentResult?.amount}` : "N/A"}
             </span>
           </div>
           <div className="flex justify-between">

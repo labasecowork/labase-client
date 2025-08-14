@@ -9,10 +9,16 @@ import type {
 export const getPaymentResult = async (
   purchaseNumber: string
 ): Promise<PaymentResponse> => {
-  const { data } = await axiosInstance.get<PaymentResponse>(
+  const { data } = await axiosInstance.get<Response<PaymentResponse>>(
     `/payment/result/${purchaseNumber}`
   );
-  return data;
+  if (!data.data) {
+    throw new Error(
+      "Error al obtener el resultado del pago, el servidor no contiene los datos del pago."
+    );
+  }
+
+  return data.data;
 };
 
 export const createPayment = async (

@@ -9,13 +9,6 @@ export const actions = [
     to: ROUTES.Admin.ViewArticles,
   },
   {
-    title: "Gestionar categorías",
-    description:
-      "Con esto podras gestionar las categorías para establecer en los artículos.",
-    icon: NewspaperIcon,
-    to: ROUTES.Admin.ViewCategories,
-  },
-  {
     title: "Newsletter",
     description: "Con esto podras enviar un newsletter a todos los clientes.",
     icon: MailIcon,

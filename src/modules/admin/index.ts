@@ -15,8 +15,8 @@ export { default as ViewArticlesPage } from "./articles/features/view_articles/p
 export { default as CreateArticlePage } from "./articles/features/create_article/pages";
 export { default as EditArticlePage } from "./articles/features/edit_article/pages";
 export { default as DeleteArticlePage } from "./articles/features/delete_article/pages";
-export { default as ViewCategoriesPage } from "./categories/features/view_categories/pages";
-export { default as CreateCategoryPage } from "./categories/features/create_category/pages";
-export { default as EditCategoryPage } from "./categories/features/edit_category/pages";
-export { default as DeleteCategoryPage } from "./categories/features/delete_category/pages";
+export { default as ViewCategoriesPage } from "./articles_categories/features/view_categories/pages";
+export { default as CreateCategoryPage } from "./articles_categories/features/create_category/pages";
+export { default as EditCategoryPage } from "./articles_categories/features/edit_category/pages";
+export { default as DeleteCategoryPage } from "./articles_categories/features/delete_category/pages";
 export { default as ViewToolsPage } from "./content/features/view_tools/pages";

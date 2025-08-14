@@ -34,6 +34,10 @@ export const PaymentModal = ({ reservation }: Props) => {
   });
 
   useEffect(() => {
+    console.log("paymentResult", paymentResult);
+  }, [paymentResult]);
+
+  useEffect(() => {
     if (isPaymentResultError && error) {
       const errorMessage = (error as Error & { response?: { status: number } })
         ?.response?.status;

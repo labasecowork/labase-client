@@ -18,7 +18,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui";
-import { useGetCategories } from "@/modules/admin/categories/features/view_categories/service";
+import { useGetCategories } from "@/modules/admin/articles_categories/features/view_categories/service";
 import { ROUTES } from "@/routes/routes";
 import { useState, useRef, useEffect } from "react";
 import { z } from "zod";
@@ -217,7 +217,9 @@ export const ArticleForm = ({
               }}
             >
               <SelectTrigger
-                className={`w-full ${errors.categoryId ? "border-rose-800" : ""}`}
+                className={`w-full ${
+                  errors.categoryId ? "border-rose-800" : ""
+                }`}
               >
                 <SelectValue
                   placeholder={

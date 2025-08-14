@@ -3,10 +3,10 @@ import { useTitle } from "@/hooks";
 import { useEffect } from "react";
 import { ROUTES } from "@/routes/routes";
 import { useParams, useNavigate } from "react-router-dom";
-import { CategoryForm } from "@/modules/admin/categories/shared/components/category_form";
-import { useGetCategory } from "@/modules/admin/categories/features/view_categories/service";
+import { CategoryForm } from "@/modules/admin/articles_categories/shared/components/category_form";
+import { useGetCategory } from "@/modules/admin/articles_categories/features/view_categories/service";
 import { useUpdateCategory } from "../service";
-import type { CategoryFormData } from "@/modules/admin/categories/shared/components/category_form";
+import type { CategoryFormData } from "@/modules/admin/articles_categories/shared/components/category_form";
 import { toast } from "sonner";
 
 export const EditCategoryPage = () => {
@@ -15,10 +15,10 @@ export const EditCategoryPage = () => {
   const navigate = useNavigate();
 
   const { data: category, isLoading: isLoadingCategory } = useGetCategory(
-    id || "",
+    id || ""
   );
   const { mutate: updateCategory, isPending: isUpdating } = useUpdateCategory(
-    id || "",
+    id || ""
   );
 
   useEffect(() => {
@@ -36,14 +36,14 @@ export const EditCategoryPage = () => {
           toast.success("Categoría actualizada exitosamente", {
             description: `La categoría "${data.name}" ha sido actualizada.`,
           });
-          navigate(ROUTES.Admin.ViewCategories);
+          navigate(ROUTES.Admin.ViewCategoriesArticles);
         },
         onError: (error: Error) => {
           toast.error("Error al actualizar la categoría", {
             description: error.message,
           });
         },
-      },
+      }
     );
   };
 
@@ -52,7 +52,7 @@ export const EditCategoryPage = () => {
       <div className="w-full max-w-4xl mx-auto px-4 py-8">
         <CustomHeader
           title="Editar Categoría"
-          to={ROUTES.Admin.ViewCategories}
+          to={ROUTES.Admin.ViewCategoriesArticles}
         />
         <div className="flex justify-center items-center h-64">
           <p className="text-gray-500">Cargando categoría...</p>
@@ -66,7 +66,7 @@ export const EditCategoryPage = () => {
       <div className="w-full max-w-4xl mx-auto px-4 py-8">
         <CustomHeader
           title="Editar Categoría"
-          to={ROUTES.Admin.ViewCategories}
+          to={ROUTES.Admin.ViewCategoriesArticles}
         />
         <div className="flex justify-center items-center h-64">
           <p className="text-red-500">No se pudo encontrar la categoría.</p>
@@ -77,7 +77,10 @@ export const EditCategoryPage = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-8">
-      <CustomHeader title="Editar Categoría" to={ROUTES.Admin.ViewCategories} />
+      <CustomHeader
+        title="Editar Categoría"
+        to={ROUTES.Admin.ViewCategoriesArticles}
+      />
       <CategoryForm
         defaultValues={{
           name: category.name,

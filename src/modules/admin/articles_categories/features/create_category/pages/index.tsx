@@ -1,11 +1,11 @@
 import { CustomHeader } from "@/components/ui";
 import { useTitle } from "@/hooks";
 import { useEffect } from "react";
-import { CategoryForm } from "@/modules/admin/categories/shared/components/category_form";
+import { CategoryForm } from "@/modules/admin/articles_categories/shared/components/category_form";
 import { useCreateCategory } from "../service";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import type { CategoryFormData } from "@/modules/admin/categories/shared/components/category_form";
+import type { CategoryFormData } from "@/modules/admin/articles_categories/shared/components/category_form";
 import { ROUTES } from "@/routes/routes";
 
 export const CreateCategoryPage = () => {
@@ -26,16 +26,18 @@ export const CreateCategoryPage = () => {
       {
         onSuccess: (response) => {
           toast.success("Categoría creada exitosamente", {
-            description: `La categoría "${response?.category?.name || "Nueva"}" ha sido creada.`,
+            description: `La categoría "${
+              response?.category?.name || "Nueva"
+            }" ha sido creada.`,
           });
-          navigate(ROUTES.Admin.ViewCategories);
+          navigate(ROUTES.Admin.ViewCategoriesArticles);
         },
         onError: (error: Error) => {
           toast.error("Error al crear la categoría", {
             description: error.message,
           });
         },
-      },
+      }
     );
   };
 
@@ -43,7 +45,7 @@ export const CreateCategoryPage = () => {
     <div className="w-full max-w-4xl mx-auto px-4 py-8">
       <CustomHeader
         title="Crear Nueva Categoría"
-        to={ROUTES.Admin.ViewCategories}
+        to={ROUTES.Admin.ViewCategoriesArticles}
       />
       <CategoryForm
         onSubmit={handleSubmit}
