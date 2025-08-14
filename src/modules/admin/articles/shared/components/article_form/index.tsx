@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { Link } from "react-router-dom";
 import {
   Button,
   Input,
@@ -21,34 +20,92 @@ import {
 } from "@/components/ui";
 import { useGetCategories } from "@/modules/admin/categories/features/view_categories/service";
 import { ROUTES } from "@/routes/routes";
-import { BannerSection } from "../banner_section";
-import { useState, useRef } from "react";
-import { createArticleSchema } from "../../schemas";
-import type { CreateArticleData, CreateArticleResponse } from "../../types";
-import { useCreateArticle } from "../../service";
+import { useState, useRef, useEffect } from "react";
+import { z } from "zod";
 
-export const ArticleForm = () => {
-  const navigate = useNavigate();
-  const { mutate: createArticle, isPending } = useCreateArticle();
+// Componentes locales
+import { BannerSection } from "@/modules/admin/articles/features/create_article/components/banner_section";
+
+// Schema para la validación del formulario
+const articleSchema = z.object({
+  title: z.string().min(1, "El título es obligatorio"),
+  categoryId: z.string().min(1, "Debes seleccionar una categoría"),
+  content: z.string().min(1, "El contenido es obligatorio"),
+});
+
+export type ArticleFormData = z.infer<typeof articleSchema>;
+
+interface ArticleFormProps {
+  defaultValues?: ArticleFormData;
+  defaultBannerUrl?: string;
+  onSubmit: (data: FormData) => void;
+  isSubmitting: boolean;
+  submitLabel: string;
+  submittingLabel: string;
+  title: string;
+  description: string;
+}
+
+export const ArticleForm = ({
+  defaultValues = {
+    title: "",
+    categoryId: "",
+    content: "",
+  },
+  defaultBannerUrl,
+  onSubmit,
+  isSubmitting,
+  submitLabel,
+  submittingLabel,
+  title,
+  description,
+}: ArticleFormProps) => {
   const { data: categoriesData, isLoading: isCategoriesLoading } =
     useGetCategories();
   const [banner, setBanner] = useState<File | null>(null);
   const [bannerError, setBannerError] = useState<string | null>(null);
   const contentFileRef = useRef<File | null>(null);
+  const [defaultBannerLoaded, setDefaultBannerLoaded] =
+    useState<boolean>(false);
+
+  // Cargar imagen de banner por defecto si existe una URL
+  useEffect(() => {
+    if (defaultBannerUrl && !defaultBannerLoaded) {
+      const loadDefaultBanner = async () => {
+        try {
+          const response = await fetch(defaultBannerUrl);
+          const blob = await response.blob();
+          const fileName =
+            defaultBannerUrl.split("/").pop() || "default-banner.jpg";
+          const file = new File([blob], fileName, { type: blob.type });
+          setBanner(file);
+          setDefaultBannerLoaded(true);
+        } catch (error) {
+          console.error("Error loading default banner:", error);
+        }
+      };
+
+      loadDefaultBanner();
+    }
+  }, [defaultBannerUrl, defaultBannerLoaded]);
 
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<CreateArticleData>({
-    resolver: zodResolver(createArticleSchema),
-    defaultValues: {
-      title: "",
-      categoryId: "",
-      content: "",
-    },
+  } = useForm<ArticleFormData>({
+    resolver: zodResolver(articleSchema),
+    defaultValues,
+    mode: "onChange",
   });
+
+  // Seleccionar categoría al cargar el formulario
+  useEffect(() => {
+    if (defaultValues.categoryId) {
+      setValue("categoryId", defaultValues.categoryId);
+    }
+  }, [defaultValues.categoryId, setValue]);
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     // Create a simple HTML file from textarea content
@@ -70,7 +127,7 @@ export const ArticleForm = () => {
     });
   };
 
-  const onSubmit = (data: CreateArticleData) => {
+  const handleFormSubmit = handleSubmit((data) => {
     if (!banner) {
       setBannerError("Debes agregar una imagen de portada para el artículo");
       return;
@@ -103,23 +160,11 @@ export const ArticleForm = () => {
       formData.append("content", contentFileRef.current);
     }
 
-    createArticle(formData, {
-      onSuccess: (response: CreateArticleResponse) => {
-        toast.success("Artículo creado exitosamente", {
-          description: `El artículo "${response.title}" ha sido creado.`,
-        });
-        navigate(ROUTES.Admin.ViewArticles);
-      },
-      onError: (error: Error) => {
-        toast.error("Error al crear el artículo", {
-          description: error.message,
-        });
-      },
-    });
-  };
+    onSubmit(formData);
+  });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-8">
+    <form onSubmit={handleFormSubmit} className="space-y-6 mt-8">
       <BannerSection
         image={banner}
         onImageChange={setBanner}
@@ -128,10 +173,8 @@ export const ArticleForm = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Contenido del Artículo</CardTitle>
-          <CardDescription>
-            Escribe el título y el cuerpo principal de tu artículo.
-          </CardDescription>
+          <CardTitle>{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -168,8 +211,8 @@ export const ArticleForm = () => {
           <div>
             <Label htmlFor="categoryId">Categoría</Label>
             <Select
+              value={defaultValues.categoryId}
               onValueChange={(value) => {
-                // Asignar el valor seleccionado al campo categoryId del formulario
                 setValue("categoryId", value);
               }}
             >
@@ -210,7 +253,7 @@ export const ArticleForm = () => {
         <CardHeader>
           <CardTitle>Metadatos y Publicación</CardTitle>
           <CardDescription>
-            Define el autor y el estado de publicación del artículo.
+            Define el estado de publicación del artículo.
           </CardDescription>
         </CardHeader>
 
@@ -226,7 +269,7 @@ export const ArticleForm = () => {
               className="w-full h-10 px-3 border border-input rounded-md bg-background"
             >
               <option value="draft">Borrador</option>
-              <option value="published">Publicado</option>
+              <option value="accepted">Publicado</option>
             </select>
           </div>
         </CardContent>
@@ -239,10 +282,10 @@ export const ArticleForm = () => {
           </Link>
           <Button
             type="submit"
-            disabled={isPending}
+            disabled={isSubmitting}
             className="w-full md:w-auto rounded-full px-8 py-3.5"
           >
-            {isPending ? "Creando artículo..." : "Crear artículo"}
+            {isSubmitting ? submittingLabel : submitLabel}
           </Button>
         </CardFooter>
       </Card>

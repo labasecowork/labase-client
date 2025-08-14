@@ -75,6 +75,27 @@ export const adminRoutes = {
       path: ROUTES.Admin.EditArticle,
       element: <admin.EditArticlePage />,
     },
+    {
+      path: ROUTES.Admin.DeleteArticle,
+      element: <admin.DeleteArticlePage />,
+    },
+    // Categories
+    {
+      path: ROUTES.Admin.ViewCategories,
+      element: <admin.ViewCategoriesPage />,
+    },
+    {
+      path: ROUTES.Admin.CreateCategory,
+      element: <admin.CreateCategoryPage />,
+    },
+    {
+      path: ROUTES.Admin.EditCategory,
+      element: <admin.EditCategoryPage />,
+    },
+    {
+      path: ROUTES.Admin.DeleteCategory,
+      element: <admin.DeleteCategoryPage />,
+    },
     // Tools
     {
       path: ROUTES.Admin.ViewTools,
