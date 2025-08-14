@@ -16,6 +16,7 @@ export interface Space {
   disabled: boolean;
   createdAt: string;
   prices: Price[];
+  images: string[];
 }
 
 export interface Price {

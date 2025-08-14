@@ -15,6 +15,7 @@ export interface Space {
   allowFullRoom: boolean;
   disabled: boolean;
   createdAt: string;
+  images: string[];
   prices: {
     duration: DurationUnit;
     amount: number;

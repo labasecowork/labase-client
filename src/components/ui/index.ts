@@ -23,3 +23,4 @@ export * from "./image";
 export * from "./card_navigation";
 export * from "./file_drop_zone";
 export * from "./scroll_area";
+export * from "./carousel";

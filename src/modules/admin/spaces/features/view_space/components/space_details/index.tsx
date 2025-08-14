@@ -15,6 +15,12 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  Image,
 } from "@/components/ui";
 import { ROUTES } from "@/routes/routes";
 import {
@@ -56,9 +62,34 @@ export const SpaceDetails: React.FC<SpaceDetailsProps> = ({ spaceData }) => {
     }
   }, [isDeactivating, isDialogOpen]);
 
+  useEffect(() => {
+    console.log("space", space);
+  }, [space]);
+
   return (
     <Card className="mt-8 border-stone-200">
-      <CardHeader className="">
+      {space.images.length > 0 && (
+        <Carousel>
+          <CarouselContent>
+            {space.images.map((image) => (
+              <CarouselItem key={image}>
+                <Image
+                  src={image}
+                  alt={space.name}
+                  className="w-full h-[500px] object-cover rounded-t-sm"
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          {space.images.length > 1 && (
+            <>
+              <CarouselPrevious className="absolute top-1/2 left-2 transform -translate-y-1/2" />
+              <CarouselNext className="absolute top-1/2 right-2 transform -translate-y-1/2" />
+            </>
+          )}
+        </Carousel>
+      )}
+      <CardHeader>
         <div className="flex justify-between items-end flex-wrap gap-4">
           <div className="w-full">
             <CardTitle className="text-2xl flex justify-between items-end gap-3 flex-wrap">

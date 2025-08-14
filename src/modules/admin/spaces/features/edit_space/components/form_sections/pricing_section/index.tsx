@@ -36,7 +36,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
       {fields.map((field, index) => (
         <div
           key={field.id}
-          className="grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr_auto] items-end gap-4 p-4 bg-stone-100"
+          className="grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr_auto] items-end gap-4 p-4 bg-stone-100 rounded-sm"
         >
           <div>
             <Label>Unidad de Tiempo</Label>
@@ -49,10 +49,10 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
                     <SelectValue placeholder="Selecciona unidad" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="HOUR">Por Hora</SelectItem>
-                    <SelectItem value="DAY">Por Día</SelectItem>
-                    <SelectItem value="WEEK">Por Semana</SelectItem>
-                    <SelectItem value="MONTH">Por Mes</SelectItem>
+                    <SelectItem value="HOUR">Por hora</SelectItem>
+                    <SelectItem value="DAY">Por día</SelectItem>
+                    <SelectItem value="WEEK">Por semana</SelectItem>
+                    <SelectItem value="MONTH">Por mes</SelectItem>
                   </SelectContent>
                 </Select>
               )}

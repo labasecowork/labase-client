@@ -11,7 +11,7 @@ import type { EditSpaceData, EditSpacePayload } from ".";
 
 export interface FormProps {
   spaceId: string;
-  defaultValues: EditSpaceData;
+  defaultValues: EditSpaceData & { images: string[] };
 }
 
 export interface GeneralInfoSectionProps {

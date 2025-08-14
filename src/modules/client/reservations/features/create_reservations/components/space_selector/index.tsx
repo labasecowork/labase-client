@@ -63,7 +63,7 @@ export const SpaceSelector = forwardRef<HTMLDivElement, SpaceSelectorProps>(
                     <div className="relative h-48 overflow-hidden">
                       {/* Endpoint sin imagen - estatica por ahora*/}
                       <img
-                        src="https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg"
+                        src={space.images[0]}
                         alt={space.name}
                         className="w-full h-full object-cover"
                       />

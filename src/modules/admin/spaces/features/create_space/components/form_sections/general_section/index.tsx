@@ -69,16 +69,10 @@ export const Form = () => {
       })),
     };
 
-    Object.entries(jsonData).forEach(([key, value]) => {
-      if (key === "prices") {
-        formData.append(key, JSON.stringify(value));
-      } else {
-        formData.append(key, String(value));
-      }
-    });
+    formData.append("data", JSON.stringify(jsonData));
 
     images.forEach((image) => {
-      formData.append("images[]", image);
+      formData.append("images", image);
     });
 
     createSpace(formData, {

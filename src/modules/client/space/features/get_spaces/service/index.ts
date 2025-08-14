@@ -2,8 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "@/interceptors";
 import type { Response } from "@/types/services";
 import type { Space } from "@/modules/client/space/features/get_spaces/types";
-import { useAuth } from "@/hooks";
-
 interface SpacesResponse {
   spaces: Space[];
 }
@@ -24,15 +22,10 @@ export const useGetSpaces = () => {
 };
 
 export const useGetAvailableSpaces = () => {
-  const { user } = useAuth();
   const { data: spacesData, ...rest } = useGetSpaces();
 
   const availableSpaces = spacesData?.spaces.filter((space) => {
     if (space.disabled) return false;
-    if (space.access === "PUBLIC") return true;
-    if (space.access === "PRIVATE") {
-      return user?.userType === "admin";
-    }
     return true;
   });
 

@@ -16,7 +16,9 @@ const LoadingState = () => (
   </div>
 );
 
-const adaptApiDataToFormData = (apiData: Space): EditSpaceData => {
+const adaptApiDataToFormData = (
+  apiData: Space
+): EditSpaceData & { images: string[] } => {
   return {
     ...apiData,
     description: apiData.description || undefined,
@@ -37,13 +39,8 @@ export default function EditSpacePage() {
   const { data: spaceResponse, isLoading, isError } = useGetSpaceById(spaceId);
 
   useEffect(() => {
-    const spaceName = spaceResponse?.space.name;
-    changeTitle(
-      spaceName
-        ? `Editando: ${spaceName} - La base`
-        : "Editar Espacio - La base"
-    );
-  }, [changeTitle, spaceResponse]);
+    changeTitle("Editar Espacio - La base");
+  }, [changeTitle]);
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-8">

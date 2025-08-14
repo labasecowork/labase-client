@@ -28,10 +28,7 @@ export const SpacesTable: React.FC<{ spaces: Space[] }> = ({ spaces }) => {
   };
 
   return (
-    <div
-      className="bg-stone-50 w-full mt-8"
-      style={{ height: "calc(100vh - 250px)" }}
-    >
+    <div className=" w-full mt-8" style={{ height: "calc(100vh - 250px)" }}>
       <Table className="w-full">
         <TableHeader>
           <TableRow className="border-b border-stone-200">

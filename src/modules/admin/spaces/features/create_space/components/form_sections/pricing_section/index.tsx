@@ -43,10 +43,10 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
                 <SelectValue placeholder="Selecciona unidad de tiempo" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="HOUR">Por Hora</SelectItem>
-                <SelectItem value="DAY">Por Día</SelectItem>
-                <SelectItem value="WEEK">Por Semana</SelectItem>
-                <SelectItem value="MONTH">Por Mes</SelectItem>
+                <SelectItem value="HOUR">Por hora</SelectItem>
+                <SelectItem value="DAY">Por día</SelectItem>
+                <SelectItem value="WEEK">Por semana</SelectItem>
+                <SelectItem value="MONTH">Por mes</SelectItem>
               </SelectContent>
             </Select>
           </div>

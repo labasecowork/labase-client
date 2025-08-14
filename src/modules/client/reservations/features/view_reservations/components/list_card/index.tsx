@@ -9,6 +9,7 @@ import {
   ExclamationTriangleIcon,
   InboxArrowDownIcon,
 } from "@heroicons/react/20/solid";
+import { StatusMessage } from "@/components/ui";
 
 const formatDate = (dateString: string) => {
   return format(new Date(dateString), "d 'de' MMMM 'del' yyyy", { locale: es });
@@ -46,36 +47,24 @@ export const ListCard = () => {
 
   if (isErrorReservations || isErrorSpaces) {
     return (
-      <div className="text-center bg-rose-800/10 p-10 sm:p-24 text-sm">
-        <div className="w-full  mx-auto max-w-md ">
-          <ExclamationTriangleIcon className="h-10 w-10 text-rose-800 mx-auto" />
-          <h2 className="text-xl font-bold font-serif text-rose-800 mt-4">
-            Sucedio un error
-          </h2>
-          <p className="text-rose-700 text-xs sm:text-sm mt-0 sm:mt-2">
-            Sucedio un error al cargar tus reservas, este error es inesperado,
-            más información:{" "}
-            {errorReservations?.message || errorSpaces?.message}
-          </p>
-        </div>
-      </div>
+      <StatusMessage
+        title="Sucedio un error"
+        description={`Sucedio un error al cargar tus reservas, este error es inesperado, más información: ${
+          errorReservations?.message || errorSpaces?.message
+        }`}
+        color="rose"
+        icon={ExclamationTriangleIcon}
+      />
     );
   }
 
   if (!reservationsData || reservationsData.data.length === 0) {
     return (
-      <div className="text-center bg-stone-500/10 p-10 sm:p-24 ">
-        <div className="w-full  mx-auto max-w-md ">
-          <InboxArrowDownIcon className="w-10 h-10 text-stone-500 mx-auto" />
-          <p className=" font-bold font-serif text-stone-900 text-lg mt-4">
-            Aún no tienes ninguna reserva.
-          </p>
-          <p className="text-xs sm:text-sm text-stone-500 text-center mt-0 sm:mt-2">
-            Aún no tienes ninguna reserva, puedes crear una nueva reserva
-            pulsando en el botón de crear reserva, ¡animate a crear una!.
-          </p>
-        </div>
-      </div>
+      <StatusMessage
+        title="Aún no tienes ninguna reserva"
+        description="Aún no tienes ninguna reserva, puedes crear una nueva reserva pulsando en el botón de crear reserva, ¡animate a crear una!."
+        icon={InboxArrowDownIcon}
+      />
     );
   }
   return (
@@ -98,7 +87,7 @@ export const ListCard = () => {
             <SpaceCard
               id={reservation.id}
               spaceName={space?.name || "Espacio no encontrado"}
-              spaceImageUrl="https://images.pexels.com/photos/2041627/pexels-photo-2041627.jpeg"
+              spaceImageUrl={reservation.space.images[0] || ""}
               people={reservation.people}
               price={price}
               dateReservation={formatDate(reservation.startTime)}

@@ -9,6 +9,10 @@ export interface MyReservation {
   codeQr: string;
   price: string;
   createdAt: string;
+  space: {
+    name: string;
+    images: string[];
+  };
 }
 
 export interface MyReservationsResponse {
