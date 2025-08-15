@@ -20,3 +20,6 @@ export { default as CreateCategoryPage } from "./articles_categories/features/cr
 export { default as EditCategoryPage } from "./articles_categories/features/edit_category/pages";
 export { default as DeleteCategoryPage } from "./articles_categories/features/delete_category/pages";
 export { default as ViewToolsPage } from "./content/features/view_tools/pages";
+export { default as ViewInventoryPage } from "./inventory/features/view_inventory/pages";
+export { default as CreateProductPage } from "./inventory/features/create_product/pages";
+export { default as EditProductPage } from "./inventory/features/edit_product/pages";

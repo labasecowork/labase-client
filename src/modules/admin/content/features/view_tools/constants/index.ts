@@ -1,5 +1,5 @@
 import { ROUTES } from "@/routes/routes";
-import { MailIcon, NewspaperIcon } from "lucide-react";
+import { MailIcon, NewspaperIcon, Container } from "lucide-react";
 
 export const actions = [
   {
@@ -13,5 +13,11 @@ export const actions = [
     description: "Con esto podras enviar un newsletter a todos los clientes.",
     icon: MailIcon,
     to: ROUTES.Admin.SendNewsletter,
+  },
+  {
+    title: "Gestionar Inventario",
+    description: "Con esto podras gestionar los inventarios en la página web.",
+    icon: Container,
+    to: ROUTES.Admin.ViewInventory,
   },
 ];

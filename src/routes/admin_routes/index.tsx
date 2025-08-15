@@ -81,20 +81,33 @@ export const adminRoutes = {
     },
     // Categories
     {
-      path: ROUTES.Admin.ViewCategories,
+      path: ROUTES.Admin.ViewCategoriesArticles,
       element: <admin.ViewCategoriesPage />,
     },
     {
-      path: ROUTES.Admin.CreateCategory,
+      path: ROUTES.Admin.CreateCategoryArticles,
       element: <admin.CreateCategoryPage />,
     },
     {
-      path: ROUTES.Admin.EditCategory,
+      path: ROUTES.Admin.EditCategoryArticles,
       element: <admin.EditCategoryPage />,
     },
     {
-      path: ROUTES.Admin.DeleteCategory,
+      path: ROUTES.Admin.DeleteCategoryArticles,
       element: <admin.DeleteCategoryPage />,
+    },
+    // Inventory
+    {
+      path: ROUTES.Admin.ViewInventory,
+      element: <admin.ViewInventoryPage />,
+    },
+    {
+      path: ROUTES.Admin.CreateProduct,
+      element: <admin.CreateProductPage />,
+    },
+    {
+      path: ROUTES.Admin.EditProduct,
+      element: <admin.EditProductPage />,
     },
     // Tools
     {

@@ -38,6 +38,9 @@ export const ROUTES = {
     EditCategoryArticles: "/admin/articles/categories/:id/edit",
     DeleteCategoryArticles: "/admin/articles/categories/:id/delete",
     ViewTools: "/admin/tools",
+    ViewInventory: "/admin/inventory",
+    CreateProduct: "/admin/inventory/create",
+    EditProduct: "/admin/inventory/:id/edit",
   },
 
   Employee: {
